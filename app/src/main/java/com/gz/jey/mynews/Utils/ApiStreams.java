@@ -1,0 +1,40 @@
+package com.gz.jey.mynews.Utils;
+
+import com.gz.jey.mynews.Models.NewsSection;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * Created by Jey on 24/04/2018.
+ */
+
+public class ApiStreams {
+
+    // creating and configuring the retrofit
+    public static Retrofit getRetrofit(){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.nytimes.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build() ;
+
+        return retrofit;
+    }
+
+    // method to call and pass the request via an observable for the TopStories api
+    public static Observable<NewsSection> streamFetchTopStories(String section){
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        return apiService.getTopStories(section)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
+}
