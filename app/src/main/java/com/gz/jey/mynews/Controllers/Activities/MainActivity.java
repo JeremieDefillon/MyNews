@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         this.disposable = ApiStreams.streamFetchTopStories("home")
                 .subscribeWith(new DisposableObserver<NewsSection>(){
                     @Override
-                    public void onNext(NewsSection n) {
+                    public void onNext(NewsSection n){
                         Log.i(TAG, "On Next");
                     }
 

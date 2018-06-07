@@ -19,4 +19,9 @@ public interface ApiService {
     @GET("/svc/topstories/v2/{section}.json?api-key="+KEY)
     Observable<NewsSection> getTopStories(@Path("section") String section);
 
+
+    // the request for the nyt top stories api
+    @GET("svc/mostpopular/v2/{mosttype}/{section}/{period}.json?api-key="+KEY)
+    Observable<NewsSection> getMostPopular(@Path("mosttype") String type, @Path("section") String section, @Path("period") String period);
+
 }

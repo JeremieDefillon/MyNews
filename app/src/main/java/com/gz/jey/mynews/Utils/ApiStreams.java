@@ -37,4 +37,13 @@ public class ApiStreams {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
+
+    // method to call and pass the request via an observable for the MostPopular api
+    public static Observable<NewsSection> streamFetchMost(String type, String section, String period){
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        return apiService.getMostPopular(type, section, period)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 }
