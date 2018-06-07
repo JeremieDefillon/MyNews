@@ -46,4 +46,13 @@ public class ApiStreams {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
+
+    // method to call and pass the request via an observable for the ArticleSearch api
+    public static Observable<NewsSection> streamFetchASearch(String query, String sort){
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        return apiService.getArticleSearch(query, sort)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 }

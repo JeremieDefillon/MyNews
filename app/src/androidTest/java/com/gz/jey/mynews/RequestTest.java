@@ -64,4 +64,24 @@ public class RequestTest {
         // 5 - Verify if Status is not null
         assertNotNull(newsFetched.getStatus());
     }
+
+
+    @Test
+    public void testArticleSearchRequest() throws Exception {
+        //1 - Get the stream
+        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("trump", "oldest");
+        //2 - Create a new TestObserver
+        TestObserver<NewsSection> testObserver = new TestObserver<>();
+        //3 - Launch observable
+        observableInfos.subscribeWith(testObserver)
+                .assertNoErrors() // 3.1 - Check if no errors
+                .assertNoTimeout() // 3.2 - Check if no Timeout
+                .awaitTerminalEvent(); // 3.3 - Await the stream terminated before continue
+
+        // 4 - Get news fetched
+        NewsSection newsFetched = testObserver.values().get(0);
+
+        // 5 - Verify if Status is not null
+        assertNotNull(newsFetched.getStatus());
+    }
 }
