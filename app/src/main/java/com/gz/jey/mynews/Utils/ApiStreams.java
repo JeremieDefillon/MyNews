@@ -1,5 +1,7 @@
 package com.gz.jey.mynews.Utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.gz.jey.mynews.Models.NewsSection;
 
 import java.util.concurrent.TimeUnit;
@@ -19,12 +21,18 @@ public class ApiStreams {
 
     // creating and configuring the retrofit
     public static Retrofit getRetrofit(){
+        
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
+                .create();
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.nytimes.com/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build() ;
+
 
         return retrofit;
     }

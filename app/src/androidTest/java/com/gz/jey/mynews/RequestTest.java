@@ -8,15 +8,10 @@ import com.gz.jey.mynews.Utils.ApiStreams;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -69,7 +64,7 @@ public class RequestTest {
     @Test
     public void testArticleSearchRequest() throws Exception {
         //1 - Get the stream
-        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("trump", "oldest");
+        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("defillon", "oldest");
         //2 - Create a new TestObserver
         TestObserver<NewsSection> testObserver = new TestObserver<>();
         //3 - Launch observable
