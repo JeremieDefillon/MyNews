@@ -21,12 +21,13 @@ public class ApiStreams {
 
     // creating and configuring the retrofit
     public static Retrofit getRetrofit(){
-        
+
+        // set custom deserializer in gson builder
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
                 .create();
 
-
+        // building retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.nytimes.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))

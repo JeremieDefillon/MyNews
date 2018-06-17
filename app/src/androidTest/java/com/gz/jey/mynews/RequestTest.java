@@ -21,7 +21,6 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class RequestTest {
 
-
     @Test
     public void testTopStoriesRequest() throws Exception {
         //1 - Get the stream
@@ -79,4 +78,5 @@ public class RequestTest {
         // 5 - Verify if Status is not null
         assertNotNull(newsFetched.getStatus());
     }
+
 }

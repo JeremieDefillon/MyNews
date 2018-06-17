@@ -61,8 +61,11 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
                 if(j.has("media")){
                     if(!j.get("media").isJsonPrimitive()){
                         JsonArray jm = j.get("media").getAsJsonArray();
-                        JsonArray jt = jm.get(0).getAsJsonObject().get("media-metadata").getAsJsonArray();
-                        String image = jt.get(0).getAsJsonObject().get("url").getAsString();
+                        String image ="";
+                        if(jm.size()>0){
+                            JsonArray jt = jm.get(0).getAsJsonObject().get("media-metadata").getAsJsonArray();
+                            image = jt.get(0).getAsJsonObject().get("url").getAsString();
+                        }
                         result.setImageUrl(image);
                     }else{
                         result.setImageUrl("");
