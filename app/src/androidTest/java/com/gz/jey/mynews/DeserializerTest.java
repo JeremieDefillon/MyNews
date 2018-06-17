@@ -59,7 +59,7 @@ public class DeserializerTest {
             "      ]\n" +
             "    }\n" +
             "  ]\n" +
-            "}";
+            "}"; 
 
     @Test
     public void DeserializeFromTopStoriesNormal(){
