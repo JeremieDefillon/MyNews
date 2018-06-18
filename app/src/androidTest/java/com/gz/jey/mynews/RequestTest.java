@@ -18,6 +18,8 @@ import static org.junit.Assert.assertNotNull;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+
+
 @RunWith(AndroidJUnit4.class)
 public class RequestTest {
 
@@ -43,7 +45,7 @@ public class RequestTest {
     @Test
     public void testMostPopularRequest() throws Exception {
         //1 - Get the stream
-        Observable<NewsSection> observableInfos = ApiStreams.streamFetchMost("mostemailed", "all-sections","1");
+        Observable<NewsSection> observableInfos = ApiStreams.streamFetchMost("mostviewed", "automobiles","30");
         //2 - Create a new TestObserver
         TestObserver<NewsSection> testObserver = new TestObserver<>();
         //3 - Launch observable

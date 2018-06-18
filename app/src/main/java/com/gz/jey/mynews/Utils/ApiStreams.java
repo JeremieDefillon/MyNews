@@ -34,7 +34,6 @@ public class ApiStreams {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build() ;
 
-
         return retrofit;
     }
 
