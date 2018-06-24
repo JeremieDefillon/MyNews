@@ -64,52 +64,37 @@ public class DeserializerTest {
     @Test
     public void DeserializeFromTopStoriesNormal(){
         String x = "https://static01.nyt.com/images/2017/01/18/world/16annefrank-item1/16annefrank-item1-thumbStandard-v2.jpg";
-
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
-                .create();
-
-        NewsSection ns = gson.fromJson(json, NewsSection.class);
-        assertThat( x , CoreMatchers.containsString(ns.getResults().get(0).getImageUrl()));
+        DeserializeTest(x, 0);
         // more assertions based on what the JSON was would be here
     }
 
     @Test
     public void DeserializeFromMostPopularNormal(){
         String x = "https://static01.nyt.com/images/2018/06/03/books/review/03Cover/03Cover-thumbStandard-v2.gif";
-
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
-                .create();
-
-        NewsSection ns = gson.fromJson(json, NewsSection.class);
-        assertThat( x , CoreMatchers.containsString(ns.getResults().get(1).getImageUrl()));
+        DeserializeTest(x, 1);
         // more assertions based on what the JSON was would be here
     }
 
     @Test
     public void DeserializeFromTopStoriesWithAPIBadReturns(){
         String x = "";
-
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
-                .create();
-
-        NewsSection ns = gson.fromJson(json, NewsSection.class);
-        assertThat( x , CoreMatchers.containsString(ns.getResults().get(2).getImageUrl()));
+        DeserializeTest(x, 2);
         // more assertions based on what the JSON was would be here
     }
 
     @Test
     public void DeserializeFromMostPopularWithAPIBadReturns(){
         String x = "";
+        DeserializeTest(x, 3);
+        // more assertions based on what the JSON was would be here
+    }
 
+    private void DeserializeTest(String x, Integer ind) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
                 .create();
 
         NewsSection ns = gson.fromJson(json, NewsSection.class);
-        assertThat( x , CoreMatchers.containsString(ns.getResults().get(3).getImageUrl()));
-        // more assertions based on what the JSON was would be here
+        assertThat( x , CoreMatchers.containsString(ns.getResults().get(ind).getImageUrl()));
     }
 }
