@@ -27,7 +27,7 @@ public class RequestTest {
     public void testTopStoriesRequest() throws Exception {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchTopStories("home");
-        //2 - Call TestRequest function to test this TopStories Request
+        //2 - Call TestRequest function to test this TopStories  Request
         TestRequest(observableInfos);
     }
 
