@@ -1,14 +1,12 @@
 package com.gz.jey.mynews;
 
-import android.app.Fragment;
-
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.gz.jey.mynews.Controllers.Activities.MainActivity;
-import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
+import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
 import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
 
 import org.junit.After;

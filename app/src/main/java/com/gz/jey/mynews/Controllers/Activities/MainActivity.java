@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     // FOR DATAS TYPE
     public static int SECNUM = 0;
+    public static int TNUM = 0;
+    public static int PNUM = 0;
 
 
     @Override

@@ -27,7 +27,7 @@ public class RequestTest {
     public void testTopStoriesRequest() throws Exception {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchTopStories("home");
-        //2 - Create a new TestObserver
+        //2 - Call TestRequest function to test this TopStories Request
         TestRequest(observableInfos);
     }
 
@@ -35,7 +35,7 @@ public class RequestTest {
     public void testMostPopularRequest() throws Exception {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchMost("mostviewed", "automobiles","30");
-        //2 - Create a new TestObserver
+        //2 - Call TestRequest function to test this MostPopular Request
         TestRequest(observableInfos);
     }
 
@@ -44,23 +44,24 @@ public class RequestTest {
     public void testArticleSearchRequest() throws Exception {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("bahamas", "oldest");
+        //2 - Call TestRequest function to test this Article Search Request
         TestRequest(observableInfos);
 
     }
 
     private void TestRequest(Observable<NewsSection> observableInfos) {
-        //2 - Create a new TestObserver
+        //1 - Create a new TestObserver
         TestObserver<NewsSection> testObserver = new TestObserver<>();
-        //3 - Launch observable
+        //2 - Launch observable
         observableInfos.subscribeWith(testObserver)
                 .assertNoErrors() // 3.1 - Check if no errors
                 .assertNoTimeout() // 3.2 - Check if no Timeout
                 .awaitTerminalEvent(); // 3.3 - Await the stream terminated before continue
 
-        // 4 - Get news fetched
+        //3 - Get news fetched
         NewsSection newsFetched = testObserver.values().get(0);
 
-        // 5 - Verify if Status is not null
+        //4 - Verify if Status is not null
         assertNotNull(newsFetched.getStatus());
     }
 

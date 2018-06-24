@@ -30,4 +30,61 @@
         <item>insider</item>
     </string-array>
 
+    <string-array name="mp_category">
+        <item>all-sections</item>
+        <item>arts</item>
+        <item>automobiles</item>
+        <item>blogs</item>
+        <item>books</item>
+        <item>Business Day</item>
+        <item>Education</item>
+        <item>Fashion Style</item>
+        <item>Food</item>
+        <item>Health</item>
+        <item>Job Market</item>
+        <item>Magazine</item>
+        <item>membercenter</item>
+        <item>Movies</item>
+        <item>Multimedia</item>
+        <item>nyregion</item>
+        <item>NYT Now</item>
+        <item>Obituaries</item>
+        <item>Open</item>
+        <item>Opinion</item>
+        <item>Public Editor</item>
+        <item>Real Estate</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Style</item>
+        <item>Sunday Review</item>
+        <item>T Magazine</item>
+        <item>Technology</item>
+        <item>The Upshot</item>
+        <item>Theater</item>
+        <item>Times Insider</item>
+        <item>Today’s Paper</item>
+        <item>Travel</item>
+        <item>U.S.</item>
+        <item>World</item>
+        <item>Your Money</item>
+    </string-array>
+
+    <string-array name="mp_type">
+        <item>mostviewed</item>
+        <item>mostshared</item>
+        <item>mostemailed</item>
+    </string-array>
+
+    <string-array name="mp_period">
+        <item>1</item>
+        <item>7</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="mp_period_names">
+        <item>a day</item>
+        <item>a week</item>
+        <item>a month</item>
+    </string-array>
+
 </resources>
