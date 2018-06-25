@@ -11,13 +11,11 @@ import com.gz.jey.mynews.Models.Result;
 import com.gz.jey.mynews.R;
 
 import java.lang.ref.WeakReference;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import com.gz.jey.mynews.Utils.Formatter;
 
 public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
@@ -30,11 +28,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     WeakReference<NewsAdapter.Listener> callbackWeakRef;
 
-    private SimpleDateFormat[] dateFormat = {
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX"),
-            new SimpleDateFormat("yyyy-MM-dd")
-    };
-    // ex date string 2018-04-25T05:00:13-04:00
+
 
     public NewsViewHolder(View itemView) {
         super(itemView);
@@ -55,7 +49,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             this.Image.setAdjustViewBounds(false);
 
         this.Title.setText(res.getTitle());
-        this.dat.setText(getDateFormated(res.getPublishedDate()));
+        this.dat.setText(Formatter.getDateFormated(res.getPublishedDate()));
 
         callbackWeakRef = new WeakReference<NewsAdapter.Listener>(callback);
     }
@@ -65,18 +59,5 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         NewsAdapter.Listener callback = callbackWeakRef.get();
     }
 
-    private String getDateFormated(String dateunformatted){
-        Date dd = null;
-        String d = "";
-        for(SimpleDateFormat df : dateFormat ){
-            try {
-                dd = df.parse(dateunformatted);
-                d = DateFormat.getDateInstance(DateFormat.SHORT).format(dd);
-                break;
-            } catch (ParseException e) {
-                d= "";
-            }
-        }
-        return d;
-    }
+
 }
