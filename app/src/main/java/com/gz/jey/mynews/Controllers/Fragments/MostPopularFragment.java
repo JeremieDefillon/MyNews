@@ -43,7 +43,7 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
     private Disposable disposable;
     private ArrayList<Result> results;
     private NewsAdapter adapter;
-    private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String TAG = MostPopularFragment.class.getSimpleName();
 
     public MostPopularFragment() {}
 

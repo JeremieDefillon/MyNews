@@ -32,7 +32,7 @@ public class FragmentUnitTest {
      public void SetUp() throws Exception
      {
         mActivity = mActivityRule.getActivity();
-        flContainer = mActivity.findViewById(R.id.activity_main_frame_layout);
+        flContainer = mActivity.findViewById(R.id.activity_main_viewpager);
      }
 
      @Test

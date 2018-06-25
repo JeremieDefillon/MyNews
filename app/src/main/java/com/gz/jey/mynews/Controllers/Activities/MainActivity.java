@@ -1,16 +1,17 @@
 package com.gz.jey.mynews.Controllers.Activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.design.widget.TabLayout;
 
-import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
+import com.gz.jey.mynews.Adapter.PageAdapter;
 import com.gz.jey.mynews.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PageAdapter.OnPageAdapterListener{
 
+    public static int ACTUALTAB = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static String URLI = "";
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     public static int SECNUM = 0;
     public static int TNUM = 0;
     public static int PNUM = 0;
+    public PageAdapter adapterViewPager;
+    public ViewPager pager;
 
 
     @Override
@@ -25,23 +28,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.buildFragment();
+        this.buildViewPager();
     }
 
     // -------------------
     // CONFIGURATION
     // -------------------
 
-    private void buildFragment() {
+    private void buildViewPager() {
+        // Set the Viewpager's layout
+        pager = findViewById(R.id.activity_main_viewpager);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        TopStoriesFragment fragment = new TopStoriesFragment();
-        fragmentTransaction.add(R.id.activity_main_frame_layout, fragment);
-        fragmentTransaction.commit();
+        // Build the Viewpager's adapter
+        adapterViewPager = new PageAdapter(getSupportFragmentManager(), this);
+        // set the adapter to the viewpager
+        pager.setAdapter(adapterViewPager);
 
-        Log.d(TAG, "buildFragment: OK");
-
+        TabLayout tabs = findViewById(R.id.activity_main_tabs);
+        tabs.setupWithViewPager(pager);
+        tabs.setTabMode(TabLayout.MODE_FIXED);
     }
 
+    @Override
+    public void onInstanceCreated(Fragment fragment, int position) {
+        ACTUALTAB = position;
+    }
 }

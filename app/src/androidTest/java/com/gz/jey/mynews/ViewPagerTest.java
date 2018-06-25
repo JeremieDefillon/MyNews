@@ -1,73 +1,53 @@
 package com.gz.jey.mynews;
 
-import android.app.Activity;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.View;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import com.gz.jey.mynews.Controllers.Activities.MainActivity;
+
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertSame;
 
-public class ViewPagerTest {
 
-    private ViewPager pager;
-    private TestPagerAdapter adapter;
+
+@RunWith(AndroidJUnit4.class)
+public class ViewPagerTest{
+
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+
+    private MainActivity mActivity = null;
 
     // Set the pager and the adapter
     @Before
     public void setUp() throws Exception {
-        pager = new ViewPager(new Activity());
-        adapter = new TestPagerAdapter();
+        mActivity = mActivityRule.getActivity();
+    }
+
+    @Test
+    public void testAdapterNotNull() throws Exception {
+        assertNotNull(mActivity.pager.getAdapter());
     }
 
     // Test the Adapter
     @Test
-    public void shouldSetAndGetAdapter() throws Exception {
-        assertNull(pager.getAdapter());
-
-        pager.setAdapter(adapter);
-        assertSame(adapter, pager.getAdapter());
+    public void testGetAdapter() throws Exception {
+        assertSame(mActivity.adapterViewPager, mActivity.pager.getAdapter());
     }
 
     // Test if pager move to the desired page
     @Test
-    public void test_getAndSetCurrentItem() throws Exception {
-        pager.setCurrentItem(1);
-        assertEquals(1, pager.getCurrentItem());
-    }
-
-    // Test if pager's listener is invoked
-    @Test
-    public void setCurrentItem_shouldInvokeListener() throws Exception {
-        TestOnPageChangeListener listener = new TestOnPageChangeListener();
-        pager.setOnPageChangeListener(listener);
-        assertFalse(listener.onPageSelectedCalled);
-        pager.setCurrentItem(1);
-        assertTrue(listener.onPageSelectedCalled);
+    public void testSetAndGetCurrentItem() throws Exception {
+        mActivity.pager.setCurrentItem(1);
+        assertEquals(1, mActivity.pager.getCurrentItem());
     }
 
 
-    // the Adapater created for test
-    private static class TestPagerAdapter extends PagerAdapter {
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return false;
-        }
-    }
-
-
-    private static class TestOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
-        public boolean onPageSelectedCalled;
-
-        @Override
-        public void onPageSelected(int position) {
-            onPageSelectedCalled = true;
-        }
-    }
 }
