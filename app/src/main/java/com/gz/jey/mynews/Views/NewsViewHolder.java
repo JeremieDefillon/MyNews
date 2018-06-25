@@ -49,7 +49,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             this.Image.setAdjustViewBounds(false);
 
         this.Title.setText(res.getTitle());
-        this.dat.setText(Formatter.getDateFormated(res.getPublishedDate()));
+        this.dat.setText(res.getPublishedDate());
 
         callbackWeakRef = new WeakReference<NewsAdapter.Listener>(callback);
     }
