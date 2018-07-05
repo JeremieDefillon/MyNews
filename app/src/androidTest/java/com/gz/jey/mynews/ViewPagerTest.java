@@ -5,19 +5,18 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 
-import org.junit.Before;
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertSame;
-
+import static org.junit.Assert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ViewPagerTest{
+public class ViewPagerTest {
 
 
     @Rule
@@ -25,29 +24,46 @@ public class ViewPagerTest{
 
     private MainActivity mActivity = null;
 
-    // Set the pager and the adapter
-    @Before
-    public void setUp() throws Exception {
-        mActivity = mActivityRule.getActivity();
-    }
-
     @Test
     public void testAdapterNotNull() throws Exception {
+        mActivity = mActivityRule.getActivity();
         assertNotNull(mActivity.pager.getAdapter());
     }
 
     // Test the Adapter
     @Test
     public void testGetAdapter() throws Exception {
+        mActivity = mActivityRule.getActivity();
         assertSame(mActivity.adapterViewPager, mActivity.pager.getAdapter());
     }
 
+
     // Test if pager move to the desired page
     @Test
-    public void testSetAndGetCurrentItem() throws Exception {
-        mActivity.pager.setCurrentItem(1);
-        assertEquals(1, mActivity.pager.getCurrentItem());
+    public void testSetAndGetCurrentItemIs0() throws Exception {
+        TestThread(0, "Top Stories");
     }
 
+    @Test
+    public void testSetAndGetCurrentItemIs1() throws Exception {
+        TestThread(1, "Most Popular");
+    }
+
+    @Test
+    public void testSetAndGetCurrentItemIs2() throws Exception {
+        TestThread(2, "Article Search");
+    }
+
+    private void TestThread(final int i, String s) throws InterruptedException {
+        mActivity = mActivityRule.getActivity();
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivity.pager.setCurrentItem(i);
+            }
+        });
+        Thread.sleep(1);
+        assertThat(mActivity.pager.getAdapter().getPageTitle(mActivity.pager.getCurrentItem()).toString(), Matchers.equalTo(s));
+    }
 
 }

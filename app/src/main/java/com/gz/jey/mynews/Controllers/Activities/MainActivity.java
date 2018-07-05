@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     // CONFIGURATION
     // -------------------
 
-    private void buildViewPager() {
+    public void buildViewPager() {
         // Set the Viewpager's layout
         pager = findViewById(R.id.activity_main_viewpager);
 
