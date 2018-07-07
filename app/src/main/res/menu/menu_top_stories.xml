@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Configuration">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/activity_main_drawer_settings"
+                    android:icon="@drawable/ic_settings_applications_white_24dp"
+                    android:title="Paramètres" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Categories">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/cat_btn_0"
+                    android:title="HOME" />
+                <item
+                    android:id="@+id/cat_btn_1"
+                    android:title="WORLD" />
+                <item
+                    android:id="@+id/cat_btn_2"
+                    android:title="NATIONAL" />
+                <item
+                    android:id="@+id/cat_btn_3"
+                    android:title="POLITICS" />
+                <item
+                    android:id="@+id/cat_btn_4"
+                    android:title="BUSINESS" />
+                <item
+                    android:id="@+id/cat_btn_5"
+                    android:title="TECHNOLOGY" />
+                <item
+                    android:id="@+id/cat_btn_6"
+                    android:title="SCIENCE" />
+                <item
+                    android:id="@+id/cat_btn_7"
+                    android:title="HEALTH" />
+                <item
+                    android:id="@+id/cat_btn_8"
+                    android:title="SPORTS" />
+                <item
+                    android:id="@+id/cat_btn_9"
+                    android:title="AUTOMOBILES" />
+                <item
+                    android:id="@+id/cat_btn_10"
+                    android:title="ARTS" />
+                <item
+                    android:id="@+id/cat_btn_11"
+                    android:title="THE UPSHOT" />
+                <item
+                    android:id="@+id/cat_btn_12"
+                    android:title="BOOKS" />
+                <item
+                    android:id="@+id/cat_btn_13"
+                    android:title="MOVIES" />
+                <item
+                    android:id="@+id/cat_btn_14"
+                    android:title="THEATER" />
+                <item
+                    android:id="@+id/cat_btn_15"
+                    android:title="SUNDAY REVIEW" />
+                <item
+                    android:id="@+id/cat_btn_16"
+                    android:title="FASHION" />
+                <item
+                    android:id="@+id/cat_btn_17"
+                    android:title="FOOD" />
+                <item
+                    android:id="@+id/cat_btn_18"
+                    android:title="TRAVEL" />
+                <item
+                    android:id="@+id/cat_btn_19"
+                    android:title="OPINION" />
+                <item
+                    android:id="@+id/cat_btn_20"
+                    android:title="MAGAZINE" />
+                <item
+                    android:id="@+id/cat_btn_21"
+                    android:title="TIMES MAGAZINE" />
+                <item
+                    android:id="@+id/cat_btn_22"
+                    android:title="NY REGION" />
+                <item
+                    android:id="@+id/cat_btn_23"
+                    android:title="REAL ESTATE" />
+                <item
+                    android:id="@+id/cat_btn_24"
+                    android:title="OBITUARIES" />
+                <item
+                    android:id="@+id/cat_btn_25"
+                    android:title="TIMES INSIDER" />
+            </group>
+        </menu>
+    </item>
+
+
+</menu>

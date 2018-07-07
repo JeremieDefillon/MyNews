@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Configuration">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/activity_main_drawer_settings"
+                    android:icon="@drawable/ic_settings_applications_white_24dp"
+                    android:title="Paramètres" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Filters by">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/type_0"
+                    android:title="Most Viewed" />
+                <item
+                    android:id="@+id/type_1"
+                    android:title="Most Shared" />
+                <item
+                    android:id="@+id/type_2"
+                    android:title="Most Mailed" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Period for">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/period_0"
+                    android:title="1 Day" />
+                <item
+                    android:id="@+id/period_1"
+                    android:title="1 Week" />
+                <item
+                    android:id="@+id/period_2"
+                    android:title="1 Month" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Categories">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/cat_btn_0"
+                    android:title="ALL SECTIONS" />
+                <item
+                    android:id="@+id/cat_btn_1"
+                    android:title="ARTS" />
+                <item
+                    android:id="@+id/cat_btn_2"
+                    android:title="AUTOMOBILES" />
+                <item
+                    android:id="@+id/cat_btn_3"
+                    android:title="BLOGS" />
+                <item
+                    android:id="@+id/cat_btn_4"
+                    android:title="BOOKS" />
+                <item
+                    android:id="@+id/cat_btn_5"
+                    android:title="BUSINESS DAY" />
+                <item
+                    android:id="@+id/cat_btn_6"
+                    android:title="EDUCATION" />
+                <item
+                    android:id="@+id/cat_btn_7"
+                    android:title="FASHION AND STYLE" />
+                <item
+                    android:id="@+id/cat_btn_8"
+                    android:title="FOOD" />
+                <item
+                    android:id="@+id/cat_btn_9"
+                    android:title="HEALTH" />
+                <item
+                    android:id="@+id/cat_btn_10"
+                    android:title="JOB MARKET" />
+                <item
+                    android:id="@+id/cat_btn_11"
+                    android:title="MAGAZINE" />
+                <item
+                    android:id="@+id/cat_btn_12"
+                    android:title="MEMBER CENTER" />
+                <item
+                    android:id="@+id/cat_btn_13"
+                    android:title="MOVIES" />
+                <item
+                    android:id="@+id/cat_btn_14"
+                    android:title="MULTIMEDIA" />
+                <item
+                    android:id="@+id/cat_btn_15"
+                    android:title="NY REGION" />
+                <item
+                    android:id="@+id/cat_btn_16"
+                    android:title="NYT NOW" />
+                <item
+                    android:id="@+id/cat_btn_17"
+                    android:title="OBITUARIES" />
+                <item
+                    android:id="@+id/cat_btn_18"
+                    android:title="OPEN" />
+                <item
+                    android:id="@+id/cat_btn_19"
+                    android:title="OPINION" />
+                <item
+                    android:id="@+id/cat_btn_20"
+                    android:title="PUBLIC EDITOR" />
+                <item
+                    android:id="@+id/cat_btn_21"
+                    android:title="REAL ESTATE" />
+                <item
+                    android:id="@+id/cat_btn_22"
+                    android:title="SCIENCE" />
+                <item
+                    android:id="@+id/cat_btn_23"
+                    android:title="SPORTS" />
+                <item
+                    android:id="@+id/cat_btn_24"
+                    android:title="STYLE" />
+                <item
+                    android:id="@+id/cat_btn_25"
+                    android:title="SUNDAY REVIEW" />
+                <item
+                    android:id="@+id/cat_btn_26"
+                    android:title="TIMES MAGAZINE" />
+                <item
+                    android:id="@+id/cat_btn_27"
+                    android:title="TECHNOLOGY" />
+                <item
+                    android:id="@+id/cat_btn_28"
+                    android:title="THE UPSHOT" />
+                <item
+                    android:id="@+id/cat_btn_29"
+                    android:title="THEATER" />
+                <item
+                    android:id="@+id/cat_btn_30"
+                    android:title="TIMES INSIDER" />
+                <item
+                    android:id="@+id/cat_btn_31"
+                    android:title="TODAY’S PAPER" />
+                <item
+                    android:id="@+id/cat_btn_32"
+                    android:title="TRAVEL" />
+                <item
+                    android:id="@+id/cat_btn_33"
+                    android:title="U.S." />
+                <item
+                    android:id="@+id/cat_btn_34"
+                    android:title="WORLD" />
+                <item
+                    android:id="@+id/cat_btn_35"
+                    android:title="YOUR MONEY" />
+            </group>
+        </menu>
+    </item>
+
+
+</menu>

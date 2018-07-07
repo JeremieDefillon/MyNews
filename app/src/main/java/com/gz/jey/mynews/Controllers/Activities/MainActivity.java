@@ -5,8 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.TabLayout;
+import android.view.View;
+import android.webkit.WebView;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
+import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
 
 public class MainActivity extends AppCompatActivity implements PageAdapter.OnPageAdapterListener{
@@ -21,12 +24,16 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public static int PNUM = 0;
     public PageAdapter adapterViewPager;
     public ViewPager pager;
+    private WebViewFragment wvf = new WebViewFragment();
+    private static WebView webview;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        webview = findViewById(R.id.activity_main_web);
 
         this.buildViewPager();
     }
@@ -47,6 +54,18 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         TabLayout tabs = findViewById(R.id.activity_main_tabs);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
+    }
+
+    public void SetWebView() {
+        pager.setVisibility(View.GONE);
+        webview.setVisibility(View.VISIBLE);
+        wvf = (WebViewFragment) getSupportFragmentManager().findFragmentById(R.id.webview);
+        if (wvf == null) {
+            wvf = new WebViewFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_main_web, wvf)
+                    .commit();
+        }
     }
 
     @Override
