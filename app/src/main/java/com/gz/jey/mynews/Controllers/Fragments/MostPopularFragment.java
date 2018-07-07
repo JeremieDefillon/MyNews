@@ -97,8 +97,7 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
                         URLI = results.getUrl();
                         Toast.makeText(getContext(), "You clicked on news : "+
                                 results.getTitle(), Toast.LENGTH_SHORT).show();
-                        // Open a Webview code
-                        //((MainActivity)getActivity()).SetWebView();
+                        ((MainActivity)getActivity()).SetWebView();
                     }
                 });
     }

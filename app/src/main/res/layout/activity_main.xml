@@ -8,14 +8,24 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context="com.gz.jey.mynews.Controllers.Activities.MainActivity">
+    tools:context="com.openclassrooms.nyt.Controllers.Activities.MainActivity">
 
     <!-- 1 | MainActivity RootView -->
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
+
+        <!-- Toolbar -->
+        <android.support.v7.widget.Toolbar
+
+            android:id="@+id/activity_main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:theme="@style/ToolBarStyle"/>
+
 
         <!-- FrameLayout for our fragments -->
         <android.support.design.widget.TabLayout
@@ -34,21 +44,23 @@
             android:layout_height="match_parent"
             android:visibility="visible"/>
 
-
         <WebView
             android:id="@+id/activity_main_web"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
 
+
     </LinearLayout>
 
+    <!-- 2 | NavigationView -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/activity_main_nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/activity_main_nav_header"
+        app:menu="@menu/menu_top_stories" />
+
 </android.support.v4.widget.DrawerLayout>
-
-
-
-
-
-
-
-

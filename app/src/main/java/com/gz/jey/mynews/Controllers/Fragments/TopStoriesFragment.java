@@ -80,7 +80,7 @@ public class TopStoriesFragment extends Fragment implements NewsAdapter.Listener
                         URLI = results.getUrl();
                         Toast.makeText(getContext(), "You clicked on news : "+
                                 results.getTitle(), Toast.LENGTH_SHORT).show();
-                        // Open a Webview code
+                        ((MainActivity)getActivity()).SetWebView();
                     }
                 });
     }
