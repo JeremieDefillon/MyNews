@@ -14,9 +14,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 import com.gz.jey.mynews.R;
 
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.URLI;

@@ -36,7 +36,6 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     }
 
     public void updateNews(Result res, RequestManager glide, NewsAdapter.Listener callback){
-
         String Sec = res.getSection();
         String Sub = res.getSubsection();
         String und = (TextUtils.isEmpty(Sec)||TextUtils.isEmpty(Sub))?"":" > ";
@@ -52,8 +51,6 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         this.dat.setText(res.getPublishedDate());
 
         callbackWeakRef = new WeakReference<NewsAdapter.Listener>(callback);
-
-
     }
 
     @Override

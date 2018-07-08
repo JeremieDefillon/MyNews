@@ -15,6 +15,8 @@ import java.lang.reflect.Type;
 
 public class NewsDeserializer implements JsonDeserializer<NewsSection>
 {
+    private static final String TAG = NewsDeserializer.class.getSimpleName();
+
     @Override
     public NewsSection deserialize(JsonElement je, Type type, JsonDeserializationContext jdc)
             throws JsonParseException
@@ -26,11 +28,14 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
         NewsSection news = new NewsSection();
 
         // Access json elements as jo.has("some_element")
-        if(jo.has("status")){news.setStatus(jo.get("status").getAsString());}
-        if(jo.has("num_results")){ news.setNumResults(jo.get("num_results").getAsInt());
-            Log.d("RESULTS => ", news.getNumResults().toString());}
+        if(jo.has("status")){
+            news.setStatus(jo.get("status").getAsString());
+        }
+        if(jo.has("num_results")){
+            news.setNumResults(jo.get("num_results").getAsInt());
+            Log.d(TAG, "RESULTS => " + news.getNumResults().toString());
+        }
         if(jo.has("results")){
-
             JsonArray jsonResultsArray = jo.get("results").getAsJsonArray();
             for(int i=0; i < jsonResultsArray.size(); i++){
 

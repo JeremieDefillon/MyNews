@@ -10,11 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
 import com.gz.jey.mynews.Controllers.Fragments.ArticleSearchFragment;
@@ -30,9 +29,11 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public static int ACTUALTAB = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static String URLI = "";
-    public static int SECNUM = 0;
+    public static int SECTOP = 0;
+    public static int SECMOST = 0;
     public static int TNUM = 0;
     public static int PNUM = 0;
+
 
     //FRAGMENTS
     private WebViewFragment wvf = new WebViewFragment();
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
     //FOR DESIGN
     private Toolbar toolbar;
-    private ProgressBar progress;
     public PageAdapter adapterViewPager;
     public ViewPager pager;
     private static WebView webview;
@@ -54,18 +54,12 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-        // Makes Progress bar Visible
-        getWindow().setFeatureInt( Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
-
         setContentView(R.layout.activity_main);
 
         // Set the Viewpager's layout
         pager = findViewById(R.id.activity_main_viewpager);
         // Set the WebView's layout
         webview = findViewById(R.id.activity_main_web);
-
-        progress = findViewById(R.id.progressBar);
 
         // Configure all views
         this.configureToolBar();
@@ -75,21 +69,34 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //2 - Inflate the menu and add it to the Toolbar
+        getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        return true;
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle Navigation Item Click
         int id = item.getItemId();
-        InProgress(0);
         int[] ind = NavDrawerClickSupport.GetNum(id);
         TNUM = ind[0];
         PNUM = ind[1];
-        SECNUM = ind[2];
+        switch(ACTUALTAB){
+            case 0 :
+                SECTOP = ind[2];
+            break;
+            case 1 :
+                SECMOST = ind[2];
+            break;
+        }
         ChangeData();
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     void ChangeData(){
-        SetVisibilityFragments(0);
+        SetVisibilityFragmentsAndMenu(0);
         configureNavigationView();
         switch (ACTUALTAB) {
             case 0:
@@ -142,6 +149,17 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         // set the adapter to the viewpager
         pager.setAdapter(adapterViewPager);
 
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            public void onPageSelected(int position) {
+                ACTUALTAB = position;
+                SetVisibilityFragmentsAndMenu(0);
+                ChangeData();
+            }
+        });
+
         TabLayout tabs = findViewById(R.id.activity_main_tabs);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
@@ -149,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
     // Configure and Open WebView
     public void SetWebView() {
-        SetVisibilityFragments(1);
+        SetVisibilityFragmentsAndMenu(1);
         wvf = (WebViewFragment) getSupportFragmentManager().findFragmentById(R.id.webview);
         if (wvf == null) {
             wvf = new WebViewFragment();
@@ -162,11 +180,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
     @Override
     public void onInstanceCreated(Fragment fragment, int position) {
-        ACTUALTAB = position;
-        InProgress(0);
-        SetVisibilityFragments(0);
-
-        switch (ACTUALTAB){
+        switch (position){
             case 0:
                 mTopStoriesFragment = (TopStoriesFragment) fragment;
                 break;
@@ -177,29 +191,31 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                 mArticleSearchFragment = (ArticleSearchFragment) fragment;
                 break;
         }
-
     }
 
-    private void SetVisibilityFragments(int fr) {
+    private void SetVisibilityFragmentsAndMenu(int fr) {
         switch (fr){
             case 0 :
                 pager.setVisibility(View.VISIBLE);
                 webview.setVisibility(View.GONE);
                 findViewById(R.id.activity_main_tabs).setVisibility(View.VISIBLE);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
+                configureDrawerLayout();
+
             break;
             case 1 :
                 pager.setVisibility(View.GONE);
                 webview.setVisibility(View.VISIBLE);
                 findViewById(R.id.activity_main_tabs).setVisibility(View.GONE);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_button);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ChangeData();
+                    }
+                });
             break;
-        }
-    }
-
-    public void InProgress(int p){
-        progress.setVisibility(View.VISIBLE);
-        progress.setProgress(p);
-        if(p>=100){
-            progress.setVisibility(View.INVISIBLE);
         }
     }
 }

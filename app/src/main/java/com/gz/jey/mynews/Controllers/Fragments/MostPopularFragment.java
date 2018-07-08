@@ -1,5 +1,6 @@
 package com.gz.jey.mynews.Controllers.Fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -39,6 +40,8 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
     @BindView(R.id.fragment_main_swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    ProgressDialog progressDialog;
+
     //FOR DATA
     private Disposable disposable;
     private ArrayList<Result> results;
@@ -55,6 +58,7 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+        ProgressLoad();
         this.configureRecyclerView();
         this.configureSwipeRefreshLayout();
         this.configureOnClickRecyclerView();
@@ -133,6 +137,7 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
     }
 
     public void ChangeDatas() {
+        ProgressLoad();
         executeHttpRequestWithRetrofit();
     }
 
@@ -142,7 +147,7 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
 
     private void executeHttpRequestWithRetrofit(){
 
-        String mp_cat = getResources().getStringArray(R.array.mp_category)[MainActivity.SECNUM];
+        String mp_cat = getResources().getStringArray(R.array.mp_category)[MainActivity.SECMOST];
         String mp_type = getResources().getStringArray(R.array.mp_type)[MainActivity.TNUM];
         String mp_period = getResources().getStringArray(R.array.mp_period)[MainActivity.PNUM];
 
@@ -159,7 +164,9 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
                     }
 
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {
+                        TerminateLoad();
+                    }
                 });
     }
 
@@ -172,11 +179,22 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
     // -------------------
 
     private void UpdateUI(NewsSection news){
-        //Log.i("UPDATE", news.getResults().get(0).getTitle());
+        Log.d(TAG, "UPDATE => " + String.valueOf(news.getResults().size()));
         results.clear();
         results.addAll(news.getResults());
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+    }
 
+    private void ProgressLoad(){
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+    }
+
+    private void TerminateLoad(){
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }

@@ -3,10 +3,14 @@ package com.gz.jey.mynews.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
+import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 import com.gz.jey.mynews.Controllers.Fragments.ArticleSearchFragment;
 import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
 import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
+
+import static com.gz.jey.mynews.Controllers.Activities.MainActivity.ACTUALTAB;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
@@ -30,7 +34,6 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position){
-
         switch (position){
             case 0: // Page Number 1
                 mListener.onInstanceCreated(fragment0, position);

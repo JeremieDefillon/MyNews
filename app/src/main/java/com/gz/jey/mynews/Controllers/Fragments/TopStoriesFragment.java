@@ -1,5 +1,6 @@
 package com.gz.jey.mynews.Controllers.Fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,6 +37,8 @@ public class TopStoriesFragment extends Fragment implements NewsAdapter.Listener
     @BindView(R.id.fragment_main_swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    ProgressDialog progressDialog;
+
     //FOR DATA
     private Disposable disposable;
     private ArrayList<Result> results;
@@ -53,6 +56,7 @@ public class TopStoriesFragment extends Fragment implements NewsAdapter.Listener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+        ProgressLoad();
         this.configureRecyclerView();
         this.configureSwipeRefreshLayout();
         this.configureOnClickRecyclerView();
@@ -116,6 +120,7 @@ public class TopStoriesFragment extends Fragment implements NewsAdapter.Listener
     }
 
     public void ChangeDatas() {
+        ProgressLoad();
         executeHttpRequestWithRetrofit();
     }
 
@@ -124,24 +129,30 @@ public class TopStoriesFragment extends Fragment implements NewsAdapter.Listener
     // -------------------
 
     private void executeHttpRequestWithRetrofit(){
-        String ts_cat = getResources().getStringArray(R.array.ts_category)[MainActivity.SECNUM];
+        String ts_cat = getResources().getStringArray(R.array.ts_category)[MainActivity.SECTOP];
 
         this.disposable = ApiStreams.streamFetchTopStories(ts_cat)
                 .subscribeWith(new DisposableObserver<NewsSection>(){
                     @Override
-                    public void onNext(NewsSection results) {UpdateUI(results);}
+                    public void onNext(NewsSection results) {
+                        UpdateUI(results);
+                    }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i(TAG, e.toString()+"||");}
+                        Log.e(TAG, e.toString());
+                    }
 
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {
+                        TerminateLoad();
+                    }
                 });
     }
 
     private void disposeWhenDestroy(){
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+        if (this.disposable != null && !this.disposable.isDisposed())
+            this.disposable.dispose();
     }
 
     // -------------------
@@ -149,10 +160,22 @@ public class TopStoriesFragment extends Fragment implements NewsAdapter.Listener
     // -------------------
 
     private void UpdateUI(NewsSection news){
-        //Log.i("UPDATE", news.getResults().get(0).getTitle());
+        Log.d(TAG, "UPDATE => " + String.valueOf(news.getResults().size()));
         results.clear();
         results.addAll(news.getResults());
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void ProgressLoad(){
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+    }
+
+    private void TerminateLoad(){
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }
