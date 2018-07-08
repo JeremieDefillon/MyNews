@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context="com.openclassrooms.nyt.Controllers.Activities.MainActivity">
+    tools:context="com.gz.jey.mynews.Controllers.Activities.MainActivity">
 
     <!-- 1 | MainActivity RootView -->
     <LinearLayout
@@ -23,19 +23,34 @@
             android:id="@+id/activity_main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             app:theme="@style/ToolBarStyle"/>
 
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:progress="0"
+            android:layout_marginTop="-4dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:progressTint="@color/colorAccent"
+            android:visibility="invisible"
+            />
         <!-- FrameLayout for our fragments -->
         <android.support.design.widget.TabLayout
             android:id="@+id/activity_main_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabTextColor="#EEEEEE"
-            app:tabSelectedTextColor="@color/colorAccent"/>
+            android:background="@color/colorPrimaryDark"
+            android:textDirection="firstStrong"
+            app:tabIndicatorColor="@color/colorWhite"
+            app:tabTextColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/colorWhite"
+            android:visibility="visible"
+            />
+
+
 
         <!-- ViewPager for our fragments -->
         <android.support.v4.view.ViewPager

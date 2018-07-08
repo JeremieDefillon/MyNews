@@ -177,5 +177,6 @@ public class MostPopularFragment extends Fragment implements NewsAdapter.Listene
         results.addAll(news.getResults());
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
+
     }
 }

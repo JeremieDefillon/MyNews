@@ -52,6 +52,8 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         this.dat.setText(res.getPublishedDate());
 
         callbackWeakRef = new WeakReference<NewsAdapter.Listener>(callback);
+
+
     }
 
     @Override
