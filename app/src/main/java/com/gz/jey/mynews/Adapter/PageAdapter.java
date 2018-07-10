@@ -8,6 +8,7 @@ import android.util.Log;
 import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 import com.gz.jey.mynews.Controllers.Fragments.ArticleSearchFragment;
 import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
+import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
 import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
 
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.ACTUALTAB;
@@ -24,7 +25,7 @@ public class PageAdapter extends FragmentPagerAdapter {
 
         fragment0 = TopStoriesFragment.newInstance();
         fragment1 = MostPopularFragment.newInstance();
-        fragment2 = ArticleSearchFragment.newInstance();
+        fragment2 = NewsQueryFragment.newInstance();
     }
 
     @Override

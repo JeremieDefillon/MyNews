@@ -10,18 +10,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
 import com.gz.jey.mynews.Controllers.Fragments.ArticleSearchFragment;
 import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
+import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
 import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
 import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
 import com.gz.jey.mynews.Utils.NavDrawerClickSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements PageAdapter.OnPageAdapterListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -39,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     private WebViewFragment wvf = new WebViewFragment();
     private TopStoriesFragment mTopStoriesFragment;
     private MostPopularFragment mMostPopularFragment;
-    private ArticleSearchFragment mArticleSearchFragment;
+    private NewsQueryFragment mNewsQueryFragment;
 
 
     //FOR DESIGN
@@ -49,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     private static WebView webview;
     public DrawerLayout drawerLayout;
     public static NavigationView navigationView;
+    Spinner beginDate, endDate;
 
 
     @Override
@@ -105,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
             case 1:
                 mMostPopularFragment.ChangeDatas();
                 break;
+            case 2:
+                mNewsQueryFragment.ChangeDatas();
+                break;
+
         }
     }
 
@@ -188,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                 mMostPopularFragment = (MostPopularFragment) fragment;
                 break;
             case 2:
-                mArticleSearchFragment = (ArticleSearchFragment) fragment;
+                mNewsQueryFragment = (NewsQueryFragment) fragment;
                 break;
         }
     }
@@ -218,4 +230,6 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
             break;
         }
     }
+
+
 }

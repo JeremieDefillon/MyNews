@@ -92,4 +92,7 @@
         <item>a month</item>
     </string-array>
 
+    <string name="begin_date">01/01/1900</string>
+    <string name="end_date">09/07/2018</string>
+
 </resources>
