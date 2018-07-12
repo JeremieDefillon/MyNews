@@ -8,8 +8,8 @@ import android.view.View;
 import android.webkit.WebView;
 
 import com.gz.jey.mynews.Controllers.Activities.MainActivity;
-import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
-import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
+import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
+import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
 import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 
 import org.junit.After;
@@ -46,22 +46,22 @@ public class FragmentUnitTest {
      }
 
      @Test
-     public void testTSFragment(){
-         // Test if the TopStories fragment is launched or not
-         Fragment fragment = TopStoriesFragment.newInstance();
+     public void testMainFragment(){
+         // Test if the Main fragment is launched or not
+         Fragment fragment = MainFragment.newInstance();
          testFragment(fragment);
      }
 
      @Test
-     public void testMPFragment(){
-        // Test if the MostPopular fragment is launched or not
-        Fragment fragment = MostPopularFragment.newInstance();
-        testFragment(fragment);
+     public void testNewsQueryFragment(){
+         // Test if the NewsQuery fragment is launched or not
+         Fragment fragment = NewsQueryFragment.newInstance();
+         testFragment(fragment);
      }
 
     @Test
-    public void testWVFragment(){
-        // Test if the MostPopular fragment is launched or not
+    public void testWebViewFragment(){
+        // Test if the WebView fragment is launched or not
         Fragment fragment = WebViewFragment.newInstance();
         testWebFragment(fragment);
     }

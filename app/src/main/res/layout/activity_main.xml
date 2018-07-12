@@ -53,6 +53,14 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
 
+        <FrameLayout
+            android:id="@+id/activity_main_no_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+        </FrameLayout>
+
 
     </LinearLayout>
 

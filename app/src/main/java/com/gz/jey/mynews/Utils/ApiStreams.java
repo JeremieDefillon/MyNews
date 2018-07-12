@@ -58,9 +58,14 @@ public class ApiStreams {
     }
 
     // method to call and pass the request via an observable for the ArticleSearch api
-    public static Observable<NewsSection> streamFetchASearch(String query, String sort){
+    public static Observable<NewsSection> streamFetchASearch(String query, String begin_date, String end_date){
+
+        String sort = "newest";
+        String fl = "headline,section_name,multimedia,pub_date,web_url";
+        String bd = begin_date==""?"19510101":begin_date;
+        String ed = end_date==""?"20180711":end_date;
         ApiService apiService = getRetrofit().create(ApiService.class);
-        return apiService.getArticleSearch(query, sort)
+        return apiService.getArticleSearch(query, sort, fl, bd, ed)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);

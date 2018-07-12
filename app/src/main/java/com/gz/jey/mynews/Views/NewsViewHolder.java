@@ -14,21 +14,18 @@ import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.annotations.Nullable;
 
 import com.gz.jey.mynews.Utils.Formatter;
 
 public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
-    @BindView(R.id.fragment_main_item_title)
-    TextView Title;
+    @BindView(R.id.fragment_main_item_title)TextView Title;
     @BindView(R.id.fragment_main_item_date) TextView dat;
-    @BindView(R.id.fragment_main_item_image)
-    ImageView Image;
+    @BindView(R.id.fragment_main_item_image)ImageView Image;
     @BindView(R.id.fragment_main_item_from) TextView From;
 
     WeakReference<NewsAdapter.Listener> callbackWeakRef;
-
-
 
     public NewsViewHolder(View itemView) {
         super(itemView);
@@ -50,7 +47,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         this.Title.setText(res.getTitle());
         this.dat.setText(res.getPublishedDate());
 
-        callbackWeakRef = new WeakReference<NewsAdapter.Listener>(callback);
+        callbackWeakRef = new WeakReference<>(callback);
     }
 
     @Override

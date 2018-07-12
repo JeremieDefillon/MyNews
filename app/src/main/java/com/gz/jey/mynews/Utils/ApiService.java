@@ -35,7 +35,11 @@ public interface ApiService {
     @GET("svc/search/v2/articlesearch.json?api-key="+KEY)
     Observable<NewsSection> getArticleSearch(
             @Query("q") String q,
-            @Query("sort") String sort
+            @Query("sort") String sort,
+            @Query("fl") String fl,
+            @Query("begin_date") String begin_date,
+            @Query("end_date") String end_date
+
     );
 
 }

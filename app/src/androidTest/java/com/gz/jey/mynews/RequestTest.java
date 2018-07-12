@@ -43,7 +43,7 @@ public class RequestTest {
     @Test
     public void testArticleSearchRequest() throws Exception {
         //1 - Get the stream
-        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("bahamas", "oldest");
+        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("obama","","");
         //2 - Call TestRequest function to test this Article Search Request
         TestRequest(observableInfos);
 

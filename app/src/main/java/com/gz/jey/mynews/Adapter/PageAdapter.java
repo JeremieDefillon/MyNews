@@ -3,15 +3,9 @@ package com.gz.jey.mynews.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
-import com.gz.jey.mynews.Controllers.Fragments.ArticleSearchFragment;
-import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
+import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
 import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
-import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
-
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.ACTUALTAB;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
@@ -23,9 +17,9 @@ public class PageAdapter extends FragmentPagerAdapter {
         super(mgr);
         mListener = listener;
 
-        fragment0 = TopStoriesFragment.newInstance();
-        fragment1 = MostPopularFragment.newInstance();
-        fragment2 = NewsQueryFragment.newInstance();
+        fragment0 = MainFragment.newInstance();
+        fragment1 = MainFragment.newInstance();
+        fragment2 = MainFragment.newInstance();
     }
 
     @Override

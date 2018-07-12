@@ -10,25 +10,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
-import com.gz.jey.mynews.Controllers.Fragments.ArticleSearchFragment;
-import com.gz.jey.mynews.Controllers.Fragments.MostPopularFragment;
+import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
 import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
-import com.gz.jey.mynews.Controllers.Fragments.TopStoriesFragment;
 import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
 import com.gz.jey.mynews.Utils.NavDrawerClickSupport;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements PageAdapter.OnPageAdapterListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -40,13 +33,15 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public static int SECMOST = 0;
     public static int TNUM = 0;
     public static int PNUM = 0;
+    public static String QUERY = "";
+    public static String BEGIN_DATE = "";
+    public static String END_DATE = "";
 
 
     //FRAGMENTS
     private WebViewFragment wvf = new WebViewFragment();
-    private TopStoriesFragment mTopStoriesFragment;
-    private MostPopularFragment mMostPopularFragment;
-    private NewsQueryFragment mNewsQueryFragment;
+    private MainFragment tsFragment, mpFragment, asFragment;
+    private NewsQueryFragment nqFragment;
 
 
     //FOR DESIGN
@@ -108,13 +103,16 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         configureNavigationView();
         switch (ACTUALTAB) {
             case 0:
-                mTopStoriesFragment.ChangeDatas();
+                tsFragment.ChangeDatas();
                 break;
             case 1:
-                mMostPopularFragment.ChangeDatas();
+                mpFragment.ChangeDatas();
                 break;
             case 2:
-                mNewsQueryFragment.ChangeDatas();
+                if(QUERY != "")
+                    asFragment.ChangeDatas();
+                else
+                    SetNewsQuery();
                 break;
 
         }
@@ -187,20 +185,32 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                     .add(R.id.activity_main_web, wvf)
                     .commit();
         }
+    }
 
+    public void SetNewsQuery() {
+        SetVisibilityFragmentsAndMenu(0);
+        nqFragment = (NewsQueryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_newsquery_swipe_container);
+        if (nqFragment == null) {
+            nqFragment = NewsQueryFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_newsquery_swipe_container, nqFragment)
+                    .commit();
+
+            nqFragment.ChangeDatas();
+        }
     }
 
     @Override
     public void onInstanceCreated(Fragment fragment, int position) {
         switch (position){
             case 0:
-                mTopStoriesFragment = (TopStoriesFragment) fragment;
+                tsFragment = (MainFragment) fragment;
                 break;
             case 1:
-                mMostPopularFragment = (MostPopularFragment) fragment;
+                mpFragment = (MainFragment) fragment;
                 break;
             case 2:
-                mNewsQueryFragment = (NewsQueryFragment) fragment;
+                asFragment = (MainFragment) fragment;
                 break;
         }
     }
@@ -208,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     private void SetVisibilityFragmentsAndMenu(int fr) {
         switch (fr){
             case 0 :
+                findViewById(R.id.activity_main_no_result).setVisibility(View.GONE);
                 pager.setVisibility(View.VISIBLE);
                 webview.setVisibility(View.GONE);
                 findViewById(R.id.activity_main_tabs).setVisibility(View.VISIBLE);
@@ -216,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
             break;
             case 1 :
+                findViewById(R.id.activity_main_no_result).setVisibility(View.GONE);
                 pager.setVisibility(View.GONE);
                 webview.setVisibility(View.VISIBLE);
                 findViewById(R.id.activity_main_tabs).setVisibility(View.GONE);
@@ -228,8 +240,19 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                     }
                 });
             break;
+            case 2 :
+                findViewById(R.id.activity_main_no_result).setVisibility(View.VISIBLE);
+                pager.setVisibility(View.GONE);
+                webview.setVisibility(View.GONE);
+                findViewById(R.id.activity_main_tabs).setVisibility(View.VISIBLE);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
+                configureDrawerLayout();
+
+                break;
         }
     }
+
+
 
 
 }
