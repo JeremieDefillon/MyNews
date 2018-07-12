@@ -14,9 +14,6 @@ import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.annotations.Nullable;
-
-import com.gz.jey.mynews.Utils.Formatter;
 
 public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
@@ -54,6 +51,5 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View view) {
         NewsAdapter.Listener callback = callbackWeakRef.get();
     }
-
 
 }

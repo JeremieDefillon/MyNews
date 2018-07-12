@@ -49,12 +49,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         return new NewsViewHolder(view);
     }
 
-
     // UPDATE VIEW HOLDER WITH A NEWS
     @Override
     public void onBindViewHolder(NewsViewHolder viewHolder, int position) {
-        Log.d("ON BIND", String.valueOf(getItemCount()));
-            viewHolder.updateNews(this.results.get(position), this.glide, this.callback);
+        viewHolder.updateNews(this.results.get(position), this.glide, this.callback);
     }
 
     // RETURN THE TOTAL COUNT OF ITEMS IN THE LIST

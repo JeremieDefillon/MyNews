@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +21,6 @@ import com.gz.jey.mynews.R;
 import com.gz.jey.mynews.Utils.ApiStreams;
 import com.gz.jey.mynews.Utils.ItemClickSupport;
 import com.gz.jey.mynews.Views.NewsAdapter;
-import com.gz.jey.mynews.Views.NoResultAdapter;
 
 import java.util.ArrayList;
 
@@ -32,12 +32,14 @@ import io.reactivex.observers.DisposableObserver;
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.ACTUALTAB;
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.URLI;
 
-public class MainFragment extends Fragment implements NewsAdapter.Listener, NoResultAdapter.Listener {
+public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // FOR DESIGN
     @BindView(R.id.fragment_main_recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.fragment_main_swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_result)
+    TextView noResult;
 
     ProgressDialog progressDialog;
 
@@ -45,7 +47,6 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
     private Disposable disposable;
     private ArrayList<Result> results;
     private NewsAdapter newsAdapter;
-    private NoResultAdapter nrAdapter;
     private static final String TAG = MainFragment.class.getSimpleName();
 
 
@@ -60,10 +61,10 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         ProgressLoad();
-        this.configureRecyclerView();
-        this.configureSwipeRefreshLayout();
-        this.configureOnClickRecyclerView();
-        this.executeHttpRequestWithRetrofit();
+        configureRecyclerView();
+        configureSwipeRefreshLayout();
+        configureOnClickRecyclerView();
+        executeHttpRequestWithRetrofit();
         return view;
     }
 
@@ -71,7 +72,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        this.disposeWhenDestroy();
+        disposeWhenDestroy();
     }
 
     // -----------------
@@ -104,25 +105,15 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
     // -----------------
 
     private void configureRecyclerView(){
-        this.results = new ArrayList<>();
-        this.SetRecyclerWithResult();
-        // Set layout manager to position the items
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    private void SetRecyclerWithResult(){
+        results = new ArrayList<>();
         // Create newsAdapter passing in the sample user data
-        this.newsAdapter = new NewsAdapter(this.results, Glide.with(this), this);
+        newsAdapter = new NewsAdapter(results, Glide.with(this), this);
         // Attach the newsAdapter to the recyclerview to populate items
-        this.recyclerView.setAdapter(this.newsAdapter);
+        recyclerView.setAdapter(newsAdapter);
+        // Set layout manager to position the items
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void SetRecyclerWithOutResult(){
-        // Create noResultAdapter passing in the sample user data
-        this.nrAdapter = new NoResultAdapter(this);
-        // Attach the newsAdapter to the recyclerview to populate items
-        this.recyclerView.setAdapter(this.nrAdapter);
-    }
 
     private void configureSwipeRefreshLayout(){
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -146,7 +137,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
         switch(ACTUALTAB) {
             case 0:
                 String ts_cat = getResources().getStringArray(R.array.ts_category)[MainActivity.SECTOP];
-                this.disposable = ApiStreams.streamFetchTopStories(ts_cat)
+                disposable = ApiStreams.streamFetchTopStories(ts_cat)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
                             public void onNext(NewsSection results) {
@@ -168,7 +159,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
                 String mp_cat = getResources().getStringArray(R.array.mp_category)[MainActivity.SECMOST];
                 String mp_typ = getResources().getStringArray(R.array.mp_type)[MainActivity.TNUM];
                 String mp_per = getResources().getStringArray(R.array.mp_period)[MainActivity.PNUM];
-                this.disposable = ApiStreams.streamFetchMost(mp_typ, mp_cat,mp_per)
+                disposable = ApiStreams.streamFetchMost(mp_typ, mp_cat,mp_per)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
                             public void onNext(NewsSection results) {
@@ -191,7 +182,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
                 String query = MainActivity.QUERY;
                 String begin = MainActivity.BEGIN_DATE;
                 String end = MainActivity.END_DATE;
-                this.disposable = ApiStreams.streamFetchASearch(query, begin, end)
+                disposable = ApiStreams.streamFetchASearch(query, begin, end)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
                             public void onNext(NewsSection results) {
@@ -213,8 +204,8 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
     }
 
     private void disposeWhenDestroy(){
-        if (this.disposable != null && !this.disposable.isDisposed())
-            this.disposable.dispose();
+        if (disposable != null && !disposable.isDisposed())
+            disposable.dispose();
     }
 
     // -------------------
@@ -226,11 +217,12 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener, NoRe
         results.clear();
         results.addAll(news.getResults());
         if(results.size()!=0) {
-            SetRecyclerWithResult();
+            noResult.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             newsAdapter.notifyDataSetChanged();
         }else{
-            SetRecyclerWithOutResult();
-            nrAdapter.notifyDataSetChanged();
+            noResult.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
         swipeRefreshLayout.setRefreshing(false);
     }

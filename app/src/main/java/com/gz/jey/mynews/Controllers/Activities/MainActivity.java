@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Spinner;
+import android.widget.FrameLayout;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
 import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public PageAdapter adapterViewPager;
     public ViewPager pager;
     private static WebView webview;
+    public FrameLayout container;
     public DrawerLayout drawerLayout;
     public static NavigationView navigationView;
-    Spinner beginDate, endDate;
 
 
     @Override
@@ -59,16 +59,23 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Init the variables
+        InitVars();
+
+        // Configure all views
+        configureToolBar();
+        configureDrawerLayout();
+        configureNavigationView();
+        buildViewPager();
+    }
+
+    void InitVars(){
         // Set the Viewpager's layout
         pager = findViewById(R.id.activity_main_viewpager);
         // Set the WebView's layout
         webview = findViewById(R.id.activity_main_web);
-
-        // Configure all views
-        this.configureToolBar();
-        this.configureDrawerLayout();
-        this.configureNavigationView();
-        this.buildViewPager();
+        // Set the Container's layout
+        container = findViewById(R.id.container);
     }
 
     @Override
@@ -109,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                 mpFragment.ChangeDatas();
                 break;
             case 2:
-                if(QUERY != "")
+                if(QUERY != null && !QUERY.isEmpty())
                     asFragment.ChangeDatas();
                 else
                     SetNewsQuery();
@@ -188,16 +195,14 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     }
 
     public void SetNewsQuery() {
-        SetVisibilityFragmentsAndMenu(0);
-        nqFragment = (NewsQueryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_newsquery_swipe_container);
-        if (nqFragment == null) {
+        SetVisibilityFragmentsAndMenu(2);
+        //nqFragment = (NewsQueryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_newsquery_swipe_container);
+       // if (nqFragment == null) {
             nqFragment = NewsQueryFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_newsquery_swipe_container, nqFragment)
+                    .add(R.id.container, nqFragment)
                     .commit();
-
-            nqFragment.ChangeDatas();
-        }
+       // }
     }
 
     @Override
@@ -218,16 +223,15 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     private void SetVisibilityFragmentsAndMenu(int fr) {
         switch (fr){
             case 0 :
-                findViewById(R.id.activity_main_no_result).setVisibility(View.GONE);
+                container.setVisibility(View.GONE);
                 pager.setVisibility(View.VISIBLE);
                 webview.setVisibility(View.GONE);
                 findViewById(R.id.activity_main_tabs).setVisibility(View.VISIBLE);
                 getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
                 configureDrawerLayout();
-
             break;
             case 1 :
-                findViewById(R.id.activity_main_no_result).setVisibility(View.GONE);
+                container.setVisibility(View.GONE);
                 pager.setVisibility(View.GONE);
                 webview.setVisibility(View.VISIBLE);
                 findViewById(R.id.activity_main_tabs).setVisibility(View.GONE);
@@ -239,16 +243,22 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                         ChangeData();
                     }
                 });
+
             break;
             case 2 :
-                findViewById(R.id.activity_main_no_result).setVisibility(View.VISIBLE);
+                container.setVisibility(View.VISIBLE);
                 pager.setVisibility(View.GONE);
                 webview.setVisibility(View.GONE);
-                findViewById(R.id.activity_main_tabs).setVisibility(View.VISIBLE);
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
-                configureDrawerLayout();
-
-                break;
+                findViewById(R.id.activity_main_tabs).setVisibility(View.GONE);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_button);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ChangeData();
+                    }
+                });
+            break;
         }
     }
 

@@ -1,7 +1,9 @@
 package com.gz.jey.mynews.Controllers.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import java.util.List;
 public class NewsQueryFragment extends Fragment {
 
     private MainActivity mainact;
+    Context context;
 
     Spinner beginDate, endDate;
 
@@ -28,8 +31,10 @@ public class NewsQueryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        mainact = (MainActivity) getActivity();
+        View view = inflater.inflate(R.layout.fragment_news_query, container, false);
+        mainact = (MainActivity)getActivity();
+        context = getContext();
+        SetSpinner(view);
         return view;
     }
 
@@ -47,28 +52,30 @@ public class NewsQueryFragment extends Fragment {
     // CONFIGURATION
     // -----------------
 
-    public void ChangeDatas(){
+    public void SetSpinner(View view){
+
+        beginDate = view.findViewById(R.id.input_begin_date);
+        endDate = view.findViewById(R.id.input_end_date);
+
         // Set Begin Block
-        beginDate = mainact.findViewById(R.id.input_begin_date);
         ArrayAdapter<String> beginAdapter;
-        List<String> begin=new ArrayList<String>();
+        List<String> begin= new ArrayList<>();
         //Fill begin arraylist..
         begin.add("01/01/1998");
 
-        beginAdapter = new ArrayAdapter<String>(mainact.getApplicationContext(),R.layout.date_text, begin);
+        beginAdapter = new ArrayAdapter<String>(context,R.layout.date_text, begin);
 
         beginDate.setAdapter(beginAdapter);
         beginDate.setSelection(0);
 
 
         // Set End Block
-        endDate = mainact.findViewById(R.id.input_end_date);
         ArrayAdapter<String> endAdapter;
-        List<String> end=new ArrayList<String>();
+        List<String> end= new ArrayList<>();
         //Fill end arraylist..
         end.add("31/12/2018");
 
-        endAdapter = new ArrayAdapter<String>(mainact.getApplicationContext(),R.layout.date_text, end);
+        endAdapter = new ArrayAdapter<>(context, R.layout.date_text, end);
 
         endDate.setAdapter(endAdapter);
         endDate.setSelection(0);
