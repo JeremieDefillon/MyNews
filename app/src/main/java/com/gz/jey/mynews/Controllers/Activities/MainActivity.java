@@ -111,17 +111,16 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         switch (ACTUALTAB) {
             case 0:
                 tsFragment.ChangeDatas();
-                break;
+            break;
             case 1:
                 mpFragment.ChangeDatas();
-                break;
+            break;
             case 2:
                 if(QUERY != null && !QUERY.isEmpty())
                     asFragment.ChangeDatas();
                 else
                     SetNewsQuery();
-                break;
-
+            break;
         }
     }
 

@@ -7,159 +7,222 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <LinearLayout
-
-        android:orientation="vertical"
-        android:id="@+id/article_search"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"   >
+        android:layout_height="match_parent">
+
+        <DatePicker
+            android:id="@+id/input_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+                >
+        </DatePicker>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:id="@+id/article_search"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <EditText
-                android:id="@+id/search_query"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:ems="10"
-                android:inputType="text"
-                android:text=""
-                android:hint="Search query term"
-                android:backgroundTint="#01FEDC"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteX="10dp"
-            tools:layout_editor_absoluteY="60dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="160dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-
-                <TextView
-                android:hint="Begin Date"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_height="20dp"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"/>
-
-                <Spinner
-                    android:id="@+id/input_begin_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:textAlignment="center" />
-
-                <View
-                    android:gravity="bottom"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#FF909090" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="160dp"
-                android:layout_height="120dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-
-                <TextView
-                    android:hint="End Date"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_height="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="bottom"/>
-
-                <Spinner
-                    android:id="@+id/input_end_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:textAlignment="center" />
-
-                <View
-                    android:gravity="bottom"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#FF909090" />
-
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
+            android:visibility="visible"
             >
 
-            <TableRow
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <EditText
+                    android:id="@+id/search_query"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:text=""
+                    android:hint="Search query term"
+                    android:backgroundTint="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="10dp"
+                tools:layout_editor_absoluteY="60dp">
+
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="55dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom"
+                        android:hint="Begin Date"
+                        android:textColor="@color/colorPrimaryDark" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <Button
+                            android:id="@+id/click_begin_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:gravity="bottom"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            android:background="@color/colorWhite"
+                            android:backgroundTint="@color/colorWhite"
+                            android:textColor="@color/colorPrimaryDark"
+                            >
+
+                        </Button>
+
+                        <ImageView
+                            android:background="@drawable/bottom_arrow"
+                            android:backgroundTint="@color/colorAccent"
+                            android:layout_gravity="bottom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1.5dp"
+                        android:background="#FF909090"
+                        android:gravity="bottom" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="55dp"
+                    android:gravity="center"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+
+                    <TextView
+                        android:hint="End Date"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_height="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="bottom"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/click_end_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp"
+                            android:gravity="bottom"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            android:background="@color/colorWhite"
+                            android:backgroundTint="@color/colorWhite"
+                            android:textColor="@color/colorPrimaryDark"
+                            >
+
+                        </Button>
+
+                        <ImageButton
+                            android:background="@drawable/bottom_arrow"
+                            android:backgroundTint="@color/colorAccent"
+                            android:layout_gravity="bottom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            />
+
+                    </LinearLayout>
+
+
+
+                    <View
+                        android:gravity="bottom"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1.5dp"
+                        android:background="#FF909090" />
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <GridLayout
+                android:id="@+id/checkbox_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CheckBox" />
-            <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="CheckBox" />
+                android:layout_above="@+id/userSwitch"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:rowCount="5"
+                android:layout_margin="20dp"
+                android:columnCount="2"
+                android:alignmentMode="alignBounds">
 
+            </GridLayout>
 
-            <TableRow
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-        </TableLayout>
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:scaleType="fitCenter"
+                tools:layout_editor_absoluteX="10dp"
+                tools:layout_editor_absoluteY="60dp">
 
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/search"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/colorAccent"/>
 
 
-    </LinearLayout>
 
-
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

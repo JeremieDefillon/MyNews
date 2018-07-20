@@ -8,21 +8,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 
 import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 import com.gz.jey.mynews.R;
+import com.gz.jey.mynews.Utils.DatesCalculator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class NewsQueryFragment extends Fragment {
 
+    // Activity & Context
     private MainActivity mainact;
     Context context;
 
-    Spinner beginDate, endDate;
+    // Views & Layouts
+    DatePicker datePicker;
 
+
+    // Datas
+    Calendar begin_date, end_date;
+
+
+    // Start & Initializing
     public NewsQueryFragment(){}
 
     public static NewsQueryFragment newInstance(){
@@ -32,10 +45,23 @@ public class NewsQueryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_query, container, false);
+        InitDatas(view);
+        return view;
+    }
+
+    // -----------------
+    // CONFIGURATION
+    // -----------------
+
+    public void InitDatas(View view){
         mainact = (MainActivity)getActivity();
         context = getContext();
-        SetSpinner(view);
-        return view;
+        datePicker = view.findViewById(R.id.input_date);
+        SetCheckboxCategorys(view);
+    }
+
+    public void SetCheckboxCategorys(View view){
+
     }
 
     @Override
@@ -47,37 +73,16 @@ public class NewsQueryFragment extends Fragment {
     // ACTION
     // -----------------
 
-
-    // -----------------
-    // CONFIGURATION
-    // -----------------
-
-    public void SetSpinner(View view){
-
-        beginDate = view.findViewById(R.id.input_begin_date);
-        endDate = view.findViewById(R.id.input_end_date);
-
-        // Set Begin Block
-        ArrayAdapter<String> beginAdapter;
-        List<String> begin= new ArrayList<>();
-        //Fill begin arraylist..
-        begin.add("01/01/1998");
-
-        beginAdapter = new ArrayAdapter<String>(context,R.layout.date_text, begin);
-
-        beginDate.setAdapter(beginAdapter);
-        beginDate.setSelection(0);
-
-
-        // Set End Block
-        ArrayAdapter<String> endAdapter;
-        List<String> end= new ArrayList<>();
-        //Fill end arraylist..
-        end.add("31/12/2018");
-
-        endAdapter = new ArrayAdapter<>(context, R.layout.date_text, end);
-
-        endDate.setAdapter(endAdapter);
-        endDate.setSelection(0);
+    public void UpdateDatePicker(Calendar date){
+        // Insert Date into DatePicker
+        int[] intDates = DatesCalculator.intDateFormat(date);
+        datePicker.updateDate(intDates[2],intDates[1],intDates[0]);
     }
+
+
+    // --------------------------
+    // Utils for all Dates Stuff
+    // --------------------------
+
+
 }

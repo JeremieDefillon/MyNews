@@ -5,6 +5,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="search">SEARCH</string>
+
     <!-- Used in NYT api Requests -->
     <string-array name="ts_category">
         <item>home</item>
@@ -92,7 +94,23 @@
         <item>a month</item>
     </string-array>
 
-    <string name="begin_date">01/01/1900</string>
-    <string name="end_date">09/07/2018</string>
+    <string-array name="as_category">
+        <item>Automobiles</item>
+        <item>Business</item>
+        <item>Politics</item>
+        <item>World</item>
+        <item>National</item>
+        <item>Technology</item>
+        <item>Science</item>
+        <item>Health</item>
+        <item>Sports</item>
+        <item>Arts</item>
+        <item>Books</item>
+        <item>Movies</item>
+        <item>Theater</item>
+        <item>Fashion</item>
+        <item>Food</item>
+        <item>Travel</item>
+    </string-array>
 
 </resources>
