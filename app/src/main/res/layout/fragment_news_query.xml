@@ -89,13 +89,10 @@
                         <Button
                             android:id="@+id/click_begin_date"
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_margin="10dp"
+                            android:layout_height="match_parent"
                             android:gravity="bottom"
                             android:textSize="18dp"
-                            android:textStyle="bold"
-                            android:background="@color/colorWhite"
-                            android:backgroundTint="@color/colorWhite"
+                            android:background="@color/colorInvisible"
                             android:textColor="@color/colorPrimaryDark"
                             >
 
@@ -105,11 +102,11 @@
                             android:background="@drawable/bottom_arrow"
                             android:backgroundTint="@color/colorAccent"
                             android:layout_gravity="bottom"
+                            android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
                             />
-
                     </LinearLayout>
 
                     <View
@@ -146,22 +143,20 @@
                         <Button
                             android:id="@+id/click_end_date"
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_margin="10dp"
+                            android:layout_height="match_parent"
                             android:gravity="bottom"
                             android:textSize="18dp"
-                            android:textStyle="bold"
-                            android:background="@color/colorWhite"
-                            android:backgroundTint="@color/colorWhite"
+                            android:background="@color/colorInvisible"
                             android:textColor="@color/colorPrimaryDark"
                             >
 
                         </Button>
 
-                        <ImageButton
+                        <ImageView
                             android:background="@drawable/bottom_arrow"
                             android:backgroundTint="@color/colorAccent"
                             android:layout_gravity="bottom"
+                            android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
@@ -183,19 +178,13 @@
 
             </LinearLayout>
 
-            <GridLayout
-                android:id="@+id/checkbox_container"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/checkbox_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/userSwitch"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:rowCount="5"
                 android:layout_margin="20dp"
-                android:columnCount="2"
-                android:alignmentMode="alignBounds">
-
-            </GridLayout>
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                />
 
             <LinearLayout
                 android:orientation="horizontal"

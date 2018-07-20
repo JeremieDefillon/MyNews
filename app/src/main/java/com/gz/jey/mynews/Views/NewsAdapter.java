@@ -20,8 +20,6 @@ import io.reactivex.annotations.Nullable;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
-    TextView no_r;
-
     public interface Listener {
         void onClickDeleteButton(int position);
     }

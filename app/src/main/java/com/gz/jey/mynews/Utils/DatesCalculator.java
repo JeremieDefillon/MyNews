@@ -21,7 +21,8 @@ public class DatesCalculator {
 
         // SETTINGS the Year , Month & Day wanted
         now.set(Calendar.YEAR, dt[0]);
-        now.set(Calendar.MONTH, dt[1]);
+        // The Month setted from 0 for January so we get it off 1
+        now.set(Calendar.MONTH, (dt[1]-1));
         now.set(Calendar.DATE, dt[2]);
         now.set(Calendar.HOUR_OF_DAY,0);
         now.set(Calendar.MINUTE,0);
@@ -45,8 +46,6 @@ public class DatesCalculator {
 
     public static String strDateFormat(Calendar cal){
         df = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-        // Get off 1 month from calendar because cal.getTime() seem increment initial month num +1
-        cal.add(Calendar.MONTH,-1);
         // use the SimpleDateFormat to convert Calendar as String Formatted
         String datestr = df.format(cal.getTime());
         return datestr;
@@ -55,6 +54,8 @@ public class DatesCalculator {
     public static int[] intDateFormat(Calendar cal){
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
+        // the month start from 0 to 1 in int so we get it and add 1 to it
+        month++;
         int year = cal.get(Calendar.YEAR);
 
         int[]dates = {year,month,day};
