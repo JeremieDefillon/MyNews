@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +41,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     @BindView(R.id.fragment_main_swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.no_result)
-    TextView noResult;
+    LinearLayout noResult;
+    @BindView(R.id.new_search)
+    Button newSearch;
 
     ProgressDialog progressDialog;
 
@@ -180,9 +184,10 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
 
             case 2:
                 String query = MainActivity.QUERY;
+                String fquery = MainActivity.FILTERQUERY;
                 String begin = MainActivity.BEGIN_DATE;
                 String end = MainActivity.END_DATE;
-                disposable = ApiStreams.streamFetchASearch(query, begin, end)
+                disposable = ApiStreams.streamFetchASearch(query, fquery, begin, end)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
                             public void onNext(NewsSection results) {
@@ -217,12 +222,18 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         results.clear();
         results.addAll(news.getResults());
         if(results.size()!=0) {
+            newSearch.setVisibility(View.GONE);
             noResult.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             newsAdapter.notifyDataSetChanged();
         }else{
             noResult.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
+            if(ACTUALTAB==2)
+                newSearch.setVisibility(View.VISIBLE);
+            else
+                newSearch.setVisibility(View.GONE);
+
         }
         swipeRefreshLayout.setRefreshing(false);
     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/notifications_btn"
+        android:title="@string/notifications">
+    </item>
+
+    <item
+        android:id="@+id/help_btn"
+        android:title="@string/help">
+    </item>
+
+    <item
+        android:id="@+id/about_btn"
+        android:title="@string/about">
+    </item>
+</menu>

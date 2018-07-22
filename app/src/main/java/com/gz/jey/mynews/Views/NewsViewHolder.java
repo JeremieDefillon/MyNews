@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.gz.jey.mynews.Models.Result;
 import com.gz.jey.mynews.R;
 
@@ -34,12 +35,13 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         String Sub = res.getSubsection();
         String und = (TextUtils.isEmpty(Sec)||TextUtils.isEmpty(Sub))?"":" > ";
         this.From.setText(Sec + und + Sub);
-        if(res.getImageUrl() != "")
-            // Replace .into(Image); -> .apply(RequestOptions.circleCropTransform()).into(Image);
-            // For an image circle cropped !
+        if(!res.getImageUrl().isEmpty())
             glide.load(res.getImageUrl()).into(Image);
         else
-            this.Image.setAdjustViewBounds(false);
+            glide.load(R.drawable.no_pict).apply(RequestOptions.circleCropTransform()).into(Image);
+            // For an image circle cropped !
+
+        this.Image.setAdjustViewBounds(false);
 
         this.Title.setText(res.getTitle());
         this.dat.setText(res.getPublishedDate());

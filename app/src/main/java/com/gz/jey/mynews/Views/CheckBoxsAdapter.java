@@ -2,6 +2,7 @@ package com.gz.jey.mynews.Views;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.gz.jey.mynews.R;
 import java.util.List;
 
 public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
+
 
     public interface Listener {
         void onClickDeleteButton(int position);

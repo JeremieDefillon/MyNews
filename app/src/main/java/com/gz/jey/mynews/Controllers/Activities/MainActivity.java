@@ -14,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
 import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
@@ -22,6 +25,9 @@ import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
 import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
 import com.gz.jey.mynews.Utils.NavDrawerClickSupport;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements PageAdapter.OnPageAdapterListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -34,55 +40,77 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public static int TNUM = 0;
     public static int PNUM = 0;
     public static String QUERY = "";
+    public static String FILTERQUERY = "";
     public static String BEGIN_DATE = "";
     public static String END_DATE = "";
-
 
     //FRAGMENTS
     private WebViewFragment wvf = new WebViewFragment();
     private MainFragment tsFragment, mpFragment, asFragment;
     private NewsQueryFragment nqFragment;
 
-
     //FOR DESIGN
-    private Toolbar toolbar;
-    public PageAdapter adapterViewPager;
-    public ViewPager pager;
-    private static WebView webview;
-    public FrameLayout container;
-    public DrawerLayout drawerLayout;
-    public static NavigationView navigationView;
+    @BindView(R.id.activity_main_viewpager)
+    ViewPager pager;
+    @BindView(R.id.activity_main_web)
+    WebView webview;
+    @BindView(R.id.container)
+    FrameLayout container;
+    @BindView(R.id.activity_main_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.activity_main_drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.activity_main_tabs)
+    TabLayout tabs;
+    @BindView(R.id.activity_main_nav_view)
+    NavigationView navigationView;
 
+    View view;
+    PageAdapter adapterViewPager;
+
+    boolean hiddenItems = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Init the variables
-        InitVars();
-
+        view = this.findViewById(R.id.activity_main_drawer_layout);
+        ButterKnife.bind(this, view);
         // Configure all views
-        configureToolBar();
-        configureDrawerLayout();
-        configureNavigationView();
+        setToolBar();
+        setDrawerLayout();
+        setNavigationView();
         buildViewPager();
-    }
-
-    void InitVars(){
-        // Set the Viewpager's layout
-        pager = findViewById(R.id.activity_main_viewpager);
-        // Set the WebView's layout
-        webview = findViewById(R.id.activity_main_web);
-        // Set the Container's layout
-        container = findViewById(R.id.container);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //2 - Inflate the menu and add it to the Toolbar
         getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        if (hiddenItems)
+            for (int i = 0; i < menu.size(); i++)
+                menu.getItem(i).setVisible(false);
+        else
+            for (int i = 0; i < menu.size(); i++)
+                menu.getItem(i).setVisible(true);
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // Handle item selection
+        switch (id) {
+            case R.id.article_search_btn:
+                SetNewsQuery();
+                return true;
+            case R.id.settings_btn:
+                openUpSettings(findViewById(id));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -105,9 +133,9 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         return true;
     }
 
-    void ChangeData(){
+    public void ChangeData(){
         SetVisibilityFragmentsAndMenu(0);
-        configureNavigationView();
+        setNavigationView();
         switch (ACTUALTAB) {
             case 0:
                 tsFragment.ChangeDatas();
@@ -116,10 +144,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                 mpFragment.ChangeDatas();
             break;
             case 2:
-                if(QUERY != null && !QUERY.isEmpty())
-                    asFragment.ChangeDatas();
-                else
-                    SetNewsQuery();
+                asFragment.ChangeDatas();
             break;
         }
     }
@@ -129,14 +154,33 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     // -------------------
 
     // Configure Toolbar
-    private void configureToolBar() {
-        this.toolbar = findViewById(R.id.activity_main_toolbar);
+    private void setToolBar() {
         setSupportActionBar(toolbar);
     }
 
+    private void openUpSettings(View view){
+         //Creating the instance of PopupMenu
+         PopupMenu popup = new PopupMenu(MainActivity.this, view);
+         //Inflating the Popup using xml file
+         popup.getMenuInflater().inflate(R.menu.menu_settings, popup.getMenu());
+
+         //registering popup with OnMenuItemClickListener
+         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(
+                    MainActivity.this,
+                    "You Clicked : " + item.getTitle(),
+                    Toast.LENGTH_SHORT
+                ).show();
+                return true;
+            }
+         });
+
+         popup.show(); //showing popup menu
+    }
+
     // Configure Drawer Layout
-    private void configureDrawerLayout() {
-        this.drawerLayout = findViewById(R.id.activity_main_drawer_layout);
+    private void setDrawerLayout() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -144,8 +188,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     }
 
     // Configure NavigationView
-    private void configureNavigationView() {
-        this.navigationView = findViewById(R.id.activity_main_nav_view);
+    private void setNavigationView() {
         navigationView.getMenu().clear();
         switch (ACTUALTAB) {
             case 0:
@@ -176,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
             }
         });
 
-        TabLayout tabs = findViewById(R.id.activity_main_tabs);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
     }
@@ -196,12 +238,10 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public void SetNewsQuery() {
         SetVisibilityFragmentsAndMenu(2);
         //nqFragment = (NewsQueryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_newsquery_swipe_container);
-       // if (nqFragment == null) {
-            nqFragment = NewsQueryFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, nqFragment)
-                    .commit();
-       // }
+        nqFragment = NewsQueryFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.container, nqFragment)
+            .commit();
     }
 
     @Override
@@ -222,46 +262,44 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     private void SetVisibilityFragmentsAndMenu(int fr) {
         switch (fr){
             case 0 :
-                container.setVisibility(View.GONE);
-                pager.setVisibility(View.VISIBLE);
-                webview.setVisibility(View.GONE);
-                findViewById(R.id.activity_main_tabs).setVisibility(View.VISIBLE);
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
-                configureDrawerLayout();
+                setInnerMainView();
             break;
             case 1 :
-                container.setVisibility(View.GONE);
-                pager.setVisibility(View.GONE);
-                webview.setVisibility(View.VISIBLE);
-                findViewById(R.id.activity_main_tabs).setVisibility(View.GONE);
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_button);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ChangeData();
-                    }
-                });
-
+                setOutterMainView(View.GONE, View.VISIBLE);
             break;
             case 2 :
-                container.setVisibility(View.VISIBLE);
-                pager.setVisibility(View.GONE);
-                webview.setVisibility(View.GONE);
-                findViewById(R.id.activity_main_tabs).setVisibility(View.GONE);
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_button);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ChangeData();
-                    }
-                });
+                setOutterMainView(View.VISIBLE, View.GONE);
             break;
         }
     }
 
+    private void setInnerMainView() {
+        container.setVisibility(View.GONE);
+        pager.setVisibility(View.VISIBLE);
+        webview.setVisibility(View.GONE);
+        tabs.setVisibility(View.VISIBLE);
+        hiddenItems=false;
+        invalidateOptionsMenu();
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
+        setDrawerLayout();
+    }
 
+    private void setOutterMainView(int visible, int gone) {
+        container.setVisibility(visible);
+        pager.setVisibility(View.GONE);
+        webview.setVisibility(gone);
+        tabs.setVisibility(View.GONE);
+        hiddenItems = true;
+        invalidateOptionsMenu();
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_button);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeData();
+            }
+        });
+    }
 
 
 }

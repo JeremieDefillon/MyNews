@@ -79,6 +79,73 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
 
                 news.getResults().add(result);
             }
+        }else if(jo.has("response")){
+            JsonObject jy = jo.get("response").getAsJsonObject();
+            if(jy.has("docs")){
+                JsonArray jsonResultsArray = jy.get("docs").getAsJsonArray();
+                news.setNumResults(jsonResultsArray.size());
+
+                Log.d(TAG, "AS RESULTS => " + news.getNumResults().toString());
+
+                for(int i=0; i < jsonResultsArray.size(); i++){
+
+                    Result result = new Result();
+                    JsonObject j = jsonResultsArray.get(i).getAsJsonObject();
+
+
+                    if(j.has("section_name")){
+                        result.setSection(j.get("section_name").getAsString());
+                    }else{
+                        result.setSection("");
+                    }
+
+                    if(j.has("subsection_name")){
+                        result.setSubsection(j.get("subsection_name").getAsString());
+                    }else{
+                        result.setSubsection("");
+                    }
+
+                    if(j.has("snippet")){
+                        result.setTitle(j.get("snippet").getAsString());
+                    }
+                    if(j.has("web_url")){
+                        result.setUrl(j.get("web_url").getAsString());
+                    }
+                    if(j.has("pub_date")){
+                        result.setPublishedDate(DatesFormatter.getDateFormated(j.get("pub_date").getAsString()));
+                    }
+                    if(j.has("multimedia")){
+                        if (!j.get("multimedia").isJsonPrimitive()){
+                            JsonArray jm = j.get("multimedia").getAsJsonArray();
+                            String image ="";
+                            int num = 0, c=0;
+                            int h=9999;
+                            if(jm.size()>0){
+
+                                for(JsonElement job : jm) {
+                                    if(job.getAsJsonObject().has("height")){
+                                        if(job.getAsJsonObject().get("height").getAsInt()<h){
+                                            h = job.getAsJsonObject().get("height").getAsInt();
+                                            num=c;
+                                        }
+                                    }
+                                    c++;
+                                }
+
+                                if(jm.get(num).getAsJsonObject().get("url").getAsString().contains("https://static01.nyt.com/"))
+                                    image = jm.get(num).getAsJsonObject().get("url").getAsString();
+                                else
+                                    image = "https://static01.nyt.com/" + jm.get(num).getAsJsonObject().get("url").getAsString();
+                            }
+                            result.setImageUrl(image);
+                        }else{
+                            result.setImageUrl("");
+                        }
+                    }
+
+                    news.getResults().add(result);
+                }
+            }
         }
 
         return news;

@@ -6,6 +6,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="search">SEARCH</string>
+    <string name="settings">SETTINGS</string>
+    <string name="newSearch">NEW SEARCH</string>
+    <string name="noResults">No Results found under this Category</string>
+
+    <string name="notifications">Notifications</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
 
     <!-- Used in NYT api Requests -->
     <string-array name="ts_category">

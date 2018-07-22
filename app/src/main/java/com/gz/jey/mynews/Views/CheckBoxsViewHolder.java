@@ -1,7 +1,9 @@
 package com.gz.jey.mynews.Views;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.gz.jey.mynews.R;
@@ -13,7 +15,10 @@ import butterknife.ButterKnife;
 
 public class CheckBoxsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
-    @BindView(R.id.checkBox)TextView Title;
+    @BindView(R.id.checkBox)CheckBox mCheckBox;
+
+
+    private SparseBooleanArray itemStateArray= new SparseBooleanArray();
 
     WeakReference<CheckBoxsAdapter.Listener> callbackWeakRef;
 
@@ -23,9 +28,10 @@ public class CheckBoxsViewHolder extends RecyclerView.ViewHolder implements View
     }
 
     public void updateCheckBoxs(String category, CheckBoxsAdapter.Listener callback){
-        this.Title.setText(category);
+        this.mCheckBox.setText(category);
         callbackWeakRef = new WeakReference<>(callback);
     }
+
 
     @Override
     public void onClick(View view) {

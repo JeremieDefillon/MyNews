@@ -2,12 +2,15 @@ package com.gz.jey.mynews.Utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CompoundButton;
 
 public class ItemClickSupport {
     private final RecyclerView mRecyclerView;
     private OnItemClickListener mOnItemClickListener;
+    private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener;
     private OnItemLongClickListener mOnItemLongClickListener;
     private int mItemID;
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -17,6 +20,17 @@ public class ItemClickSupport {
             }
         }
     };
+
+    private CompoundButton.OnCheckedChangeListener mOnCheckedListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
+            if (mOnCheckedChangeListener != null) {
+                RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(bv);
+                mOnCheckedChangeListener.onCheckedChanged(bv, isChecked);
+            }
+        }
+    };
+
     private View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -36,6 +50,11 @@ public class ItemClickSupport {
             }
             if (mOnItemLongClickListener != null) {
                 view.setOnLongClickListener(mOnLongClickListener);
+            }
+
+            if(mOnCheckedChangeListener != null){
+                CompoundButton cb = (CompoundButton) view;
+                cb.setOnCheckedChangeListener(mOnCheckedListener);
             }
         }
 
@@ -73,6 +92,11 @@ public class ItemClickSupport {
         return this;
     }
 
+    public ItemClickSupport setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
+        mOnCheckedChangeListener = listener;
+        return this;
+    }
+
     public ItemClickSupport setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
         return this;
@@ -84,12 +108,14 @@ public class ItemClickSupport {
     }
 
     public interface OnItemClickListener {
-
         void onItemClicked(RecyclerView recyclerView, int position, View v);
     }
 
-    public interface OnItemLongClickListener {
+    public interface OnCheckChangeListener{
+        void onCheckedChanged(CompoundButton buttonView , boolean isChecked);
+    }
 
+    public interface OnItemLongClickListener {
         boolean onItemLongClicked(RecyclerView recyclerView, int position, View v);
     }
 }

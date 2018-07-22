@@ -51,6 +51,13 @@ public class DatesCalculator {
         return datestr;
     }
 
+    public static String strDateForReq(Calendar cal){
+        df = new SimpleDateFormat("yyyyMMdd", Locale.FRANCE);
+        // use the SimpleDateFormat to convert Calendar as String Formatted
+        String datestr = df.format(cal.getTime());
+        return datestr;
+    }
+
     public static int[] intDateFormat(Calendar cal){
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
