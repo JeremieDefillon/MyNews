@@ -27,8 +27,9 @@ public class CheckBoxsViewHolder extends RecyclerView.ViewHolder implements View
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateCheckBoxs(String category, CheckBoxsAdapter.Listener callback){
+    public void updateCheckBoxs(String category, CheckBoxsAdapter.Listener callback, boolean isChecked){
         this.mCheckBox.setText(category);
+        this.mCheckBox.setChecked(isChecked);
         callbackWeakRef = new WeakReference<>(callback);
     }
 

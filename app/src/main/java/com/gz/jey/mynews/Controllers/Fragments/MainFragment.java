@@ -64,10 +64,11 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
-        ProgressLoad();
-        configureRecyclerView();
-        configureSwipeRefreshLayout();
-        configureOnClickRecyclerView();
+        ((MainActivity)getActivity()).ProgressLoad();
+        SetRecyclerView();
+        SetSwipeRefreshLayout();
+        SetOnClickRecyclerView();
+        SetOnClickNewSearch();
         executeHttpRequestWithRetrofit();
         return view;
     }
@@ -83,7 +84,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // ACTION
     // -----------------
 
-    private void configureOnClickRecyclerView(){
+    private void SetOnClickRecyclerView(){
         ItemClickSupport.addTo(recyclerView, R.layout.fragment_main_item)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
@@ -108,7 +109,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // CONFIGURATION
     // -----------------
 
-    private void configureRecyclerView(){
+    private void SetRecyclerView(){
         results = new ArrayList<>();
         // Create newsAdapter passing in the sample user data
         newsAdapter = new NewsAdapter(results, Glide.with(this), this);
@@ -118,8 +119,16 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    private void SetOnClickNewSearch(){
+        newSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).SetNewsQuery();
+            }
+        });
+    }
 
-    private void configureSwipeRefreshLayout(){
+    private void SetSwipeRefreshLayout(){
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -129,7 +138,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     }
 
     public void ChangeDatas() {
-        ProgressLoad();
+        ((MainActivity)getActivity()).ProgressLoad();
         executeHttpRequestWithRetrofit();
     }
 
@@ -155,7 +164,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
 
                             @Override
                             public void onComplete() {
-                                TerminateLoad();
+                                ((MainActivity)getActivity()).TerminateLoad();
                             }
                         });
                 break;
@@ -177,7 +186,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
 
                             @Override
                             public void onComplete() {
-                                TerminateLoad();
+                                ((MainActivity)getActivity()).TerminateLoad();
                             }
                         });
                 break;
@@ -201,7 +210,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
 
                             @Override
                             public void onComplete() {
-                                TerminateLoad();
+                                ((MainActivity)getActivity()).TerminateLoad();
                             }
                         });
                 break;
@@ -238,15 +247,4 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    private void ProgressLoad(){
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
-    }
-
-    private void TerminateLoad(){
-        if (progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }
 }

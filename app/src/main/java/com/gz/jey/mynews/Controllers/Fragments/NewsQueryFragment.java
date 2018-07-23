@@ -1,8 +1,7 @@
 package com.gz.jey.mynews.Controllers.Fragments;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 import com.gz.jey.mynews.R;
@@ -24,13 +24,16 @@ import com.gz.jey.mynews.Views.CheckBoxsAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.gz.jey.mynews.Controllers.Activities.MainActivity.BEGIN_DATE;
+import static com.gz.jey.mynews.Controllers.Activities.MainActivity.END_DATE;
+import static com.gz.jey.mynews.Controllers.Activities.MainActivity.FILTERQUERY;
+import static com.gz.jey.mynews.Controllers.Activities.MainActivity.QUERY;
 
 public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.Listener{
 
@@ -49,13 +52,18 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     Button endDateBTN;
     @BindView(R.id.click_send_search)
     Button searchBTN;
+    @BindView(R.id.set_date_btn)
+    Button setDate;
 
+    ProgressDialog progressDialog;
     //FOR DATA
     private String query;
     private Calendar begin_date, end_date;
+    Calendar minbegin, maxbegin, minend, maxend;
     private List<String> filters;
-    private ArrayList<String> categs;
+    private List<Boolean> checked;
     private CheckBoxsAdapter checkBoxsAdapter;
+    private int beginOrEnd = 0;
 
     // Start & Initializing
     public NewsQueryFragment(){}
@@ -68,6 +76,8 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_query, container, false);
         ButterKnife.bind(this, view);
+        ((MainActivity)getActivity()).ProgressLoad();
+        InitDatas();
         SetCheckboxCategorys();
         SetOnClickButtons(view);
         return view;
@@ -77,12 +87,59 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     // CONFIGURATION
     // -----------------
 
-    public void SetOnClickButtons(View view){
+    private void InitDatas(){
         filters = new ArrayList<>();
+        checked = new ArrayList<>();
+        Collections.addAll(filters, getResources().getStringArray(R.array.as_category));
 
+        for (String t:filters) {
+            checked.add(false);
+        }
+
+        if(!QUERY.isEmpty())
+            query=QUERY;
+
+        if(!FILTERQUERY.isEmpty()){
+            for (int i=0; i<checked.size(); i++ ) {
+                if(FILTERQUERY.contains(filters.get(i)))
+                    checked.set(i,true);
+                else
+                    checked.set(i,false);
+            }
+        }
+
+        if(!BEGIN_DATE.isEmpty()) {
+            begin_date = DatesCalculator
+                    .SetUpCustomDateFromString(DatesCalculator.strDateFromStrReq(BEGIN_DATE));
+            beginDateBTN.setText(DatesCalculator.strDateFormat(begin_date));
+        }
+
+        if(!END_DATE.isEmpty()) {
+            end_date = DatesCalculator
+                    .SetUpCustomDateFromString(DatesCalculator.strDateFromStrReq(END_DATE));
+            endDateBTN.setText(DatesCalculator.strDateFormat(end_date));
+        }
+
+        searchQuery.setText(query);
+
+        minbegin = Calendar.getInstance();
+        minbegin.set(1800, 0,1);
+
+        maxbegin = Calendar.getInstance();
+        maxbegin.add(Calendar.DAY_OF_MONTH, -1);
+
+        minend = Calendar.getInstance();
+        minbegin.add(Calendar.YEAR, -200);
+
+        maxend = Calendar.getInstance();
+    }
+
+
+    private void SetOnClickButtons(View view){
         beginDateBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginOrEnd=0;
                 OpenUpBeginDatePicker();
             }
         });
@@ -90,6 +147,7 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         endDateBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginOrEnd=1;
                 OpenUpEndDatePicker();
             }
         });
@@ -105,29 +163,60 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
                 .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if(isChecked) {
-                            filters.add(buttonView.getText().toString());
-                        }else {
-                            int index = filters.indexOf(buttonView.getText().toString());
-                            filters.remove(index);
-                        }
+                        int index = filters.indexOf(buttonView.getText().toString());
+                        checked.set(index, isChecked);
                     }
         });
+
+        setDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnDateChanged();
+            }
+        });
+
+        ((MainActivity)getActivity()).TerminateLoad();
     }
 
-    public void SetCheckboxCategorys(){
-        categs = new ArrayList<>();
-        for (String t : getResources().getStringArray(R.array.as_category)) {
-            categs.add(t);
-        }
-
+    private void SetCheckboxCategorys(){
         // Create newsAdapter passing in the sample user data
-        checkBoxsAdapter = new CheckBoxsAdapter(categs, this);
+        checkBoxsAdapter = new CheckBoxsAdapter(filters, checked,this);
         // Attach the newsAdapter to the recyclerview to populate items
         recyclerView.setAdapter(checkBoxsAdapter);
         // Set layout manager to position the items
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         checkBoxsAdapter.notifyDataSetChanged();
+    }
+
+    private void OnDateChanged(){
+        switch (beginOrEnd){
+            case 0 :
+                int[] dtb = {datePicker.getYear(), datePicker.getMonth()+1, datePicker.getDayOfMonth()};
+                begin_date = DatesCalculator.SetUpCustomDateFromIntArray(dtb);
+                beginDateBTN.setText(DatesCalculator.strDateFormat(begin_date));
+                break;
+            case 1 :
+                int[] dte = {datePicker.getYear(), datePicker.getMonth()+1, datePicker.getDayOfMonth()};
+                end_date = DatesCalculator.SetUpCustomDateFromIntArray(dte);
+                endDateBTN.setText(DatesCalculator.strDateFormat(end_date));
+                break;
+        }
+
+        minbegin = Calendar.getInstance();
+        minbegin.set(1800, 0,1);
+
+        maxbegin = end_date!=null?end_date:Calendar.getInstance();
+        maxbegin.add(Calendar.DAY_OF_MONTH, -1);
+
+        Calendar ifnobegin = Calendar.getInstance();
+        ifnobegin.add(Calendar.YEAR, -200);
+        minend = begin_date!=null?begin_date:ifnobegin;
+        minend.add(Calendar.DAY_OF_MONTH ,1);
+
+        maxend = Calendar.getInstance();
+
+        datePicker.setVisibility(View.GONE);
+        artSearch.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -141,31 +230,52 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
 
     public void SearchArticles(){
         MainActivity mact = (MainActivity)getActivity();
-        if(searchQuery.getText().toString()!=null && !searchQuery.getText().toString().isEmpty() && filters.size()!=0){
-            mact.QUERY = searchQuery.getText().toString();
-            String fq = "";
-            for (String s : filters) {
-                fq+=s+",";
+        query = searchQuery.getText().toString();
+        boolean searchCondition = !query.isEmpty();
+        boolean filterCondition = false;
+        for (boolean b : checked)
+            if(b){
+                filterCondition=true;
+                break;
             }
-            mact.FILTERQUERY = fq;
+
+        if(searchCondition && filterCondition){
+            QUERY = query;
+            StringBuilder fq = new StringBuilder();
+            for (int i=0; i<filters.size(); i++) {
+                String comma = i==(filters.size()-1)?"":",";
+                if(checked.get(i))
+                    fq.append(filters.get(i)).append(comma);
+            }
+            FILTERQUERY = fq.toString();
             if(begin_date!=null)
-                mact.BEGIN_DATE = DatesCalculator.strDateForReq(begin_date);
+                BEGIN_DATE = DatesCalculator.strDateForReq(begin_date);
 
             if(end_date!=null)
-                mact.END_DATE = DatesCalculator.strDateForReq(end_date);
+                END_DATE = DatesCalculator.strDateForReq(end_date);
 
             mact.ChangeData();
         }else{
 
+            String[] message = getResources().getStringArray(R.array.as_messages);
+            String msg =    !searchCondition && filterCondition ?   message[0]:
+                            searchCondition && !filterCondition ?   message[1]:
+                                                                    message[2];
+
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void OpenUpBeginDatePicker(){
-        if(begin_date==null)
-            begin_date=DatesCalculator.StartingDates()[0];
+        if(begin_date==null) {
+            begin_date = DatesCalculator.StartingDates()[0];
+        }
 
-        UpdateDatePicker(begin_date);
+        Log.d("BEGIN DATE", DatesCalculator.strDateFormat(begin_date));
         datePicker.setVisibility(View.VISIBLE);
+        datePicker.setMinDate(minbegin.getTimeInMillis());
+        datePicker.setMaxDate(maxbegin.getTimeInMillis());
+        UpdateDatePicker(begin_date);
         artSearch.setVisibility(View.GONE);
     }
 
@@ -173,8 +283,11 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         if(end_date==null)
             end_date=DatesCalculator.StartingDates()[1];
 
-        UpdateDatePicker(end_date);
+        Log.d("END DATE", DatesCalculator.strDateFormat(end_date));
         datePicker.setVisibility(View.VISIBLE);
+        datePicker.setMinDate(minend.getTimeInMillis());
+        datePicker.setMaxDate(maxend.getTimeInMillis());
+        UpdateDatePicker(end_date);
         artSearch.setVisibility(View.GONE);
     }
 

@@ -1,5 +1,7 @@
 package com.gz.jey.mynews.Utils;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -9,6 +11,7 @@ public class DatesCalculator {
     private static SimpleDateFormat df;
 
     public static Calendar SetUpCustomDateFromString(String date){
+        Log.d("DATE", "date : "+date);
         String[] cut = date.split("/");
         int[] dt = {Integer.parseInt(cut[2]), Integer.parseInt(cut[1]), Integer.parseInt(cut[0])};
         Calendar cal = SetUpCustomDateFromIntArray(dt);
@@ -36,7 +39,7 @@ public class DatesCalculator {
         Calendar now = Calendar.getInstance();
 
         // SET 1 WEEK AGO TIME
-        Calendar weekAgo = now;
+        Calendar weekAgo = Calendar.getInstance();
         weekAgo.add(Calendar.WEEK_OF_MONTH, -1);
 
         Calendar[] ds = {weekAgo, now};
@@ -58,13 +61,22 @@ public class DatesCalculator {
         return datestr;
     }
 
+
+
+    public static String strDateFromStrReq(String date){
+        String year = date.substring(0,4);
+        String month = date.substring(4,6);
+        String day = date.substring(6,8);
+        String datestr = day+"/"+month+"/"+year;
+        return datestr;
+    }
+
     public static int[] intDateFormat(Calendar cal){
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
         // the month start from 0 to 1 in int so we get it and add 1 to it
         month++;
         int year = cal.get(Calendar.YEAR);
-
         int[]dates = {year,month,day};
         return dates;
     }

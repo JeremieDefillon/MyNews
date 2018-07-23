@@ -1,5 +1,6 @@
 package com.gz.jey.mynews.Controllers.Activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -24,6 +25,7 @@ import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
 import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
 import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
+import com.gz.jey.mynews.Utils.DatesCalculator;
 import com.gz.jey.mynews.Utils.NavDrawerClickSupport;
 
 import butterknife.BindView;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
     View view;
     PageAdapter adapterViewPager;
+    ProgressDialog progressDialog;
 
     boolean hiddenItems = false;
 
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         view = this.findViewById(R.id.activity_main_drawer_layout);
+        progressDialog = new ProgressDialog(this);
         ButterKnife.bind(this, view);
         // Configure all views
         setToolBar();
@@ -197,6 +201,32 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
             case 1:
                 getMenuInflater().inflate(R.menu.menu_most_popular, navigationView.getMenu());
                 break;
+            case 2:
+                getMenuInflater().inflate(R.menu.menu_article_search, navigationView.getMenu());
+                if(!QUERY.isEmpty()) {
+                    navigationView.getMenu().getItem(0)
+                            .getSubMenu().getItem(0).setTitle("Query : " + QUERY);
+                }
+
+                if(!FILTERQUERY.isEmpty()){
+                    String fList = FILTERQUERY.replace(",", ", ");
+                    navigationView.getMenu().getItem(0)
+                            .getSubMenu().getItem(1).setTitle("Filters : " + fList);
+                }
+
+                if(!BEGIN_DATE.isEmpty()){
+                    String bDate = DatesCalculator.strDateFromStrReq(BEGIN_DATE);
+                    navigationView.getMenu().getItem(0)
+                            .getSubMenu().getItem(2).setTitle("Begin Date : " + bDate);
+                }
+
+                if(!END_DATE.isEmpty()){
+                    String eDate = DatesCalculator.strDateFromStrReq(END_DATE);
+                    navigationView.getMenu().getItem(0)
+                            .getSubMenu().getItem(3).setTitle("Begin Date : " + eDate);
+                }
+
+                break;
         }
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -236,6 +266,8 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     }
 
     public void SetNewsQuery() {
+        ACTUALTAB=2;
+        pager.setCurrentItem(ACTUALTAB);
         SetVisibilityFragmentsAndMenu(2);
         //nqFragment = (NewsQueryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_newsquery_swipe_container);
         nqFragment = NewsQueryFragment.newInstance();
@@ -299,6 +331,18 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                 ChangeData();
             }
         });
+    }
+
+
+    public void ProgressLoad(){
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+    }
+
+    public void TerminateLoad(){
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
 

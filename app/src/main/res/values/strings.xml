@@ -13,6 +13,13 @@
     <string name="notifications">Notifications</string>
     <string name="help">Help</string>
     <string name="about">About</string>
+    <string name="set_date">Set Date</string>
+
+    <string-array name="as_messages">
+        <item>Your query\'s search is empty</item>
+        <item>You must select at least one category</item>
+        <item>You have to type a query\'s search &amp; \n must select at least one category</item>
+    </string-array>
 
     <!-- Used in NYT api Requests -->
     <string-array name="ts_category">

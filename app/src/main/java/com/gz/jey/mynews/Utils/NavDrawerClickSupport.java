@@ -7,9 +7,6 @@ public class NavDrawerClickSupport {
 
         int TNUM =0, PNUM=0, SECNUM=0;
         switch (id) {
-            case R.id.activity_main_drawer_settings:
-                break;
-
             case R.id.type_0:
                 TNUM = 0;
                 break;
