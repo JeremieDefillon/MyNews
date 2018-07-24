@@ -1,6 +1,12 @@
 package com.gz.jey.mynews.Controllers.Activities;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,27 +21,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.gz.jey.mynews.Adapter.PageAdapter;
 import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
 import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
+import com.gz.jey.mynews.Controllers.Fragments.NotificationsFragment;
 import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
 import com.gz.jey.mynews.Utils.DatesCalculator;
 import com.gz.jey.mynews.Utils.NavDrawerClickSupport;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements PageAdapter.OnPageAdapterListener, NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     // FOR DATAS TYPE
     public static int ACTUALTAB = 0;
-    private static final String TAG = MainActivity.class.getSimpleName();
     public static String URLI = "";
     public static int SECTOP = 0;
     public static int SECMOST = 0;
@@ -45,15 +56,26 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public static String FILTERQUERY = "";
     public static String BEGIN_DATE = "";
     public static String END_DATE = "";
+    public static boolean LOAD_NOTIF=false;
+    public static String NOTIF_QUERY = "";
+    public static String NOTIF_FILTERS = "";
+    public static int HOUR = 0;
+    public static int MINS = 0;
 
-    //FRAGMENTS
-    private WebViewFragment wvf = new WebViewFragment();
-    private MainFragment tsFragment, mpFragment, asFragment;
-    private NewsQueryFragment nqFragment;
+
+
+    // Activity
+    private MainActivity mainActivity;
+
+    // The Fragments
+    private MainFragment topStoriesFragment, mostPopularFragment, articleSearchFragment;
+    private WebViewFragment webViewFragment;
+    private NewsQueryFragment newsQueryFragment;
+    private NotificationsFragment notificationsFragment;
 
     //FOR DESIGN
     @BindView(R.id.activity_main_viewpager)
-    ViewPager pager;
+    public ViewPager pager;
     @BindView(R.id.activity_main_web)
     WebView webview;
     @BindView(R.id.container)
@@ -70,21 +92,42 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     View view;
     PageAdapter adapterViewPager;
     ProgressDialog progressDialog;
-
-    boolean hiddenItems = false;
+    boolean hiddenItems = false, movepage=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         view = this.findViewById(R.id.activity_main_drawer_layout);
+        mainActivity = this;
         progressDialog = new ProgressDialog(this);
         ButterKnife.bind(this, view);
+        LoadDatas();
         // Configure all views
         setToolBar();
+        setFragments();
         setDrawerLayout();
         setNavigationView();
         buildViewPager();
+        //Set If notification's onClick
+        if(savedInstanceState==null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null){
+                if (extras.getBoolean("NotiClick")) {
+                    LOAD_NOTIF=true;
+                    while (articleSearchFragment == null) {
+                        try {
+                            wait(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    pager.setCurrentItem(2);
+                }
+            }else{
+                movepage=true;
+            }
+        }
     }
 
     @Override
@@ -140,17 +183,19 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     public void ChangeData(){
         SetVisibilityFragmentsAndMenu(0);
         setNavigationView();
+        toolbar.setTitle(getResources().getString(R.string.app_name));
         switch (ACTUALTAB) {
             case 0:
-                tsFragment.ChangeDatas();
+                topStoriesFragment.ChangeDatas();
             break;
             case 1:
-                mpFragment.ChangeDatas();
+                mostPopularFragment.ChangeDatas();
             break;
             case 2:
-                asFragment.ChangeDatas();
+                articleSearchFragment.ChangeDatas();
             break;
         }
+        SaveDatas();
     }
 
     // -------------------
@@ -162,6 +207,15 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         setSupportActionBar(toolbar);
     }
 
+    private void setFragments(){
+        topStoriesFragment = MainFragment.newInstance(mainActivity);
+        mostPopularFragment = MainFragment.newInstance(mainActivity);
+        articleSearchFragment = MainFragment.newInstance(mainActivity);
+        webViewFragment = WebViewFragment.newInstance(mainActivity);
+        newsQueryFragment = NewsQueryFragment.newInstance(mainActivity);
+        notificationsFragment = NotificationsFragment.newInstance(mainActivity);
+    }
+
     private void openUpSettings(View view){
          //Creating the instance of PopupMenu
          PopupMenu popup = new PopupMenu(MainActivity.this, view);
@@ -171,11 +225,20 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
          //registering popup with OnMenuItemClickListener
          popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(
-                    MainActivity.this,
-                    "You Clicked : " + item.getTitle(),
-                    Toast.LENGTH_SHORT
-                ).show();
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.notifications_btn :
+                        SetNotifications();
+                        break;
+                    case R.id.help_btn :
+                        SetHelp();
+                        break;
+                    case R.id.about_btn :
+                        SetAbout();
+                        break;
+                    default:
+                       break;
+                }
                 return true;
             }
          });
@@ -185,8 +248,8 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
     // Configure Drawer Layout
     private void setDrawerLayout() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -223,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
                 if(!END_DATE.isEmpty()){
                     String eDate = DatesCalculator.strDateFromStrReq(END_DATE);
                     navigationView.getMenu().getItem(0)
-                            .getSubMenu().getItem(3).setTitle("Begin Date : " + eDate);
+                            .getSubMenu().getItem(3).setTitle("End Date : " + eDate);
                 }
 
                 break;
@@ -233,10 +296,19 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
     // Configure ViewPager
     public void buildViewPager() {
+        //Creat List of Fragments
+        List<Fragment> frg = new ArrayList<>();
+        frg.add(topStoriesFragment);
+        frg.add(mostPopularFragment);
+        frg.add(articleSearchFragment);
+
         // Build the Viewpager's adapter
-        adapterViewPager = new PageAdapter(getSupportFragmentManager(), this);
+        adapterViewPager = new PageAdapter(getSupportFragmentManager(), frg);
         // set the adapter to the viewpager
         pager.setAdapter(adapterViewPager);
+
+        tabs.setupWithViewPager(pager);
+        tabs.setTabMode(TabLayout.MODE_FIXED);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {}
@@ -244,51 +316,50 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
 
             public void onPageSelected(int position) {
                 ACTUALTAB = position;
-                SetVisibilityFragmentsAndMenu(0);
                 ChangeData();
             }
         });
 
-        tabs.setupWithViewPager(pager);
-        tabs.setTabMode(TabLayout.MODE_FIXED);
     }
 
-    // Configure and Open WebView
+    //Open selected Article in a web view
     public void SetWebView() {
-        SetVisibilityFragmentsAndMenu(1);
-        wvf = (WebViewFragment) getSupportFragmentManager().findFragmentById(R.id.webview);
-        if (wvf == null) {
-            wvf = new WebViewFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_main_web, wvf)
-                    .commit();
-        }
+        OpenWebView(R.string.webDetails);
     }
 
     public void SetNewsQuery() {
-        ACTUALTAB=2;
-        pager.setCurrentItem(ACTUALTAB);
+        toolbar.setTitle(getResources().getString(R.string.searchArticles));
         SetVisibilityFragmentsAndMenu(2);
-        //nqFragment = (NewsQueryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_newsquery_swipe_container);
-        nqFragment = NewsQueryFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
-            .replace(R.id.container, nqFragment)
+            .replace(R.id.container, newsQueryFragment)
             .commit();
     }
 
-    @Override
-    public void onInstanceCreated(Fragment fragment, int position) {
-        switch (position){
-            case 0:
-                tsFragment = (MainFragment) fragment;
-                break;
-            case 1:
-                mpFragment = (MainFragment) fragment;
-                break;
-            case 2:
-                asFragment = (MainFragment) fragment;
-                break;
-        }
+    public void SetNotifications() {
+        toolbar.setTitle(getResources().getString(R.string.notifications));
+        SetVisibilityFragmentsAndMenu(2);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.container, notificationsFragment)
+            .commit();
+    }
+
+    private void SetHelp(){
+        URLI = "https://google.com";
+        OpenWebView(R.string.help);
+    }
+
+    private void SetAbout(){
+        URLI = "https://google.com";
+        OpenWebView(R.string.about);
+    }
+
+    private void OpenWebView(int id){
+        SetVisibilityFragmentsAndMenu(1);
+        webViewFragment = WebViewFragment.newInstance(mainActivity);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.activity_main_web, webViewFragment)
+            .commit();
+        toolbar.setTitle(getResources().getString(id));
     }
 
     private void SetVisibilityFragmentsAndMenu(int fr) {
@@ -312,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         tabs.setVisibility(View.VISIBLE);
         hiddenItems=false;
         invalidateOptionsMenu();
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.menu);
         setDrawerLayout();
     }
 
@@ -323,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         tabs.setVisibility(View.GONE);
         hiddenItems = true;
         invalidateOptionsMenu();
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_button);
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.back_button);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -334,6 +405,34 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
     }
 
 
+    public void SetNotification(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,HOUR);
+        cal.set(Calendar.MINUTE,MINS);
+        cal.set(Calendar.SECOND,0);
+
+        Intent intent = new Intent(getApplicationContext(),NotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                987,intent,PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        SaveDatas();
+    }
+
+    public void CancelNotification(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent myIntent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(), 987, myIntent, 0);
+
+        alarmManager.cancel(pendingIntent);
+        SaveDatas();
+    }
+
     public void ProgressLoad(){
         progressDialog.setMessage("Loading...");
         progressDialog.show();
@@ -343,7 +442,48 @@ public class MainActivity extends AppCompatActivity implements PageAdapter.OnPag
         if (progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+
+        if(movepage){
+            movepage=false;
+            pager.setCurrentItem(ACTUALTAB);
+        }
     }
 
+    private void LoadDatas(){
+        ACTUALTAB = getPreferences(MODE_PRIVATE).getInt("ACTUALTAB", 0);
+        URLI = getPreferences(MODE_PRIVATE).getString("URLI", "");
+        SECTOP = getPreferences(MODE_PRIVATE).getInt("SECTOP" , 0);
+        SECMOST = getPreferences(MODE_PRIVATE).getInt("SECMOST" , 0);
+        TNUM = getPreferences(MODE_PRIVATE).getInt("TNUM" , 0);
+        PNUM = getPreferences(MODE_PRIVATE).getInt("PNUM" , 0);
+        QUERY = getPreferences(MODE_PRIVATE).getString("QUERY", "");
+        FILTERQUERY = getPreferences(MODE_PRIVATE).getString("FILTERS", "");
+        BEGIN_DATE = getPreferences(MODE_PRIVATE).getString("BEGIN_DATE", "");
+        END_DATE = getPreferences(MODE_PRIVATE).getString("END_DATE", "");
+        NOTIF_QUERY = getPreferences(MODE_PRIVATE).getString("NOTIF_QUERY", "");
+        NOTIF_FILTERS = getPreferences(MODE_PRIVATE).getString("NOTIF_FILTERS", "");
+        HOUR = getPreferences(MODE_PRIVATE).getInt("HOUR" , 7);
+        MINS = getPreferences(MODE_PRIVATE).getInt("MINS" , 0);
+    }
+
+    public void SaveDatas(){
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("ACTUALTAB", ACTUALTAB);
+        editor.putString("URLI", URLI);
+        editor.putInt("SECTOP", SECTOP);
+        editor.putInt("SECMOST", SECMOST);
+        editor.putInt("TNUM", TNUM);
+        editor.putInt("PNUM", PNUM);
+        editor.putString("QUERY", QUERY);
+        editor.putString("FILTERS", FILTERQUERY);
+        editor.putString("BEGIN_DATE", BEGIN_DATE);
+        editor.putString("END_DATE", END_DATE);
+        editor.putString("NOTIF_QUERY", NOTIF_QUERY);
+        editor.putString("NOTIF_FILTERS", NOTIF_FILTERS);
+        editor.putInt("HOUR", HOUR);
+        editor.putInt("MINS", MINS);
+        editor.apply();
+    }
 
 }

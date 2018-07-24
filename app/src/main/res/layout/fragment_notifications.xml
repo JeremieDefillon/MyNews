@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_notifications_swipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TimePicker
+            android:id="@+id/time_picker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/set_time"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="200dp"
+                android:text="@string/set_time"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"
+                android:backgroundTint="@color/colorAccent"
+                >
+
+            </Button>
+        </TimePicker>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/notifications"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <EditText
+                    android:id="@+id/search_query"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:text=""
+                    android:hint="Search query term"
+                    android:backgroundTint="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/checkbox_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="1.5dp"
+                android:background="#FF909090"
+                android:gravity="bottom" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:scaleType="fitCenter"
+                tools:layout_editor_absoluteX="10dp"
+                tools:layout_editor_absoluteY="60dp">
+
+
+                <Switch
+                    android:id="@+id/switch_enable_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="@string/enable_notification" />
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="1.5dp"
+                android:background="#FF909090"
+                android:gravity="bottom" />
+
+            <LinearLayout
+                android:id="@+id/time_setter"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:scaleType="fitCenter">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notif_time"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <LinearLayout
+                    android:id="@+id/input_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/input_time_text"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center|bottom"
+                        android:textSize="20sp"
+                        android:background="@color/colorInvisible"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:clickable="true"
+                        />
+
+                    <ImageView
+                        android:background="@drawable/bottom_arrow"
+                        android:backgroundTint="@color/colorAccent"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

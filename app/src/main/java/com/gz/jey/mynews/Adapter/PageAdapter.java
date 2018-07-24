@@ -7,19 +7,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
 import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
 
-public class PageAdapter extends FragmentPagerAdapter {
+import java.util.List;
 
-    private final OnPageAdapterListener mListener;
+public class PageAdapter extends FragmentPagerAdapter {
 
     Fragment fragment0,fragment1,fragment2;
 
-    public PageAdapter(FragmentManager mgr, OnPageAdapterListener listener){
+    public PageAdapter(FragmentManager mgr, List<Fragment> frg){
         super(mgr);
-        mListener = listener;
-
-        fragment0 = MainFragment.newInstance();
-        fragment1 = MainFragment.newInstance();
-        fragment2 = MainFragment.newInstance();
+        fragment0 = frg.get(0);
+        fragment1 = frg.get(1);
+        fragment2 = frg.get(2);
     }
 
     @Override
@@ -31,16 +29,12 @@ public class PageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position){
         switch (position){
             case 0: // Page Number 1
-                mListener.onInstanceCreated(fragment0, position);
                 return fragment0;
             case 1: // Page Number 2
-                mListener.onInstanceCreated(fragment1, position);
                 return fragment1;
             case 2: // Page Number 3
-                mListener.onInstanceCreated(fragment2, position);
                 return fragment2;
             default:
-                mListener.onInstanceCreated(fragment0, position);
                 return fragment0;
         }
 
@@ -58,10 +52,6 @@ public class PageAdapter extends FragmentPagerAdapter {
             default:
                 return "Top Stories";
         }
-    }
-
-    public interface OnPageAdapterListener{
-        void onInstanceCreated(Fragment fragment, int position);
     }
 
 }

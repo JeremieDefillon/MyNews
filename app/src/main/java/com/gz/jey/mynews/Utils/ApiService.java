@@ -40,7 +40,6 @@ public interface ApiService {
             @Query("fl") String fl,
             @Query("begin_date") String begin_date,
             @Query("end_date") String end_date
-
     );
 
 }

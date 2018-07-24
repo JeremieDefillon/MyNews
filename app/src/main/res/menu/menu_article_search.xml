@@ -4,7 +4,7 @@
     <item android:title="Search Settings">
         <menu>
             <group >
-                <Text
+                <item
                     android:id="@+id/query"
                     android:title="" />
                 <item

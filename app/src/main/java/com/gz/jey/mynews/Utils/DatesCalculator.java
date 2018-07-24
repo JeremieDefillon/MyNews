@@ -81,4 +81,18 @@ public class DatesCalculator {
         return dates;
     }
 
+    public static String strTimeFromInt(int[] time){
+        int h = time[0];
+        int m = time[1];
+
+        Calendar t = Calendar.getInstance();
+        t.set(Calendar.HOUR_OF_DAY, h);
+        t.set(Calendar.MINUTE, m);
+
+        df = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+        // use the SimpleDateFormat to convert Calendar as String Formatted
+        String timestr = df.format(t.getTime());
+        return timestr;
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.gz.jey.mynews.Controllers.Fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.gz.jey.mynews.Controllers.Activities.MainActivity.ACTUALTAB;
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.BEGIN_DATE;
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.END_DATE;
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.FILTERQUERY;
@@ -55,8 +55,8 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     @BindView(R.id.set_date_btn)
     Button setDate;
 
-    ProgressDialog progressDialog;
     //FOR DATA
+    private MainActivity mact;
     private String query;
     private Calendar begin_date, end_date;
     Calendar minbegin, maxbegin, minend, maxend;
@@ -66,17 +66,19 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     private int beginOrEnd = 0;
 
     // Start & Initializing
-    public NewsQueryFragment(){}
+    public NewsQueryFragment(MainActivity mainActivity){
+        mact = mainActivity;
+    }
 
-    public static NewsQueryFragment newInstance(){
-        return (new NewsQueryFragment());
+    public static NewsQueryFragment newInstance(MainActivity mainActivity){
+        return (new NewsQueryFragment(mainActivity));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_query, container, false);
         ButterKnife.bind(this, view);
-        ((MainActivity)getActivity()).ProgressLoad();
+        mact.ProgressLoad();
         InitDatas();
         SetCheckboxCategorys();
         SetOnClickButtons(view);
@@ -175,7 +177,7 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
             }
         });
 
-        ((MainActivity)getActivity()).TerminateLoad();
+        mact.TerminateLoad();
     }
 
     private void SetCheckboxCategorys(){
@@ -229,7 +231,6 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     // -----------------
 
     public void SearchArticles(){
-        MainActivity mact = (MainActivity)getActivity();
         query = searchQuery.getText().toString();
         boolean searchCondition = !query.isEmpty();
         boolean filterCondition = false;
@@ -254,7 +255,10 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
             if(end_date!=null)
                 END_DATE = DatesCalculator.strDateForReq(end_date);
 
-            mact.ChangeData();
+            if(ACTUALTAB!=2)
+                mact.pager.setCurrentItem(2);
+            else
+                mact.ChangeData();
         }else{
 
             String[] message = getResources().getStringArray(R.array.as_messages);
@@ -299,6 +303,5 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
 
 
     @Override
-    public void onClickDeleteButton(int position) {
-    }
+    public void onClickDeleteButton(int position) {}
 }

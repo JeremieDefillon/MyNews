@@ -3,13 +3,14 @@
     package="com.gz.jey.mynews">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/my_backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_n"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_n"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Controllers.Activities.MainActivity">
@@ -20,6 +21,7 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".Controllers.Activities.NotificationReceiver"/>
     </application>
 
 </manifest>

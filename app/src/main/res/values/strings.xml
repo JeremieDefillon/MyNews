@@ -1,5 +1,11 @@
 <resources>
-    <string name="app_name">MyNews</string>
+    <string name="app_name">My News</string>
+    <string name="default_notification_channel_id">4565</string>
+
+    <!-- Used in Toolbar Title -->
+    <string name="searchArticles">Search Articles</string>
+    <string name="notifications">Notifications</string>
+    <string name="webDetails">News Details</string>
 
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -10,15 +16,27 @@
     <string name="newSearch">NEW SEARCH</string>
     <string name="noResults">No Results found under this Category</string>
 
-    <string name="notifications">Notifications</string>
     <string name="help">Help</string>
     <string name="about">About</string>
     <string name="set_date">Set Date</string>
 
-    <string-array name="as_messages">
-        <item>Your query\'s search is empty</item>
+    <string name="enable_notification">Enable notifications (Once per day)</string>
+    <string name="notif_time">Set the notification\'s time :</string>
+    <string name="enabledNotif">Notification is enabled</string>
+    <string name="disabledNotif">Notification is disabled</string>
+    <string name="set_time">Set Time</string>
+
+    <string-array name="notif_messages">
+        <item>Notification\'s query is empty</item>
         <item>You must select at least one category</item>
-        <item>You have to type a query\'s search &amp; \n must select at least one category</item>
+        <item>You have to type a search\'s query &amp; \n must select at least one category</item>
+    </string-array>
+
+
+    <string-array name="as_messages">
+        <item>Your search\'s query is empty</item>
+        <item>You must select at least one category</item>
+        <item>You have to type a search\'s query &amp; \n must select at least one category</item>
     </string-array>
 
     <!-- Used in NYT api Requests -->

@@ -15,24 +15,29 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.gz.jey.mynews.Controllers.Activities.MainActivity;
 import com.gz.jey.mynews.R;
 
 import static com.gz.jey.mynews.Controllers.Activities.MainActivity.URLI;
 
 public class WebViewFragment extends Fragment {
 
+    MainActivity mact;
     WebView wvPage;
-    ProgressDialog progressDialog;
 
-    public WebViewFragment() {  }
+    public WebViewFragment(MainActivity mainActivity) {
+        mact = mainActivity;
+    }
 
-    public static WebViewFragment newInstance(){
-        return (new WebViewFragment());
+    public static WebViewFragment newInstance(MainActivity mainActivity){
+        return (new WebViewFragment(mainActivity));
     }
 
    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+       mact.ProgressLoad();
         View v = inflater.inflate(R.layout.fragment_webview, container, false);
         wvPage = v.findViewById(R.id.webview);
         wvPage.loadUrl(URLI);
@@ -45,9 +50,6 @@ public class WebViewFragment extends Fragment {
        wvPage.getSettings().setUseWideViewPort(true);
        wvPage.getSettings().setLoadWithOverviewMode(true);
 
-       progressDialog = new ProgressDialog(getContext());
-       progressDialog.setMessage("Loading...");
-       progressDialog.show();
 
         wvPage.setWebViewClient(new MyWebViewClient());
         return v;
@@ -79,9 +81,7 @@ public class WebViewFragment extends Fragment {
         public void onPageFinished(WebView view, String url) {
             // TODO Auto-generated method stub
             super.onPageFinished(view, url);
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
+            mact.TerminateLoad();
         }
     }
 }
