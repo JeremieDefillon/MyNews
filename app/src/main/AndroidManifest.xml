@@ -13,7 +13,9 @@
         android:roundIcon="@drawable/ic_n"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Controllers.Activities.MainActivity">
+        <activity
+            android:name=".controllers.activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Controllers.Activities.NotificationReceiver"/>
+        <receiver android:name=".controllers.activities.NotificationReceiver"/>
     </application>
 
 </manifest>

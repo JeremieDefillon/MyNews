@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import static com.gz.jey.mynews.Utils.DatesFormatter.getDateFormated;
+import static com.gz.jey.mynews.utils.DatesFormatter.getDateFormated;
 
 public class DateFormatterTest {
 

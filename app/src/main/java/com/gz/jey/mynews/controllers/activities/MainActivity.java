@@ -1,10 +1,8 @@
-package com.gz.jey.mynews.Controllers.Activities;
+package com.gz.jey.mynews.controllers.activities;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +23,15 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
-import com.gz.jey.mynews.Adapter.PageAdapter;
-import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
-import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
-import com.gz.jey.mynews.Controllers.Fragments.NotificationsFragment;
-import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
+import com.gz.jey.mynews.adapter.PageAdapter;
+import com.gz.jey.mynews.controllers.fragments.MainFragment;
+import com.gz.jey.mynews.controllers.fragments.NewsQueryFragment;
+import com.gz.jey.mynews.controllers.fragments.NotificationsFragment;
+import com.gz.jey.mynews.controllers.fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.Utils.DatesCalculator;
-import com.gz.jey.mynews.Utils.NavDrawerClickSupport;
+import com.gz.jey.mynews.model.Data;
+import com.gz.jey.mynews.utils.DatesCalculator;
+import com.gz.jey.mynews.utils.NavDrawerClickSupport;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,24 +45,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    // FOR DATAS TYPE
-    public static int ACTUALTAB = 0;
-    public static String URLI = "";
-    public static int SECTOP = 0;
-    public static int SECMOST = 0;
-    public static int TNUM = 0;
-    public static int PNUM = 0;
-    public static String QUERY = "";
-    public static String FILTERQUERY = "";
-    public static String BEGIN_DATE = "";
-    public static String END_DATE = "";
-    public static boolean LOAD_NOTIF=false;
-    public static String NOTIF_QUERY = "";
-    public static String NOTIF_FILTERS = "";
-    public static int HOUR = 0;
-    public static int MINS = 0;
-
-
+    // FOR DATAS
+    boolean hiddenItems = false, movepage=false;
 
     // Activity
     private MainActivity mainActivity;
@@ -90,19 +74,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
 
     View view;
-    PageAdapter adapterViewPager;
+    public PageAdapter adapterViewPager;
     ProgressDialog progressDialog;
-    boolean hiddenItems = false, movepage=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         view = this.findViewById(R.id.activity_main_drawer_layout);
-        mainActivity = this;
-        progressDialog = new ProgressDialog(this);
         ButterKnife.bind(this, view);
         LoadDatas();
+        mainActivity = this;
+        progressDialog = new ProgressDialog(this);
         // Configure all views
         setToolBar();
         setFragments();
@@ -112,21 +95,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Set If notification's onClick
         if(savedInstanceState==null) {
             Bundle extras = getIntent().getExtras();
-            if (extras != null){
+            if (extras != null)
                 if (extras.getBoolean("NotiClick")) {
-                    LOAD_NOTIF=true;
-                    while (articleSearchFragment == null) {
-                        try {
-                            wait(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    pager.setCurrentItem(2);
-                }
-            }else{
+                    Data.setLoadNotif(true);
+                    Data.setLastUrl(extras.getString("QueryURL"));
+                }else
+                    movepage=true;
+            else
                 movepage=true;
-            }
         }
     }
 
@@ -165,14 +141,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle Navigation Item Click
         int id = item.getItemId();
         int[] ind = NavDrawerClickSupport.GetNum(id);
-        TNUM = ind[0];
-        PNUM = ind[1];
-        switch(ACTUALTAB){
+        Data.settNum(ind[0]);
+        Data.setpNum(ind[1]);
+        switch(Data.getActualTab()){
             case 0 :
-                SECTOP = ind[2];
+                Data.setSecTop(ind[2]);
             break;
             case 1 :
-                SECMOST = ind[2];
+                Data.setSecMost(ind[2]);
             break;
         }
         ChangeData();
@@ -184,17 +160,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SetVisibilityFragmentsAndMenu(0);
         setNavigationView();
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        switch (ACTUALTAB) {
+        switch (Data.getActualTab()) {
             case 0:
-                topStoriesFragment.ChangeDatas();
+                topStoriesFragment.onResume();
             break;
             case 1:
-                mostPopularFragment.ChangeDatas();
+                mostPopularFragment.onResume();
             break;
             case 2:
-                articleSearchFragment.ChangeDatas();
+                articleSearchFragment.onResume();
             break;
         }
+
         SaveDatas();
     }
 
@@ -257,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Configure NavigationView
     private void setNavigationView() {
         navigationView.getMenu().clear();
-        switch (ACTUALTAB) {
+        switch (Data.getActualTab()) {
             case 0:
                 getMenuInflater().inflate(R.menu.menu_top_stories, navigationView.getMenu());
                 break;
@@ -266,25 +243,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case 2:
                 getMenuInflater().inflate(R.menu.menu_article_search, navigationView.getMenu());
-                if(!QUERY.isEmpty()) {
+                if(!Data.getSearchQuery().isEmpty()) {
                     navigationView.getMenu().getItem(0)
-                            .getSubMenu().getItem(0).setTitle("Query : " + QUERY);
+                            .getSubMenu().getItem(0).setTitle("Query : " + Data.getSearchQuery());
                 }
 
-                if(!FILTERQUERY.isEmpty()){
-                    String fList = FILTERQUERY.replace(",", ", ");
+                if(!Data.getSearchFilters().isEmpty()){
+                    String fList = Data.getSearchFilters().replace(",", ", ");
                     navigationView.getMenu().getItem(0)
                             .getSubMenu().getItem(1).setTitle("Filters : " + fList);
                 }
 
-                if(!BEGIN_DATE.isEmpty()){
-                    String bDate = DatesCalculator.strDateFromStrReq(BEGIN_DATE);
+                if(!Data.getBeginDate().isEmpty()){
+                    String bDate = DatesCalculator.ConvertRequestToStandardDate(Data.getBeginDate());
                     navigationView.getMenu().getItem(0)
                             .getSubMenu().getItem(2).setTitle("Begin Date : " + bDate);
                 }
 
-                if(!END_DATE.isEmpty()){
-                    String eDate = DatesCalculator.strDateFromStrReq(END_DATE);
+                if(!Data.getEndDate().isEmpty()){
+                    String eDate = DatesCalculator.ConvertRequestToStandardDate(Data.getEndDate());
                     navigationView.getMenu().getItem(0)
                             .getSubMenu().getItem(3).setTitle("End Date : " + eDate);
                 }
@@ -315,11 +292,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             public void onPageSelected(int position) {
-                ACTUALTAB = position;
+                Data.setActualTab(position);
                 ChangeData();
             }
         });
-
     }
 
     //Open selected Article in a web view
@@ -344,12 +320,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void SetHelp(){
-        URLI = "https://google.com";
+        Data.setUrl(getResources().getString(R.string.help_url));
         OpenWebView(R.string.help);
     }
 
     private void SetAbout(){
-        URLI = "https://google.com";
+        Data.setUrl(getResources().getString(R.string.about_url));
         OpenWebView(R.string.about);
     }
 
@@ -407,11 +383,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void SetNotification(){
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY,HOUR);
-        cal.set(Calendar.MINUTE,MINS);
+        cal.set(Calendar.HOUR_OF_DAY,Data.getHour());
+        cal.set(Calendar.MINUTE,Data.getMinutes());
         cal.set(Calendar.SECOND,0);
 
         Intent intent = new Intent(getApplicationContext(),NotificationReceiver.class);
+        intent.putExtra("LASTURL", Data.getLastUrl());
+        intent.putExtra("NOTIF_QUERY", Data.getNotifQuery());
+        intent.putExtra("NOTIF_FILTERS", Data.getNotifFilters());
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
                 987,intent,PendingIntent.FLAG_ONE_SHOT);
@@ -434,56 +413,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void ProgressLoad(){
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage(getResources().getString(R.string.in_loading));
         progressDialog.show();
     }
 
     public void TerminateLoad(){
+        if(Data.isLoadNotif()) {
+            Data.setLoadNotif(false);
+            Data.setSearchQuery(Data.getNotifQuery());
+            Data.setSearchFilters(Data.getNotifFilters());
+            Data.setActualTab(2);
+            Data.setUrl(Data.getLastUrl());
+            SaveDatas();
+            SetWebView();
+        }else if(movepage){
+            movepage=false;
+            Data.setLoadNotif(false);
+            pager.setCurrentItem(Data.getActualTab());
+        }
+
+        CloseLoad();
+    }
+
+    public void CloseLoad(){
         if (progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-
-        if(movepage){
-            movepage=false;
-            pager.setCurrentItem(ACTUALTAB);
-        }
     }
 
-    private void LoadDatas(){
-        ACTUALTAB = getPreferences(MODE_PRIVATE).getInt("ACTUALTAB", 0);
-        URLI = getPreferences(MODE_PRIVATE).getString("URLI", "");
-        SECTOP = getPreferences(MODE_PRIVATE).getInt("SECTOP" , 0);
-        SECMOST = getPreferences(MODE_PRIVATE).getInt("SECMOST" , 0);
-        TNUM = getPreferences(MODE_PRIVATE).getInt("TNUM" , 0);
-        PNUM = getPreferences(MODE_PRIVATE).getInt("PNUM" , 0);
-        QUERY = getPreferences(MODE_PRIVATE).getString("QUERY", "");
-        FILTERQUERY = getPreferences(MODE_PRIVATE).getString("FILTERS", "");
-        BEGIN_DATE = getPreferences(MODE_PRIVATE).getString("BEGIN_DATE", "");
-        END_DATE = getPreferences(MODE_PRIVATE).getString("END_DATE", "");
-        NOTIF_QUERY = getPreferences(MODE_PRIVATE).getString("NOTIF_QUERY", "");
-        NOTIF_FILTERS = getPreferences(MODE_PRIVATE).getString("NOTIF_FILTERS", "");
-        HOUR = getPreferences(MODE_PRIVATE).getInt("HOUR" , 7);
-        MINS = getPreferences(MODE_PRIVATE).getInt("MINS" , 0);
+    public void LoadDatas(){
+        Data.setActualTab(getPreferences(MODE_PRIVATE).getInt("ACTUALTAB", 0));
+        Data.setUrl(getPreferences(MODE_PRIVATE).getString("URLI", ""));
+        Data.setLastUrl(getPreferences(MODE_PRIVATE).getString("LASTURL", ""));
+        Data.setSecTop(getPreferences(MODE_PRIVATE).getInt("SECTOP" , 0));
+        Data.setSecMost(getPreferences(MODE_PRIVATE).getInt("SECMOST" , 0));
+        Data.settNum(getPreferences(MODE_PRIVATE).getInt("TNUM" , 0));
+        Data.setpNum(getPreferences(MODE_PRIVATE).getInt("PNUM" , 0));
+        Data.setSearchQuery(getPreferences(MODE_PRIVATE).getString("QUERY", ""));
+        Data.setSearchFilters(getPreferences(MODE_PRIVATE).getString("FILTERS", ""));
+        Data.setBeginDate(getPreferences(MODE_PRIVATE).getString("BEGIN_DATE", ""));
+        Data.setEndDate(getPreferences(MODE_PRIVATE).getString("END_DATE", ""));
+        Data.setNotifQuery(getPreferences(MODE_PRIVATE).getString("NOTIF_QUERY", ""));
+        Data.setNotifFilters(getPreferences(MODE_PRIVATE).getString("NOTIF_FILTERS", ""));
+        Data.setHour(getPreferences(MODE_PRIVATE).getInt("HOUR" , 7));
+        Data.setMinutes(getPreferences(MODE_PRIVATE).getInt("MINS" , 0));
+
+        Log.d("LOAD BEGIN ", Data.getBeginDate());
+        Log.d("LOAD END ", Data.getEndDate());
     }
 
     public void SaveDatas(){
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("ACTUALTAB", ACTUALTAB);
-        editor.putString("URLI", URLI);
-        editor.putInt("SECTOP", SECTOP);
-        editor.putInt("SECMOST", SECMOST);
-        editor.putInt("TNUM", TNUM);
-        editor.putInt("PNUM", PNUM);
-        editor.putString("QUERY", QUERY);
-        editor.putString("FILTERS", FILTERQUERY);
-        editor.putString("BEGIN_DATE", BEGIN_DATE);
-        editor.putString("END_DATE", END_DATE);
-        editor.putString("NOTIF_QUERY", NOTIF_QUERY);
-        editor.putString("NOTIF_FILTERS", NOTIF_FILTERS);
-        editor.putInt("HOUR", HOUR);
-        editor.putInt("MINS", MINS);
+        editor.putInt("ACTUALTAB", Data.getActualTab());
+        editor.putString("URLI",  Data.getUrl());
+        editor.putString("LASTURL",  Data.getLastUrl());
+        editor.putInt("SECTOP",  Data.getSecTop());
+        editor.putInt("SECMOST",  Data.getSecMost());
+        editor.putInt("TNUM",  Data.gettNum());
+        editor.putInt("PNUM", Data.getpNum());
+        editor.putString("QUERY",  Data.getSearchQuery());
+        editor.putString("FILTERS", Data.getSearchFilters());
+        editor.putString("BEGIN_DATE",  Data.getBeginDate());
+        editor.putString("END_DATE",  Data.getEndDate());
+        editor.putString("NOTIF_QUERY",  Data.getNotifQuery());
+        editor.putString("NOTIF_FILTERS",  Data.getNotifFilters());
+        editor.putInt("HOUR",  Data.getHour());
+        editor.putInt("MINS", Data.getMinutes());
         editor.apply();
+
+        Log.d("SAVE BEGIN ", Data.getBeginDate());
+        Log.d("SAVE END ", Data.getEndDate());
     }
 
 }

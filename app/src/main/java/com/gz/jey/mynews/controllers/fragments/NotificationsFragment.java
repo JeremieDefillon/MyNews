@@ -1,13 +1,10 @@
-package com.gz.jey.mynews.Controllers.Fragments;
+package com.gz.jey.mynews.controllers.fragments;
 
-import android.annotation.TargetApi;
-import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,27 +17,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.Utils.DatesCalculator;
-import com.gz.jey.mynews.Utils.ItemClickSupport;
-import com.gz.jey.mynews.Views.CheckBoxsAdapter;
-
-import org.w3c.dom.Text;
+import com.gz.jey.mynews.model.Data;
+import com.gz.jey.mynews.utils.DatesCalculator;
+import com.gz.jey.mynews.utils.ItemClickSupport;
+import com.gz.jey.mynews.views.CheckBoxsAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.HOUR;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.MINS;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.NOTIF_FILTERS;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.NOTIF_QUERY;
 
 public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter.Listener {
 
@@ -66,19 +55,18 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
 
 
     //FOR DATA
-    private MainActivity mact;
+    static MainActivity mact;
     private String query;
     private List<String> filters;
     private List<Boolean> checked;
     private CheckBoxsAdapter checkBoxsAdapter;
 
     // Start & Initializing
-    public NotificationsFragment(MainActivity mainActivity){
-        mact = mainActivity;
-    }
+    public NotificationsFragment(){ }
 
     public static NotificationsFragment newInstance(MainActivity mainActivity){
-        return (new NotificationsFragment(mainActivity));
+        mact = mainActivity;
+        return (new NotificationsFragment());
     }
 
     @Override
@@ -111,12 +99,12 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         for (String t:filters)
             checked.add(false);
 
-        if(!NOTIF_QUERY.isEmpty())
-            query=NOTIF_QUERY;
+        if(!Data.getNotifQuery().isEmpty())
+            query=Data.getNotifQuery();
 
-        if(!NOTIF_FILTERS.isEmpty()){
+        if(!Data.getNotifFilters().isEmpty()){
             for (int i=0; i<checked.size(); i++ ) {
-                if(NOTIF_FILTERS.contains(filters.get(i)))
+                if(Data.getNotifFilters().contains(filters.get(i)))
                     checked.set(i,true);
                 else
                     checked.set(i,false);
@@ -201,21 +189,21 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
             }
 
         if(searchCondition && filterCondition){
-            NOTIF_QUERY = query;
+            Data.setNotifQuery(query);
             StringBuilder fq = new StringBuilder();
             for (int i=0; i<filters.size(); i++) {
                 String comma = i==(filters.size()-1)?"":",";
                 if(checked.get(i))
                     fq.append(filters.get(i)).append(comma);
             }
-            NOTIF_FILTERS = fq.toString();
+            Data.setNotifFilters(fq.toString());
             String msg = getResources().getString(R.string.enabledNotif);
             Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 timeSetter.setVisibility(View.VISIBLE);
             else{
-                HOUR=7;
-                MINS=0;
+                Data.setHour(7);
+                Data.setMinutes(0);
             }
             mact.SetNotification();
         }else{
@@ -240,8 +228,8 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         timePicker.setVisibility(View.GONE);
         notifications.setVisibility(View.VISIBLE);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            HOUR = timePicker.getHour();
-            MINS = timePicker.getMinute();
+            Data.setHour(timePicker.getHour());
+            Data.setMinutes(timePicker.getMinute());
         }
         SetTimeOnButton();
         mact.SetNotification();
@@ -257,8 +245,8 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     }
 
     private void SetTimeOnButton(){
-        int[] times = {HOUR,MINS};
-        String time = DatesCalculator.strTimeFromInt(times);
+        int[] times = {Data.getHour(),Data.getMinutes()};
+        String time = DatesCalculator.StandardStringTimeFormat(times);
         inputTimeTx.setText(time);
     }
 

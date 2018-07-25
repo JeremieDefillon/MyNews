@@ -1,7 +1,6 @@
-package com.gz.jey.mynews.Controllers.Fragments;
+package com.gz.jey.mynews.controllers.fragments;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -15,32 +14,31 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
 import com.gz.jey.mynews.R;
+import com.gz.jey.mynews.model.Data;
 
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.URLI;
 
 public class WebViewFragment extends Fragment {
 
-    MainActivity mact;
+    static MainActivity mact;
     WebView wvPage;
 
-    public WebViewFragment(MainActivity mainActivity) {
-        mact = mainActivity;
+    public WebViewFragment() {
     }
 
     public static WebViewFragment newInstance(MainActivity mainActivity){
-        return (new WebViewFragment(mainActivity));
+        mact = mainActivity;
+        return (new WebViewFragment());
     }
 
    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-       mact.ProgressLoad();
+        mact.ProgressLoad();
         View v = inflater.inflate(R.layout.fragment_webview, container, false);
         wvPage = v.findViewById(R.id.webview);
-        wvPage.loadUrl(URLI);
+        wvPage.loadUrl(Data.getUrl());
         WebSettings settings = wvPage.getSettings();
         settings.setJavaScriptEnabled(true);
 
@@ -57,7 +55,7 @@ public class WebViewFragment extends Fragment {
 
     private class MyWebViewClient extends WebViewClient {
 
-        public MyWebViewClient(){ }
+        MyWebViewClient(){ }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -79,9 +77,8 @@ public class WebViewFragment extends Fragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            // TODO Auto-generated method stub
             super.onPageFinished(view, url);
-            mact.TerminateLoad();
+            mact.CloseLoad();
         }
     }
 }

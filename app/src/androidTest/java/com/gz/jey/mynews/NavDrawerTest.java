@@ -6,7 +6,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

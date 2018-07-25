@@ -1,22 +1,16 @@
-package com.gz.jey.mynews.Views;
+package com.gz.jey.mynews.views;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
-import com.gz.jey.mynews.Models.NewsSection;
-import com.gz.jey.mynews.Models.Result;
+import com.gz.jey.mynews.model.Result;
 import com.gz.jey.mynews.R;
 
 import java.util.List;
-
-import butterknife.BindView;
-import io.reactivex.annotations.Nullable;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 

@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.Views;
+package com.gz.jey.mynews.views;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.gz.jey.mynews.Models.Result;
+import com.gz.jey.mynews.model.Result;
 import com.gz.jey.mynews.R;
 
 import java.lang.ref.WeakReference;

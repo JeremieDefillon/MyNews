@@ -3,7 +3,7 @@ package com.gz.jey.mynews;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
 
 import org.hamcrest.Matchers;
 import org.junit.Rule;

@@ -2,8 +2,8 @@ package com.gz.jey.mynews;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.gz.jey.mynews.Models.NewsSection;
-import com.gz.jey.mynews.Utils.ApiStreams;
+import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.utils.ApiStreams;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public class RequestTest {
     @Test
     public void testArticleSearchRequest() throws Exception {
         //1 - Get the stream
-        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("obama","","");
+        Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("obama","Politics","00010101","20180415");
         //2 - Call TestRequest function to test this Article Search Request
         TestRequest(observableInfos);
 

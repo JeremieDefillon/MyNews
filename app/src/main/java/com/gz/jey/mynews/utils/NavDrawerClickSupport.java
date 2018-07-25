@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.Utils;
+package com.gz.jey.mynews.utils;
 
 import com.gz.jey.mynews.R;
 

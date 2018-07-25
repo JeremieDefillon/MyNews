@@ -2,8 +2,8 @@ package com.gz.jey.mynews;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.gz.jey.mynews.Models.NewsSection;
-import com.gz.jey.mynews.Utils.NewsDeserializer;
+import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.utils.NewsDeserializer;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DeserializerTest {
 
-    String json = "{\n" +
+    private String json = "{\n" +
             "  \"status\": \"OK\",\n" +
             "  \"copyright\": \"Copyright (c) 2018 The New York Times Company.  All Rights Reserved.\",\n" +
             "  \"num_results\": 4,\n" +

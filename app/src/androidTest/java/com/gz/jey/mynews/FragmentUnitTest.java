@@ -7,10 +7,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.webkit.WebView;
 
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
-import com.gz.jey.mynews.Controllers.Fragments.MainFragment;
-import com.gz.jey.mynews.Controllers.Fragments.NewsQueryFragment;
-import com.gz.jey.mynews.Controllers.Fragments.WebViewFragment;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
+import com.gz.jey.mynews.controllers.fragments.MainFragment;
+import com.gz.jey.mynews.controllers.fragments.NewsQueryFragment;
+import com.gz.jey.mynews.controllers.fragments.WebViewFragment;
 
 import org.junit.After;
 import org.junit.Before;
@@ -48,21 +48,21 @@ public class FragmentUnitTest {
      @Test
      public void testMainFragment(){
          // Test if the Main fragment is launched or not
-         Fragment fragment = MainFragment.newInstance();
+         Fragment fragment = MainFragment.newInstance(mActivity);
          testFragment(fragment);
      }
 
      @Test
      public void testNewsQueryFragment(){
          // Test if the NewsQuery fragment is launched or not
-         Fragment fragment = NewsQueryFragment.newInstance();
+         Fragment fragment = NewsQueryFragment.newInstance(mActivity);
          testFragment(fragment);
      }
 
     @Test
     public void testWebViewFragment(){
         // Test if the WebView fragment is launched or not
-        Fragment fragment = WebViewFragment.newInstance();
+        Fragment fragment = WebViewFragment.newInstance(mActivity);
         testWebFragment(fragment);
     }
 

@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.Utils;
+package com.gz.jey.mynews.utils;
 
 import android.util.Log;
 
@@ -8,8 +8,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.gz.jey.mynews.Models.NewsSection;
-import com.gz.jey.mynews.Models.Result;
+import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.model.Result;
 
 import java.lang.reflect.Type;
 
@@ -23,6 +23,8 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
     {
         // Get the "content" element from the parsed JSON
         JsonObject jo = je.getAsJsonObject();
+
+        //Log.d(TAG, "JSON ARRAY => " + jo.toString());
 
         // Deserializing the "content" and use a new instance of Gson to avoid infinite recursion
         NewsSection news = new NewsSection();
@@ -81,11 +83,12 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
             }
         }else if(jo.has("response")){
             JsonObject jy = jo.get("response").getAsJsonObject();
+
             if(jy.has("docs")){
                 JsonArray jsonResultsArray = jy.get("docs").getAsJsonArray();
+
                 news.setNumResults(jsonResultsArray.size());
 
-                Log.d(TAG, "AS RESULTS => " + news.getNumResults().toString());
 
                 for(int i=0; i < jsonResultsArray.size(); i++){
 
@@ -93,27 +96,28 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
                     JsonObject j = jsonResultsArray.get(i).getAsJsonObject();
 
 
-                    if(j.has("section_name")){
+                    if(j.has("section_name"))
                         result.setSection(j.get("section_name").getAsString());
-                    }else{
+                    else
                         result.setSection("");
-                    }
 
-                    if(j.has("subsection_name")){
+
+                    if(j.has("subsection_name"))
                         result.setSubsection(j.get("subsection_name").getAsString());
-                    }else{
+                    else
                         result.setSubsection("");
-                    }
 
-                    if(j.has("snippet")){
-                        result.setTitle(j.get("snippet").getAsString());
-                    }
-                    if(j.has("web_url")){
+
+                    if(j.has("headline"))
+                        if(j.get("headline").getAsJsonObject().has("main"))
+                            result.setTitle(j.get("headline").getAsJsonObject().get("main").getAsString());
+
+                    if(j.has("web_url"))
                         result.setUrl(j.get("web_url").getAsString());
-                    }
-                    if(j.has("pub_date")){
+
+                    if(j.has("pub_date"))
                         result.setPublishedDate(DatesFormatter.getDateFormated(j.get("pub_date").getAsString()));
-                    }
+
                     if(j.has("multimedia")){
                         if (!j.get("multimedia").isJsonPrimitive()){
                             JsonArray jm = j.get("multimedia").getAsJsonArray();
@@ -138,16 +142,13 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
                                     image = "https://static01.nyt.com/" + jm.get(num).getAsJsonObject().get("url").getAsString();
                             }
                             result.setImageUrl(image);
-                        }else{
+                        }else
                             result.setImageUrl("");
-                        }
                     }
-
                     news.getResults().add(result);
                 }
             }
         }
-
         return news;
     }
 }

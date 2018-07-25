@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.Models;
+package com.gz.jey.mynews.model;
 
 import java.util.ArrayList;
 import java.util.List;

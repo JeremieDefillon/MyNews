@@ -7,64 +7,101 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-import static com.gz.jey.mynews.Utils.DatesCalculator.SetUpCustomDateFromIntArray;
-import static com.gz.jey.mynews.Utils.DatesCalculator.SetUpCustomDateFromString;
-import static com.gz.jey.mynews.Utils.DatesCalculator.StartingDates;
-import static com.gz.jey.mynews.Utils.DatesCalculator.intDateFormat;
-import static com.gz.jey.mynews.Utils.DatesCalculator.strDateFormat;
+import static com.gz.jey.mynews.utils.DatesCalculator.ConvertRequestToCalendar;
+import static com.gz.jey.mynews.utils.DatesCalculator.ConvertRequestToStandardDate;
+import static com.gz.jey.mynews.utils.DatesCalculator.GetOneWeekAgo;
+import static com.gz.jey.mynews.utils.DatesCalculator.IntDateFormat;
+import static com.gz.jey.mynews.utils.DatesCalculator.RequestDateFormat;
+import static com.gz.jey.mynews.utils.DatesCalculator.SetupCustomDateInt;
+import static com.gz.jey.mynews.utils.DatesCalculator.StandardStringDateFormat;
 
 public class DatesCalculatorTest {
 
-    String dateTest;
-    int[] dateInt;
+    private String dateStr1, dateStr2;
+    private String dateForm1, dateForm2;
+    private int[] dateInt1, dateInt2;
 
     @Before
     public void SetUp(){
         // Initial Date for Test
-        dateTest = "17/11/1997";
-        dateInt = new int[3];
-        dateInt[0] = 1997;
-        dateInt[1] = 11;
-        dateInt[2] = 17;
+        dateStr1 = "01/01/2018";
+        dateForm1 = "20180101";
+        dateInt1 = new int[]{1,1,2018};
+        dateStr2 = "31/12/2018";
+        dateForm2 = "20181231";
+        dateInt2 = new int[]{31,12,2018};
     }
 
     @Test
-    public void TestCustomDate(){
+    public void TestDateStr() {
+        Calendar cal1 = SetupCustomDateInt(dateInt1);
+        String result1 = StandardStringDateFormat(cal1);
+        Assert.assertEquals(dateStr1, result1);
 
-        // Convert string date into calendar
-        Calendar date = SetUpCustomDateFromString(dateTest);
-
-        // Convert same calendar into int array
-        int[] dtint = intDateFormat(date);
-        // Testing matches year, month and day returned as Int
-        Assert.assertEquals(dateInt[0] , dtint[0]);
-        Assert.assertEquals(dateInt[1] , dtint[1]);
-        Assert.assertEquals(dateInt[2] , dtint[2]);
-
-        // Convert same int array calendar into calendar
-        Calendar dTest = SetUpCustomDateFromIntArray(dtint);
-        // Testing matchs calendar from string & calendar from int array
-        Assert.assertEquals(date, dTest);
-
-        // Testing Both Calendars as string format "dd/MM/yyyy"
-        String testDate = strDateFormat(date);
-        Assert.assertEquals(dateTest, testDate);
-
-        String testDTest = strDateFormat(dTest);
-        Assert.assertEquals(dateTest, testDTest);
+        Calendar cal2 = SetupCustomDateInt(dateInt2);
+        String result2 = StandardStringDateFormat(cal2);
+        Assert.assertEquals(dateStr2, result2);
     }
 
     @Test
-    public void TestStartingDates(){
-        Calendar endDate = Calendar.getInstance();
-        Calendar beginDate = endDate;
+    public void TestDateReq() {
+        Calendar cal1 = SetupCustomDateInt(dateInt1);
+        String result1 = RequestDateFormat(cal1);
+        Assert.assertEquals(dateForm1, result1);
 
-        beginDate.add(Calendar.WEEK_OF_MONTH,-1);
+        Calendar cal2 = SetupCustomDateInt(dateInt2);
+        String result2 = RequestDateFormat(cal2);
+        Assert.assertEquals(dateForm2, result2);
+    }
 
-        Calendar[] beginAndEnd = StartingDates();
-        // Testing Begin Date & End Date
-        Assert.assertEquals(beginDate, beginAndEnd[0]);
-        Assert.assertEquals(endDate, beginAndEnd[1]);
+    @Test
+    public void TestDateInt() {
+        Calendar cal1 = SetupCustomDateInt(dateInt1);
+        int[] result1 = IntDateFormat(cal1);
+        Assert.assertEquals(dateInt1[0], result1[0]);
+        Assert.assertEquals(dateInt1[1], result1[1]);
+        Assert.assertEquals(dateInt1[2], result1[2]);
+
+        Calendar cal2 = SetupCustomDateInt(dateInt2);
+        int[] result2 = IntDateFormat(cal2);
+        Assert.assertEquals(dateInt2[0], result2[0]);
+        Assert.assertEquals(dateInt2[1], result2[1]);
+        Assert.assertEquals(dateInt2[2], result2[2]);
+    }
+
+    @Test
+    public void TestDateConvertReqToCal() {
+        Calendar cal1 = SetupCustomDateInt(dateInt1);
+        Calendar result1 = ConvertRequestToCalendar(dateForm1);
+        Assert.assertEquals(cal1, result1);
+
+        Calendar cal2 = SetupCustomDateInt(dateInt2);
+        Calendar result2 = ConvertRequestToCalendar(dateForm2);
+        Assert.assertEquals(cal2, result2);
+    }
+
+    @Test
+    public void TestConvertReqToStandard() {
+        String result1 = ConvertRequestToStandardDate(dateForm1);
+        Assert.assertEquals(dateStr1, result1);
+
+        String result2 = ConvertRequestToStandardDate(dateForm2);
+        Assert.assertEquals(dateStr2, result2);
+    }
+
+    @Test
+    public void TestGetOneWeekAgo(){
+        Calendar end1 = SetupCustomDateInt(dateInt1);
+        Calendar begin1 = GetOneWeekAgo(end1);
+        String result1 = StandardStringDateFormat(begin1);
+
+        Assert.assertEquals("25/12/2017", result1);
+
+        Calendar end2 = SetupCustomDateInt(dateInt2);
+        Calendar begin2 = GetOneWeekAgo(end2);
+        String result2 = StandardStringDateFormat(begin2);
+
+        Assert.assertEquals("24/12/2018", result2);
     }
 
 

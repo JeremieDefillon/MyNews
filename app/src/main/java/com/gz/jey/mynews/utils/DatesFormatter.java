@@ -1,6 +1,5 @@
-package com.gz.jey.mynews.Utils;
+package com.gz.jey.mynews.utils;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,10 +15,11 @@ public class DatesFormatter {
     public static String getDateFormated(String dateunformatted){
         Date dd = null;
         String d = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         for(SimpleDateFormat df : dateFormat ){
             try {
                 dd = df.parse(dateunformatted);
-                d = DateFormat.getDateInstance(DateFormat.SHORT).format(dd);
+                d = sdf.format(dd);
                 break;
             } catch (ParseException e) {
                 d= "";

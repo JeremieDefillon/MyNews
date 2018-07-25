@@ -1,11 +1,10 @@
-package com.gz.jey.mynews.Utils;
-
-import android.util.Log;
+package com.gz.jey.mynews.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.gz.jey.mynews.Models.NewsSection;
+import com.gz.jey.mynews.model.NewsSection;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -22,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiStreams {
 
     // creating and configuring the retrofit
-    public static Retrofit getRetrofit(){
+    private static Retrofit getRetrofit(){
 
         // set custom deserializer in gson builder
         Gson gson = new GsonBuilder()
@@ -59,11 +58,12 @@ public class ApiStreams {
 
     // method to call and pass the request via an observable for the ArticleSearch api
     public static Observable<NewsSection> streamFetchASearch(String query, String filter, String begin_date, String end_date){
-        String fl = "web_url,section_name,snippet,multimedia,pub_date";
+        String fl = "web_url,section_name,snippet,multimedia,pub_date,headline";
         String sort = "newest";
-        String bd = begin_date==""?"00010101":begin_date;
-        String enddateformatted = DatesCalculator.strDateForReq(DatesCalculator.StartingDates()[1]);
-        String ed = end_date==""?enddateformatted:end_date;
+        String bd = begin_date.isEmpty()?"00010101":begin_date;
+        Calendar cal = Calendar.getInstance();
+        String endDateFormated = DatesCalculator.RequestDateFormat(DatesCalculator.GetOneWeekAgo(cal));
+        String ed = end_date.isEmpty()?endDateFormated:end_date;
         ApiService apiService = getRetrofit().create(ApiService.class);
         return apiService.getArticleSearch(query, filter, sort, fl, bd, ed)
                 .subscribeOn(Schedulers.io())

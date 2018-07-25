@@ -1,10 +1,9 @@
-package com.gz.jey.mynews.Views;
+package com.gz.jey.mynews.views;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import com.gz.jey.mynews.R;
 

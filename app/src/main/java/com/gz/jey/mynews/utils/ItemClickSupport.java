@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.Utils;
+package com.gz.jey.mynews.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

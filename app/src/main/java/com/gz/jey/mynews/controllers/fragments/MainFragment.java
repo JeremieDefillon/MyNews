@@ -1,6 +1,7 @@
-package com.gz.jey.mynews.Controllers.Fragments;
+package com.gz.jey.mynews.controllers.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,13 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.gz.jey.mynews.Controllers.Activities.MainActivity;
-import com.gz.jey.mynews.Models.NewsSection;
-import com.gz.jey.mynews.Models.Result;
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.Utils.ApiStreams;
-import com.gz.jey.mynews.Utils.ItemClickSupport;
-import com.gz.jey.mynews.Views.NewsAdapter;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
+import com.gz.jey.mynews.model.Data;
+import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.model.Result;
+import com.gz.jey.mynews.utils.ApiStreams;
+import com.gz.jey.mynews.utils.ItemClickSupport;
+import com.gz.jey.mynews.views.NewsAdapter;
 
 import java.util.ArrayList;
 
@@ -28,16 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.ACTUALTAB;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.BEGIN_DATE;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.END_DATE;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.FILTERQUERY;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.LOAD_NOTIF;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.NOTIF_FILTERS;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.NOTIF_QUERY;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.QUERY;
-import static com.gz.jey.mynews.Controllers.Activities.MainActivity.URLI;
 
 public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // FOR DESIGN
@@ -51,26 +43,28 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     Button newSearch;
 
     //FOR DATA
-    protected MainActivity mact;
+    static MainActivity mact;
+    private View view;
     private Disposable disposable;
     private ArrayList<Result> results;
     private NewsAdapter newsAdapter;
+    private Handler myHandler;
     private static final String TAG = MainFragment.class.getSimpleName();
 
 
-    public MainFragment(MainActivity mainActivity){
-        mact = mainActivity;
-    }
+    public MainFragment(){ }
 
     public static MainFragment newInstance(MainActivity mainActivity){
-        return (new MainFragment(mainActivity));
+        mact = mainActivity;
+        return (new MainFragment());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         mact.ProgressLoad();
+        myHandler = new Handler();
         SetRecyclerView();
         SetSwipeRefreshLayout();
         SetOnClickRecyclerView();
@@ -96,7 +90,7 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Result results = newsAdapter.getNews(position);
-                        URLI = results.getUrl();
+                        Data.setUrl(results.getUrl());
                         Toast.makeText(getContext(), "You clicked on news : "+
                                 results.getTitle(), Toast.LENGTH_SHORT).show();
                         mact.SetWebView();
@@ -143,19 +137,22 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         });
     }
 
-    public void ChangeDatas() {
+    public void onResume() {
+        super.onResume();
         mact.ProgressLoad();
         executeHttpRequestWithRetrofit();
     }
+
+
 
     // -------------------
     // HTTP (RxJAVA)
     // -------------------
 
     private void executeHttpRequestWithRetrofit(){
-        switch(ACTUALTAB) {
+        switch(Data.getActualTab()) {
             case 0:
-                String ts_cat = getResources().getStringArray(R.array.ts_category)[MainActivity.SECTOP];
+                String ts_cat = mact.getResources().getStringArray(R.array.ts_category)[Data.getSecTop()];
                 disposable = ApiStreams.streamFetchTopStories(ts_cat)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
@@ -175,9 +172,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
                         });
                 break;
             case 1:
-                String mp_cat = getResources().getStringArray(R.array.mp_category)[MainActivity.SECMOST];
-                String mp_typ = getResources().getStringArray(R.array.mp_type)[MainActivity.TNUM];
-                String mp_per = getResources().getStringArray(R.array.mp_period)[MainActivity.PNUM];
+                String mp_cat = mact.getResources().getStringArray(R.array.mp_category)[Data.getSecMost()];
+                String mp_typ = mact.getResources().getStringArray(R.array.mp_type)[Data.gettNum()];
+                String mp_per = mact.getResources().getStringArray(R.array.mp_period)[Data.getpNum()];
                 disposable = ApiStreams.streamFetchMost(mp_typ, mp_cat,mp_per)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
@@ -198,10 +195,10 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
                 break;
 
             case 2:
-                String query = LOAD_NOTIF?NOTIF_QUERY:QUERY;
-                String fquery = LOAD_NOTIF?NOTIF_FILTERS:FILTERQUERY;
-                String begin = LOAD_NOTIF?"":BEGIN_DATE;
-                String end = LOAD_NOTIF?"":END_DATE;
+                String query = Data.isLoadNotif()?Data.getNotifQuery():Data.getSearchQuery();
+                String fquery = Data.isLoadNotif()?Data.getNotifFilters():Data.getSearchFilters();
+                String begin = Data.isLoadNotif()?"":Data.getBeginDate();
+                String end = Data.isLoadNotif()?"":Data.getEndDate();
                 disposable = ApiStreams.streamFetchASearch(query, fquery, begin, end)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
                             @Override
@@ -233,25 +230,30 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // -------------------
 
     private void UpdateUI(NewsSection news){
-        Log.d(TAG, "UPDATE => " + String.valueOf(news.getResults().size()));
-        if(results!=null)
+        if(results!= null)
             results.clear();
+        else
+            results = new ArrayList<>();
 
         results.addAll(news.getResults());
-        if(results.size()!=0) {
-            newSearch.setVisibility(View.GONE);
-            noResult.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            newsAdapter.notifyDataSetChanged();
-        }else{
-            noResult.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            if(ACTUALTAB==2)
-                newSearch.setVisibility(View.VISIBLE);
-            else
-                newSearch.setVisibility(View.GONE);
 
-        }
+        if(newSearch==null)
+            mact.pager.setCurrentItem(Data.getActualTab());
+        else
+            if(results.size()!=0) {
+                newSearch.setVisibility(View.GONE);
+                noResult.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                newsAdapter.notifyDataSetChanged();
+            }else{
+                noResult.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+
+                if(Data.getActualTab()==2)
+                    newSearch.setVisibility(View.VISIBLE);
+                else
+                    newSearch.setVisibility(View.GONE);
+            }
         swipeRefreshLayout.setRefreshing(false);
     }
 
