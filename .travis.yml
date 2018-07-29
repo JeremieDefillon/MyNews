@@ -23,7 +23,7 @@ android:
     - tools
     - platform-tools
     - build-tools-27.0.3
-    - android-27
+    - android-26
     - extra-google-m2repository
     - extra-android-m2repository
     # Google Play Services
@@ -34,12 +34,13 @@ android:
     - addon-google_apis-google-$ANDROID_API_LEVEL
     - addon-google_apis-google-$EMULATOR_API_LEVEL
 
-    - sys-img-armeabi-v7a-android-27
+    - sys-img-x86-android-27
+    - sys-img-x86-android-26
     - sys-img-armeabi-v7a-android-19
 
 # Emulator Management: Create, Start and Wait
 before_script:
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a --skin 480x800
+  - echo no | android create avd --force -n test -t android-26 --abi x86 --skin 480x800
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
