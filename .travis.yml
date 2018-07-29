@@ -24,8 +24,30 @@ android:
     - platform-tools
     - build-tools-27.0.3
     - android-27
+    - sys-img-armeabi-v7a-android-27
+    - android-27
+    - sys-img-armeabi-v7a-android-26
+    - android-26
+    - sys-img-armeabi-v7a-android-22
+    - android-21
+    - sys-img-armeabi-v7a-android-21
+    - android-20
+    - sys-img-armeabi-v7a-android-wear-20
+    - android-19
+    - sys-img-armeabi-v7a-android-19
+    - android-18
+    - sys-img-armeabi-v7a-android-18
+    - android-17
+    - sys-img-armeabi-v7a-android-17
+    - android-16
+    - sys-img-armeabi-v7a-android-16
+    - android-15
+    - sys-img-armeabi-v7a-android-15
+    - android-10
+
     - extra-google-m2repository
     - extra-android-m2repository
+
     # Google Play Services
     - extra-google-google_play_services
     # Support library
@@ -34,9 +56,6 @@ android:
     - addon-google_apis-google-$ANDROID_API_LEVEL
     - addon-google_apis-google-$EMULATOR_API_LEVEL
 
-    - sys-img-x86-android-27
-    - sys-img-x86-android-26
-    - sys-img-armeabi-v7a-android-19
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
@@ -44,7 +63,7 @@ android:
 
 # Emulator Management: Create, Start and Wait
 before_script:
-  - echo no | android create avd --force -n test -t -android-27 --abi armeabi-v7a --skin 480x800
+  - echo no | android create avd --force -n test -t -android-18 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
@@ -60,4 +79,4 @@ before_install:
 
 branches:
         only:
-                - master
+          - master
