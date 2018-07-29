@@ -1,5 +1,5 @@
 
-/*package com.gz.jey.mynews;
+package com.gz.jey.mynews;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -97,4 +97,3 @@ public class DeserializerTest {
         assertThat( x , CoreMatchers.containsString(ns.getResults().get(ind).getImageUrl()));
     }
 }
-*/
