@@ -1,4 +1,4 @@
-package com.gz.jey.mynews;
+/*package com.gz.jey.mynews;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -52,3 +52,4 @@ public class NavDrawerTest extends ActivityInstrumentationTestCase2<MainActivity
         assertTrue("Drawer Opened", mDrawerLayout.isDrawerOpen(GravityCompat.START));
     }
 }
+*/

@@ -492,17 +492,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void CloseLoad(){
-        boolean istest = false;
-        if (progressDialog.isShowing()) {
-            try {
-                Class.forName ("com.gz.jey.mynews.FragmentUnitTest");
-                istest = true;
-            } catch (ClassNotFoundException e) {
-                istest = false;
-            }
-            if(!istest)
-                progressDialog.dismiss();
+        boolean istest;
+        try {
+            Class.forName ("com.gz.jey.mynews.FragmentUnitTest");
+            istest = true;
+        } catch (ClassNotFoundException e) {
+            istest = false;
         }
+        if(!istest)
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
     }
 
     public void LoadDatas(){
