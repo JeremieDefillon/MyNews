@@ -1,4 +1,4 @@
-/*package com.gz.jey.mynews;
+package com.gz.jey.mynews;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -74,4 +74,3 @@ public class FragmentUnitTest {
      }
 
 }
-*/
