@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 for (int i = 0; i < menuTitle.length; i++) {
                     subMenu[i] = menu.getItem(i).getSubMenu();
                     menu.getItem(i).setTitle(menuTitle[i]);
-                    int id = R.array.ts_category;
+                    int id = R.array.ts_item;
                     String[] itemTitle = getResources().getStringArray(id);
                     for(int y = 0; y<itemTitle.length; y++) {
                         subMenu[i].add(y, Menu.FIRST, Menu.FIRST, itemTitle[y]);
