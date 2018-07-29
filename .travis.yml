@@ -31,10 +31,7 @@ env:
     
 android:
   components:
-    # Base components 
-    - tools # to get the new `repository-11.xml`
-    - tools # https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
-    - platform-tools   
+    # Base components   
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION # get the build tools version to build the project
 
     # used sdk versions
