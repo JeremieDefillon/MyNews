@@ -10,6 +10,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Objects;
+
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertThat;
@@ -25,14 +27,14 @@ public class ViewPagerTest {
     private MainActivity mActivity = null;
 
     @Test
-    public void testAdapterNotNull() throws Exception {
+    public void testAdapterNotNull() {
         mActivity = mActivityRule.getActivity();
         assertNotNull(mActivity.pager.getAdapter());
     }
 
     // Test the Adapter
     @Test
-    public void testGetAdapter() throws Exception {
+    public void testGetAdapter() {
         mActivity = mActivityRule.getActivity();
         assertSame(mActivity.adapterViewPager, mActivity.pager.getAdapter());
     }
@@ -62,8 +64,9 @@ public class ViewPagerTest {
                 mActivity.pager.setCurrentItem(i);
             }
         });
-        Thread.sleep(1);
-        assertThat(mActivity.pager.getAdapter().getPageTitle(mActivity.pager.getCurrentItem()).toString(), Matchers.equalTo(s));
+        Thread.sleep(10);
+        assertThat(Objects.requireNonNull(Objects.requireNonNull(mActivity.pager.getAdapter())
+                .getPageTitle(mActivity.pager.getCurrentItem())).toString(), Matchers.equalTo(s));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.gz.jey.mynews.utils;
 
-import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.models.NewsSection;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

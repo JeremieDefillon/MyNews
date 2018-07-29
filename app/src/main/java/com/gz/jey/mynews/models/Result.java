@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.model;
+package com.gz.jey.mynews.models;
 
 public class Result {
 

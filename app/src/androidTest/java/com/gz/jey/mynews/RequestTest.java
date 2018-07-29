@@ -2,7 +2,7 @@ package com.gz.jey.mynews;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.models.NewsSection;
 import com.gz.jey.mynews.utils.ApiStreams;
 
 import org.junit.Test;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 public class RequestTest {
 
     @Test
-    public void testTopStoriesRequest() throws Exception {
+    public void testTopStoriesRequest() {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchTopStories("home");
         //2 - Call TestRequest function to test this TopStories  Request
@@ -32,7 +32,7 @@ public class RequestTest {
     }
 
     @Test
-    public void testMostPopularRequest() throws Exception {
+    public void testMostPopularRequest() {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchMost("mostviewed", "automobiles","30");
         //2 - Call TestRequest function to test this MostPopular Request
@@ -41,7 +41,7 @@ public class RequestTest {
 
 
     @Test
-    public void testArticleSearchRequest() throws Exception {
+    public void testArticleSearchRequest() {
         //1 - Get the stream
         Observable<NewsSection> observableInfos = ApiStreams.streamFetchASearch("obama","Politics","00010101","20180415");
         //2 - Call TestRequest function to test this Article Search Request

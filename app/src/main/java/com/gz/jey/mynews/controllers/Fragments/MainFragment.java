@@ -1,7 +1,8 @@
-package com.gz.jey.mynews.controllers.fragments;
+package com.gz.jey.mynews.controllers.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +18,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.gz.jey.mynews.R;
 import com.gz.jey.mynews.controllers.activities.MainActivity;
-import com.gz.jey.mynews.model.Data;
-import com.gz.jey.mynews.model.NewsSection;
-import com.gz.jey.mynews.model.Result;
+import com.gz.jey.mynews.models.Data;
+import com.gz.jey.mynews.models.NewsSection;
+import com.gz.jey.mynews.models.Result;
 import com.gz.jey.mynews.utils.ApiStreams;
 import com.gz.jey.mynews.utils.ItemClickSupport;
 import com.gz.jey.mynews.views.NewsAdapter;
@@ -43,12 +44,11 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     Button newSearch;
 
     //FOR DATA
+    @SuppressLint("StaticFieldLeak")
     static MainActivity mact;
-    private View view;
     private Disposable disposable;
     private ArrayList<Result> results;
     private NewsAdapter newsAdapter;
-    private Handler myHandler;
     private static final String TAG = MainFragment.class.getSimpleName();
 
 
@@ -60,11 +60,10 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         mact.ProgressLoad();
-        myHandler = new Handler();
         SetRecyclerView();
         SetSwipeRefreshLayout();
         SetOnClickRecyclerView();
@@ -96,13 +95,6 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
                         mact.SetWebView();
                     }
                 });
-    }
-
-    @Override
-    public void onClickDeleteButton(int position) {
-        Result results = newsAdapter.getNews(position);
-        Toast.makeText(getContext(), "You are trying to delete result : "+
-                results.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     // -----------------

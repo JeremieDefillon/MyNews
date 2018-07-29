@@ -13,8 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.model.NewsSection;
-import com.gz.jey.mynews.model.Result;
+import com.gz.jey.mynews.models.NewsSection;
+import com.gz.jey.mynews.models.Result;
 import com.gz.jey.mynews.utils.ApiStreams;
 
 import java.util.ArrayList;
@@ -29,7 +29,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     public final String NOTIFICATION_CHANNEL_ID = "4565";
     public final String NOTIFICATION_CHANNEL_NAME = "MYNEWS";
-    int importance = NotificationManager.IMPORTANCE_LOW;
     private String LASTURL;
 
     // Activity
@@ -40,6 +39,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         Bundle extra = intent.getExtras();
 
+        assert extra != null;
         LASTURL = extra.getString("LASTURL");
         String query = extra.getString("NOTIF_QUERY");
         String fquery = extra.getString("NOTIF_FILTERS");
@@ -58,10 +58,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
 
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {disposeWhenDestroy();}
                 });
     }
-
 
     private void UpdateNews(NewsSection news, Context context){
         Log.d(TAG, "UPDATE => " + String.valueOf(news.getResults().size()));
@@ -85,12 +84,13 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationManager notificationManager;
         //Notification Channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance);
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(true);
 
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel);
         }else{
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -116,6 +116,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
+        assert notificationManager != null;
         notificationManager.notify(987, builder.build());
     }
 

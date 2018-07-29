@@ -8,7 +8,7 @@ import static com.gz.jey.mynews.utils.DatesFormatter.getDateFormated;
 
 public class DateFormatterTest {
 
-    String actual = "16/02/17";
+    private String actual = "16/02/17";
 
     @Test
     public void TestLongFormat(){

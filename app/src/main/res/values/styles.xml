@@ -8,7 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
+    <!-- Button theme. -->
+    <style name="buttonBarButtonStyle" parent="Theme.AppCompat.DayNight">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:buttonBarButtonStyle">@color/colorAccent</item>
+    </style>
 
     <!-- Toolbar theme. -->
     <style name="ToolBarStyle" parent="AppTheme">

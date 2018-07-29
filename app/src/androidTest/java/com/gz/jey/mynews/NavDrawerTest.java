@@ -20,21 +20,20 @@ public class NavDrawerTest extends ActivityInstrumentationTestCase2<MainActivity
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     private MainActivity mActivity = null;
-    DrawerLayout mDrawerLayout = null;
+    private DrawerLayout mDrawerLayout = null;
 
     public NavDrawerTest() {
         super(MainActivity.class);
     }
 
     @Before
-    public void SetUp() throws Exception
-    {
+    public void SetUp() {
         mActivity = mActivityRule.getActivity();
         mDrawerLayout = mActivity.findViewById(R.id.activity_main_drawer_layout);
     }
 
     @Test
-    public void NavDrawerStartisClosed() throws Exception{
+    public void NavDrawerStartisClosed() {
         // Left Drawer should be closed.
         assertFalse("Drawer Closed", mDrawerLayout.isDrawerOpen(GravityCompat.START));
     }

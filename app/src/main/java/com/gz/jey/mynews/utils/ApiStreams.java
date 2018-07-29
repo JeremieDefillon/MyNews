@@ -2,7 +2,7 @@ package com.gz.jey.mynews.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.gz.jey.mynews.model.NewsSection;
+import com.gz.jey.mynews.models.NewsSection;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -29,13 +29,12 @@ public class ApiStreams {
                 .create();
 
         // building retrofit
-        Retrofit retrofit = new Retrofit.Builder()
+
+        return new Retrofit.Builder()
                 .baseUrl("https://api.nytimes.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build() ;
-
-        return retrofit;
+                .build();
     }
 
     // method to call and pass the request via an observable for the TopStories api

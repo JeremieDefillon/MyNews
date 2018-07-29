@@ -22,7 +22,7 @@
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:background="@color/colorError"
+                android:backgroundTint="@color/colorError"
                 android:layout_gravity="start|bottom"
                 android:layout_marginTop="400dp"
                 />
@@ -35,7 +35,7 @@
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:background="@color/colorAccent"
+                android:backgroundTint="@color/colorAccent"
                 android:layout_gravity="end|bottom"
                 android:layout_marginTop="400dp"
                 />
@@ -70,7 +70,7 @@
                     android:inputType="text"
                     android:text=""
                     android:hint="@string/hint_search_query"
-                    android:background="@color/colorAccent"
+                    android:backgroundTint="@color/colorAccent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -115,13 +115,12 @@
                             android:gravity="bottom"
                             android:textSize="18sp"
                             android:background="@color/colorInvisible"
-                            android:textColor="@color/colorPrimaryDark"
-                            >
-
+                            android:textColor="@color/colorPrimaryDark">
                         </Button>
 
                         <ImageView
                             android:background="@drawable/bottom_arrow"
+                            android:backgroundTint="@color/colorAccent"
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:layout_width="wrap_content"
@@ -174,6 +173,7 @@
 
                         <ImageView
                             android:background="@drawable/bottom_arrow"
+                            android:backgroundTint="@color/colorAccent"
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:layout_width="wrap_content"
@@ -225,7 +225,7 @@
                     android:gravity="center"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
-                    android:background="@color/colorAccent"/>
+                    android:backgroundTint="@color/colorAccent"/>
 
 
 

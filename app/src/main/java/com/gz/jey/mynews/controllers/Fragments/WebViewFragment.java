@@ -1,10 +1,11 @@
-package com.gz.jey.mynews.controllers.fragments;
+package com.gz.jey.mynews.controllers.Fragments;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,14 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.gz.jey.mynews.controllers.activities.MainActivity;
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.model.Data;
+import com.gz.jey.mynews.controllers.activities.MainActivity;
+import com.gz.jey.mynews.models.Data;
 
 
 public class WebViewFragment extends Fragment {
 
+    @SuppressLint("StaticFieldLeak")
     static MainActivity mact;
     WebView wvPage;
 
@@ -32,8 +34,9 @@ public class WebViewFragment extends Fragment {
         return (new WebViewFragment());
     }
 
+   @SuppressLint("SetJavaScriptEnabled")
    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mact.ProgressLoad();
         View v = inflater.inflate(R.layout.fragment_webview, container, false);
@@ -64,11 +67,10 @@ public class WebViewFragment extends Fragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            final Uri uri = Uri.parse(url);
             return true;
         }
 
-        @TargetApi(Build.VERSION_CODES.O)
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             view.loadUrl(request.getUrl().toString());

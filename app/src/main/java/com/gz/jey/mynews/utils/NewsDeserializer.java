@@ -8,8 +8,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.gz.jey.mynews.model.NewsSection;
-import com.gz.jey.mynews.model.Result;
+import com.gz.jey.mynews.models.NewsSection;
+import com.gz.jey.mynews.models.Result;
 
 import java.lang.reflect.Type;
 

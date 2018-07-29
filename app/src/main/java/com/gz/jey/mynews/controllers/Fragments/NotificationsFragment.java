@@ -1,7 +1,9 @@
-package com.gz.jey.mynews.controllers.fragments;
+package com.gz.jey.mynews.controllers.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +21,7 @@ import android.widget.Toast;
 
 import com.gz.jey.mynews.controllers.activities.MainActivity;
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.model.Data;
+import com.gz.jey.mynews.models.Data;
 import com.gz.jey.mynews.utils.DatesCalculator;
 import com.gz.jey.mynews.utils.ItemClickSupport;
 import com.gz.jey.mynews.views.CheckBoxsAdapter;
@@ -44,22 +46,22 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     Switch enableNotif;
     @BindView(R.id.time_setter)
     LinearLayout timeSetter;
-    @BindView(R.id.set_time)
+    @BindView(R.id.set_time_btn)
     Button setTime;
+    @BindView(R.id.cancel_time_btn)
+    Button cancelBtn;
     @BindView(R.id.input_time)
-    LinearLayout inputTime;
-    @BindView(R.id.input_time_text)
-    TextView inputTimeTx;
+    TextView inputTime;
     @BindView(R.id.time_picker)
     TimePicker timePicker;
 
 
     //FOR DATA
+    @SuppressLint("StaticFieldLeak")
     static MainActivity mact;
     private String query;
     private List<String> filters;
     private List<Boolean> checked;
-    private CheckBoxsAdapter checkBoxsAdapter;
 
     // Start & Initializing
     public NotificationsFragment(){ }
@@ -70,13 +72,13 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         ButterKnife.bind(this, view);
         mact.ProgressLoad();
         InitDatas();
         SetCheckboxCategorys();
-        SetOnClickButtons(view);
+        SetOnClickButtons();
         return view;
     }
 
@@ -96,7 +98,7 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         checked = new ArrayList<>();
         Collections.addAll(filters, getResources().getStringArray(R.array.as_category));
 
-        for (String t:filters)
+        for (String ignored :filters)
             checked.add(false);
 
         if(!Data.getNotifQuery().isEmpty())
@@ -115,7 +117,7 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     }
 
 
-    private void SetOnClickButtons(View view){
+    private void SetOnClickButtons(){
         enableNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,17 +143,17 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
                 OnOpenTimePicker();
             }
         });
-        inputTimeTx.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OnOpenTimePicker();
-            }
-        });
 
         setTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OnChangedTime();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnEraseTime();
             }
         });
 
@@ -160,7 +162,7 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
 
     private void SetCheckboxCategorys(){
         // Create newsAdapter passing in the sample user data
-        checkBoxsAdapter = new CheckBoxsAdapter(filters, checked,this);
+        CheckBoxsAdapter checkBoxsAdapter = new CheckBoxsAdapter(filters, checked, this);
         // Attach the newsAdapter to the recyclerview to populate items
         recyclerView.setAdapter(checkBoxsAdapter);
         // Set layout manager to position the items
@@ -205,13 +207,13 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
                 Data.setHour(7);
                 Data.setMinutes(0);
             }
+            assert mact != null;
             mact.SetNotification();
         }else{
 
             String[] message = getResources().getStringArray(R.array.as_messages);
-            String msg =    !searchCondition && filterCondition ?   message[0]:
-                    searchCondition && !filterCondition ?   message[1]:
-                            message[2];
+            String msg = !searchCondition && filterCondition ? message[0]:
+                        searchCondition? message[1]:message[2];
 
             Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
             enableNotif.setChecked(false);
@@ -235,6 +237,15 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         mact.SetNotification();
     }
 
+    private void OnEraseTime(){
+        timePicker.setVisibility(View.GONE);
+        notifications.setVisibility(View.VISIBLE);
+        Data.setHour(7);
+        Data.setMinutes(0);
+        SetTimeOnButton();
+        mact.SetNotification();
+    }
+
     private void UnactivateNotif(){
         String msg = getResources().getString(R.string.disabledNotif);
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
@@ -247,11 +258,7 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     private void SetTimeOnButton(){
         int[] times = {Data.getHour(),Data.getMinutes()};
         String time = DatesCalculator.StandardStringTimeFormat(times);
-        inputTimeTx.setText(time);
+        inputTime.setText(time);
     }
 
-    @Override
-    public void onClickDeleteButton(int position) {
-
-    }
 }

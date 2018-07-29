@@ -79,6 +79,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/activity_main_nav_header"
-        app:menu="@menu/menu_top_stories" />
+        app:menu="@menu/menu_nav_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

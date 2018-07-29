@@ -1,4 +1,4 @@
-package com.gz.jey.mynews.model;
+package com.gz.jey.mynews.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,5 @@ public class NewsSection {
         return results;
     }
 
-    public void setResults(List<Result> results) { this.results = results; }
 }
 

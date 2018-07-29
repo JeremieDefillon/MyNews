@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_mynews"
-        android:background="#FFF"/>
+        android:background="#FFF"
+        android:contentDescription="@string/app_name" />
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.gz.jey.mynews.views;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,6 @@ public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
 
 
     public interface Listener {
-        void onClickDeleteButton(int position);
     }
 
     // FOR COMMUNICATION
@@ -31,8 +31,9 @@ public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
         this.callback = callback;
     }
 
+    @NonNull
     @Override
-    public CheckBoxsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CheckBoxsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // CREATE VIEW HOLDER AND INFLATING ITS XML LAYOUT
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -42,7 +43,7 @@ public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
 
     // UPDATE VIEW HOLDER WITH A NEWS
     @Override
-    public void onBindViewHolder(CheckBoxsViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull CheckBoxsViewHolder viewHolder, int position) {
         viewHolder.updateCheckBoxs(this.categorys.get(position),this.callback,this.check.get(position));
     }
 
@@ -52,8 +53,5 @@ public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
         return this.categorys.size();
     }
 
-    public String getCheckBoxs(int position){
-        return this.categorys.get(position);
-    }
 }
 

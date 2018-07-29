@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -23,15 +24,14 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
-import com.gz.jey.mynews.adapter.PageAdapter;
-import com.gz.jey.mynews.controllers.fragments.MainFragment;
-import com.gz.jey.mynews.controllers.fragments.NewsQueryFragment;
-import com.gz.jey.mynews.controllers.fragments.NotificationsFragment;
-import com.gz.jey.mynews.controllers.fragments.WebViewFragment;
 import com.gz.jey.mynews.R;
-import com.gz.jey.mynews.model.Data;
+import com.gz.jey.mynews.adapter.PageAdapter;
+import com.gz.jey.mynews.controllers.Fragments.MainFragment;
+import com.gz.jey.mynews.controllers.Fragments.NewsQueryFragment;
+import com.gz.jey.mynews.controllers.Fragments.NotificationsFragment;
+import com.gz.jey.mynews.controllers.Fragments.WebViewFragment;
+import com.gz.jey.mynews.models.Data;
 import com.gz.jey.mynews.utils.DatesCalculator;
-import com.gz.jey.mynews.utils.NavDrawerClickSupport;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,9 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // FOR DATAS
     boolean hiddenItems = false, movepage=false;
-
-    // Activity
-    private MainActivity mainActivity;
+    Menu[] subMenu;
 
     // The Fragments
     private MainFragment topStoriesFragment, mostPopularFragment, articleSearchFragment;
@@ -84,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         view = this.findViewById(R.id.activity_main_drawer_layout);
         ButterKnife.bind(this, view);
         LoadDatas();
-        mainActivity = this;
         progressDialog = new ProgressDialog(this);
         // Configure all views
         setToolBar();
@@ -137,21 +134,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle Navigation Item Click
-        int id = item.getItemId();
-        int[] ind = NavDrawerClickSupport.GetNum(id);
-        Data.settNum(ind[0]);
-        Data.setpNum(ind[1]);
-        switch(Data.getActualTab()){
-            case 0 :
-                Data.setSecTop(ind[2]);
-            break;
-            case 1 :
-                Data.setSecMost(ind[2]);
-            break;
+        if(Data.getActualTab()!=2){
+            CharSequence id = item.getTitle();
+            item.setChecked(true);
+            for(int i=0; i<subMenu.length; i++){
+                for(int y=0; y<subMenu[i].size(); y++){
+                    if (id == subMenu[i].getItem(y).getTitle()) {
+                        if(Data.getActualTab()==0)
+                            Data.setSecTop(y);
+                        else{
+                            switch (i){
+                                case 0 : Data.settNum(y); break;
+                                case 1 : Data.setpNum(y); break;
+                                case 2 : Data.setSecMost(y); break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            ChangeData();
         }
-        ChangeData();
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -185,12 +190,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setFragments(){
-        topStoriesFragment = MainFragment.newInstance(mainActivity);
-        mostPopularFragment = MainFragment.newInstance(mainActivity);
-        articleSearchFragment = MainFragment.newInstance(mainActivity);
-        webViewFragment = WebViewFragment.newInstance(mainActivity);
-        newsQueryFragment = NewsQueryFragment.newInstance(mainActivity);
-        notificationsFragment = NotificationsFragment.newInstance(mainActivity);
+        topStoriesFragment = MainFragment.newInstance(this);
+        mostPopularFragment = MainFragment.newInstance(this);
+        articleSearchFragment = MainFragment.newInstance(this);
+        webViewFragment = WebViewFragment.newInstance(this);
+        newsQueryFragment = NewsQueryFragment.newInstance(this);
+        notificationsFragment = NotificationsFragment.newInstance(this);
     }
 
     private void openUpSettings(View view){
@@ -234,40 +239,89 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Configure NavigationView
     private void setNavigationView() {
         navigationView.getMenu().clear();
+        getMenuInflater().inflate(R.menu.menu_nav_drawer, navigationView.getMenu());
+        Menu menu = navigationView.getMenu();
+        String[] ResourcesMenu = getResources().getStringArray(R.array.submenu_mp);
+        String[] menuTitle;
         switch (Data.getActualTab()) {
             case 0:
-                getMenuInflater().inflate(R.menu.menu_top_stories, navigationView.getMenu());
+                menuTitle = new String[1];
+                menuTitle[0] = ResourcesMenu[2];
+                subMenu = new Menu[menuTitle.length];
+                for (int i = 0; i < menuTitle.length; i++) {
+                    subMenu[i] = menu.getItem(i).getSubMenu();
+                    menu.getItem(i).setTitle(menuTitle[i]);
+                    int id = R.array.ts_category;
+                    String[] itemTitle = getResources().getStringArray(id);
+                    for(int y = 0; y<itemTitle.length; y++) {
+                        subMenu[i].add(y, Menu.FIRST, Menu.FIRST, itemTitle[y]);
+                        MenuItem item = subMenu[i].getItem(y);
+                        item.setTitle(itemTitle[y]);
+                    }
+                }
                 break;
             case 1:
-                getMenuInflater().inflate(R.menu.menu_most_popular, navigationView.getMenu());
+                menuTitle = ResourcesMenu;
+                subMenu = new Menu[menuTitle.length];
+                for (int i = 0; i < menuTitle.length; i++) {
+                    subMenu[i] = menu.getItem(i).getSubMenu();
+                    menu.getItem(i).setTitle(menuTitle[i]);
+                    int id = i==0?R.array.submenu_mp_0:i==1?R.array.submenu_mp_1:R.array.submenu_mp_2;
+                    String[] itemTitle = getResources().getStringArray(id);
+                    for(int y = 0; y<itemTitle.length; y++) {
+                        subMenu[i].add(y, Menu.FIRST, Menu.FIRST, itemTitle[y]);
+                        MenuItem item = subMenu[i].getItem(y);
+                        item.setTitle(itemTitle[y]);
+                    }
+                }
                 break;
             case 2:
-                getMenuInflater().inflate(R.menu.menu_article_search, navigationView.getMenu());
+                menuTitle = getResources().getStringArray(R.array.submenu_as);
+                subMenu = new Menu[menuTitle.length];
                 if(!Data.getSearchQuery().isEmpty()) {
-                    navigationView.getMenu().getItem(0)
-                            .getSubMenu().getItem(0).setTitle("Query : " + Data.getSearchQuery());
+                    menu.getItem(0).setTitle(menuTitle[0]);
+                    subMenu[0] = menu.getItem(0).getSubMenu();
+                    subMenu[0].add(0, Menu.FIRST, Menu.FIRST, Data.getSearchQuery());
+                    MenuItem item = subMenu[0].getItem(0);
+                    item.setTitle(Data.getSearchQuery());
+                }
+
+                if(!Data.getBeginDate().isEmpty()) {
+                    menu.getItem(1).setTitle(menuTitle[1]);
+                    subMenu[1] = menu.getItem(1).getSubMenu();
+                    String bdate = DatesCalculator.ConvertRequestToStandardDate(Data.getBeginDate());
+                    subMenu[1].add(0, Menu.FIRST, Menu.FIRST, bdate);
+                    MenuItem item = subMenu[1].getItem(0);
+                    item.setTitle(bdate);
+                }
+
+                if(!Data.getEndDate().isEmpty()) {
+                    menu.getItem(2).setTitle(menuTitle[2]);
+                    subMenu[2] = menu.getItem(2).getSubMenu();
+                    String edate = DatesCalculator.ConvertRequestToStandardDate(Data.getEndDate());
+                    subMenu[2].add(0, Menu.FIRST, Menu.FIRST, edate);
+                    MenuItem item = subMenu[2].getItem(0);
+                    item.setTitle(edate);
                 }
 
                 if(!Data.getSearchFilters().isEmpty()){
-                    String fList = Data.getSearchFilters().replace(",", ", ");
-                    navigationView.getMenu().getItem(0)
-                            .getSubMenu().getItem(1).setTitle("Filters : " + fList);
-                }
-
-                if(!Data.getBeginDate().isEmpty()){
-                    String bDate = DatesCalculator.ConvertRequestToStandardDate(Data.getBeginDate());
-                    navigationView.getMenu().getItem(0)
-                            .getSubMenu().getItem(2).setTitle("Begin Date : " + bDate);
-                }
-
-                if(!Data.getEndDate().isEmpty()){
-                    String eDate = DatesCalculator.ConvertRequestToStandardDate(Data.getEndDate());
-                    navigationView.getMenu().getItem(0)
-                            .getSubMenu().getItem(3).setTitle("End Date : " + eDate);
+                    menu.getItem(3).setTitle(menuTitle[3]);
+                    subMenu[3] = menu.getItem(3).getSubMenu();
+                    String[] filters = Data.getSearchFilters().split(",");
+                    for (int i = 0; i < filters.length; i++){
+                        subMenu[3].add(i, Menu.FIRST, Menu.FIRST, filters[i]);
+                        MenuItem item = subMenu[3].getItem(i);
+                        item.setTitle(filters[i]);
+                    }
                 }
 
                 break;
+            default:
+                menuTitle = new String[1];
+                menuTitle[0] = ResourcesMenu[2];
+                break;
         }
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -331,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void OpenWebView(int id){
         SetVisibilityFragmentsAndMenu(1);
-        webViewFragment = WebViewFragment.newInstance(mainActivity);
+        webViewFragment = WebViewFragment.newInstance(this);
         getSupportFragmentManager().beginTransaction()
             .replace(R.id.activity_main_web, webViewFragment)
             .commit();
@@ -396,6 +450,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 987,intent,PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        assert alarmManager != null;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
 
@@ -408,6 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 getApplicationContext(), 987, myIntent, 0);
 
+        assert alarmManager != null;
         alarmManager.cancel(pendingIntent);
         SaveDatas();
     }
@@ -458,8 +514,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Data.setHour(getPreferences(MODE_PRIVATE).getInt("HOUR" , 7));
         Data.setMinutes(getPreferences(MODE_PRIVATE).getInt("MINS" , 0));
 
-        Log.d("LOAD BEGIN ", Data.getBeginDate());
-        Log.d("LOAD END ", Data.getEndDate());
+        Log.d(TAG,"LOAD BEGIN : " + Data.getBeginDate());
+        Log.d(TAG , "LOAD END : " + Data.getEndDate());
     }
 
     public void SaveDatas(){
@@ -482,8 +538,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor.putInt("MINS", Data.getMinutes());
         editor.apply();
 
-        Log.d("SAVE BEGIN ", Data.getBeginDate());
-        Log.d("SAVE END ", Data.getEndDate());
+        Log.d(TAG, "SAVE BEGIN : " + Data.getBeginDate());
+        Log.d(TAG,"SAVE END : " + Data.getEndDate());
     }
 
 }
