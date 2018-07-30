@@ -94,6 +94,7 @@ before_script:
   - adb shell input keyevent 82 &
 script:
   - ./gradlew test #--debug # Local unit test
+  - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - ./gradlew connectedAndroidTest #--debug # Instrumented unit test
   - ./gradlew lint #--debug #maybe at some point
   - ./gradlew clean test build
