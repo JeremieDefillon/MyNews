@@ -1,10 +1,11 @@
 package com.gz.jey.mynews;
 
+import com.gz.jey.mynews.utils.DatesFormatter;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import static com.gz.jey.mynews.utils.DatesFormatter.getDateFormated;
 
 public class DateFormatterTest {
 
@@ -24,7 +25,7 @@ public class DateFormatterTest {
     }
 
     private void ResultFromTest(String date) {
-        String expected = getDateFormated(date);
+        String expected = DatesFormatter.create().getDateFormated(date);
         Assert.assertEquals(expected, actual);
     }
 }

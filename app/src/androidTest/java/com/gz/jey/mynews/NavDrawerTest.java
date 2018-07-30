@@ -48,7 +48,7 @@ public class NavDrawerTest extends ActivityInstrumentationTestCase2<MainActivity
                 mDrawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        Thread.sleep(500);
+        Thread.sleep(1000);
         assertTrue("Drawer Opened", mDrawerLayout.isDrawerOpen(GravityCompat.START));
     }
 }

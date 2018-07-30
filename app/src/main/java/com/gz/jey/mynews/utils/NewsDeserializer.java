@@ -51,7 +51,10 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
                 else{result.setSubsection("");}
                 if(j.has("title")){result.setTitle(j.get("title").getAsString());   }
                 if(j.has("url")){result.setUrl(j.get("url").getAsString());}
-                if(j.has("published_date")){result.setPublishedDate(DatesFormatter.getDateFormated(j.get("published_date").getAsString()));}
+                if(j.has("published_date")){
+                    String date_format = DatesFormatter.create().getDateFormated(j.get("published_date").getAsString());
+                    result.setPublishedDate(date_format);
+                }
                 if(j.has("multimedia")){
                     if (!j.get("multimedia").isJsonPrimitive()){
                         JsonArray jm = j.get("multimedia").getAsJsonArray();
@@ -116,7 +119,7 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
                         result.setUrl(j.get("web_url").getAsString());
 
                     if(j.has("pub_date"))
-                        result.setPublishedDate(DatesFormatter.getDateFormated(j.get("pub_date").getAsString()));
+                        result.setPublishedDate(DatesFormatter.create().getDateFormated(j.get("pub_date").getAsString()));
 
                     if(j.has("multimedia")){
                         if (!j.get("multimedia").isJsonPrimitive()){

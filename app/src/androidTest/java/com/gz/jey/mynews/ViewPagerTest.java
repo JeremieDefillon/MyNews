@@ -64,7 +64,7 @@ public class ViewPagerTest {
                 mActivity.pager.setCurrentItem(i);
             }
         });
-        Thread.sleep(10);
+        Thread.sleep(100);
         assertThat(Objects.requireNonNull(Objects.requireNonNull(mActivity.pager.getAdapter())
                 .getPageTitle(mActivity.pager.getCurrentItem())).toString(), Matchers.equalTo(s));
     }
