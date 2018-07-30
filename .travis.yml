@@ -83,20 +83,19 @@ before_script:
   - echo no | avdmanager -v create avd -f -n test -k "system-images;android-"$EMULATOR_API_LEVEL";google_apis;armeabi-v7a"
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
 
-  - android-wait-for-emulator
+  - sleep 300
 
   # Turn off animations
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
+  #- adb shell settings put global window_animation_scale 0 &
+  #- adb shell settings put global transition_animation_scale 0 &
+  #- adb shell settings put global animator_duration_scale 0 &
 
   # Wake up
   - adb shell input keyevent 82 &
-  - adb shell input keyevent 1 &
 script:
-#  - ./gradlew clean test #--debug # Local unit test
-#  - ./gradlew clean connectedAndroidTest #--debug # Instrumented unit test
-#  - ./gradlew clean lint #--debug #maybe at some point
+  - ./gradlew test #--debug # Local unit test
+  - ./gradlew connectedAndroidTest #--debug # Instrumented unit test
+  - ./gradlew lint #--debug #maybe at some point
   - ./gradlew clean test build
 after_script:
   - echo $ANDROID_TARGET 
