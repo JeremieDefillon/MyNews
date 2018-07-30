@@ -1,6 +1,10 @@
 package com.gz.jey.mynews.models;
 
 public class Data {
+    /**
+     * @return
+     * all the Getters & Setters for the foolwings vars
+     */
 
     private static int actualTab = 0;
     private static String url = "";

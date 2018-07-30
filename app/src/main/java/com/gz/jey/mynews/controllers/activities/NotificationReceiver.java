@@ -35,6 +35,11 @@ public class NotificationReceiver extends BroadcastReceiver {
     private Disposable disposable;
     private ArrayList<Result> results;
 
+    /**
+     * @param context
+     * @param intent
+     * to request article with articleSearch parameters
+     */
     @Override
     public void onReceive(final Context context, Intent intent) {
         Bundle extra = intent.getExtras();
@@ -62,6 +67,11 @@ public class NotificationReceiver extends BroadcastReceiver {
                 });
     }
 
+    /**
+     * @param news
+     * @param context
+     * to build models results with the returned request
+     */
     private void UpdateNews(NewsSection news, Context context){
         Log.d(TAG, "UPDATE => " + String.valueOf(news.getResults().size()));
         results = new ArrayList<>();
@@ -75,11 +85,18 @@ public class NotificationReceiver extends BroadcastReceiver {
             Log.d(TAG, "NOTHING");
     }
 
+    /**
+     * to destroy the disposable and avoid memoryLeaks
+     */
     private void disposeWhenDestroy(){
         if (disposable != null && !disposable.isDisposed())
             disposable.dispose();
     }
 
+    /**
+     * @param context
+     * build the notification and pop it if results resturned a new article
+     */
     private void BuildNotification(Context context){
         NotificationManager notificationManager;
         //Notification Channel

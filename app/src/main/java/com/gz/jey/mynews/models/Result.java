@@ -2,12 +2,18 @@ package com.gz.jey.mynews.models;
 
 public class Result {
 
+    /**
+     * @return
+     * all the Getters & Setters for the foolwings vars
+     */
+
         private String section;
         private String subsection;
         private String title;
         private String url;
         private String publishedDate;
         private String imageUrl;
+
 
         public String getSection() {
             return section;

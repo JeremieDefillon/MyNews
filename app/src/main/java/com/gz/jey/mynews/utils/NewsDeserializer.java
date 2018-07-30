@@ -17,6 +17,14 @@ public class NewsDeserializer implements JsonDeserializer<NewsSection>
 {
     private static final String TAG = NewsDeserializer.class.getSimpleName();
 
+    /**
+     * @param je
+     * @param type
+     * @param jdc
+     * @return
+     * @throws JsonParseException
+     * Custom Deserializer because of weird value changing type from the unthrustworthy NYT's API
+     */
     @Override
     public NewsSection deserialize(JsonElement je, Type type, JsonDeserializationContext jdc)
             throws JsonParseException

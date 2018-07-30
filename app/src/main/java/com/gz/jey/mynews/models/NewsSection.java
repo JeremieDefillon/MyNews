@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsSection {
+    /**
+     * @return
+     * all the Getters & Setters for the foolwings vars
+     */
 
     private String status;
     private Integer numResults;

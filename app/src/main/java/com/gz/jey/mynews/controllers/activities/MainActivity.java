@@ -75,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public PageAdapter adapterViewPager;
     ProgressDialog progressDialog;
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //2 - Inflate the menu and add it to the Toolbar
@@ -117,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -133,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * @param item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle Navigation Item Click
@@ -161,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     *
+     */
     public void ChangeData(){
         SetVisibilityFragmentsAndMenu(0);
         setNavigationView();
@@ -184,11 +202,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // CONFIGURATION
     // -------------------
 
+    /**
+     *
+     */
     // Configure Toolbar
     private void setToolBar() {
         setSupportActionBar(toolbar);
     }
 
+    /**
+     *
+     */
     private void setFragments(){
         topStoriesFragment = MainFragment.newInstance(this);
         mostPopularFragment = MainFragment.newInstance(this);
@@ -198,6 +222,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         notificationsFragment = NotificationsFragment.newInstance(this);
     }
 
+    /**
+     * @param view
+     */
     private void openUpSettings(View view){
          //Creating the instance of PopupMenu
          PopupMenu popup = new PopupMenu(MainActivity.this, view);
@@ -228,7 +255,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          popup.show(); //showing popup menu
     }
 
-    // Configure Drawer Layout
+    /**
+     * Configure Drawer Layout
+     */
     private void setDrawerLayout() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,
                 toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -236,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
     }
 
-    // Configure NavigationView
+    /**
+     * Configure NavigationView
+     */
     private void setNavigationView() {
         navigationView.getMenu().clear();
         getMenuInflater().inflate(R.menu.menu_nav_drawer, navigationView.getMenu());
@@ -325,7 +356,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    // Configure ViewPager
+    /**
+     * Configure ViewPager
+     */
     public void buildViewPager() {
         //Creat List of Fragments
         List<Fragment> frg = new ArrayList<>();
@@ -342,9 +375,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabs.setTabMode(TabLayout.MODE_FIXED);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            /**
+             * @param state
+             */
             public void onPageScrollStateChanged(int state) {}
+
+            /**
+             * @param position
+             * @param positionOffset
+             * @param positionOffsetPixels
+             */
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
+            /**
+             * @param position
+             */
             public void onPageSelected(int position) {
                 Data.setActualTab(position);
                 ChangeData();
@@ -352,11 +397,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    //Open selected Article in a web view
+    /**
+     * Open selected Article in a web view
+     */
     public void SetWebView() {
         OpenWebView(R.string.webDetails);
     }
 
+    /**
+     * Open ArticleSearch Fragment
+     */
     public void SetNewsQuery() {
         toolbar.setTitle(getResources().getString(R.string.searchArticles));
         SetVisibilityFragmentsAndMenu(2);
@@ -365,6 +415,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             .commit();
     }
 
+    /**
+     * Open Notifications Fragment
+     */
     public void SetNotifications() {
         toolbar.setTitle(getResources().getString(R.string.notifications));
         SetVisibilityFragmentsAndMenu(2);
@@ -373,16 +426,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             .commit();
     }
 
+    /**
+     * To Open Help page in webView
+     */
     private void SetHelp(){
         Data.setUrl(getResources().getString(R.string.help_url));
         OpenWebView(R.string.help);
     }
 
+    /**
+     * To Open About page in webView
+     */
     private void SetAbout(){
         Data.setUrl(getResources().getString(R.string.about_url));
         OpenWebView(R.string.about);
     }
 
+    /**
+     * @param id
+     * Open WebView Fragment
+     */
     private void OpenWebView(int id){
         SetVisibilityFragmentsAndMenu(1);
         webViewFragment = WebViewFragment.newInstance(this);
@@ -392,8 +455,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setTitle(getResources().getString(id));
     }
 
-    private void SetVisibilityFragmentsAndMenu(int fr) {
-        switch (fr){
+    /**
+     * @param fragment
+     * to set the visibilities and proper toolbar depending on wich fragment we need
+     */
+    private void SetVisibilityFragmentsAndMenu(int fragment) {
+        switch (fragment){
             case 0 :
                 setInnerMainView();
             break;
@@ -406,6 +473,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * for all fragment that need viewpager
+     */
     private void setInnerMainView() {
         container.setVisibility(View.GONE);
         pager.setVisibility(View.VISIBLE);
@@ -417,6 +487,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setDrawerLayout();
     }
 
+    /**
+     * @param visible
+     * @param gone
+     * for all fragment that need else webview or framelayout container
+     */
     private void setOutterMainView(int visible, int gone) {
         container.setVisibility(visible);
         pager.setVisibility(View.GONE);
@@ -435,6 +510,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    /**
+     * the calling notifcation with alarmManager (once per day)
+     */
     public void SetNotification(){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY,Data.getHour());
@@ -457,6 +535,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SaveDatas();
     }
 
+    /**
+     * to disable notification
+     */
     public void CancelNotification(){
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent myIntent = new Intent(getApplicationContext(), NotificationReceiver.class);
@@ -468,11 +549,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SaveDatas();
     }
 
+    /**
+     * to open loading in a progressDialog
+     */
     public void ProgressLoad(){
         progressDialog.setMessage(getResources().getString(R.string.in_loading));
         progressDialog.show();
     }
 
+    /**
+     * to close loading if its running and loaded functions have terminates their works
+     */
     public void TerminateLoad(){
         if(Data.isLoadNotif()) {
             Data.setLoadNotif(false);
@@ -491,6 +578,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CloseLoad();
     }
 
+    /**
+     * close loading if it's not while running test (to avoid emulators slow down script executing)
+     */
     public void CloseLoad(){
         boolean istest;
         try {
@@ -504,6 +594,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 progressDialog.dismiss();
     }
 
+    /**
+     * load all the saved datas from Preferences
+     */
     public void LoadDatas(){
         Data.setActualTab(getPreferences(MODE_PRIVATE).getInt("ACTUALTAB", 0));
         Data.setUrl(getPreferences(MODE_PRIVATE).getString("URLI", ""));
@@ -525,6 +618,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG , "LOAD END : " + Data.getEndDate());
     }
 
+    /**
+     * Save all the datas into Preferences
+     */
     public void SaveDatas(){
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
