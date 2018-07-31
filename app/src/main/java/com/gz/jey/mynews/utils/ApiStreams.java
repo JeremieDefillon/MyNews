@@ -40,9 +40,8 @@ public class ApiStreams {
     }
 
     /**
-     * @param section
-     * @return
-     * method to call and pass the request via an observable for the TopStories api
+     * @param section String
+     * @return the request via an observable for the TopStories api
      */
     public static Observable<NewsSection> streamFetchTopStories(String section){
         ApiService apiService = getRetrofit().create(ApiService.class);
@@ -53,11 +52,10 @@ public class ApiStreams {
     }
 
     /**
-     * @param type
-     * @param section
-     * @param period
-     * @return
-     * method to call and pass the request via an observable for the MostPopular api
+     * @param type String
+     * @param section String
+     * @param period String
+     * @return the request via an observable for the MostPopular api
      */
     public static Observable<NewsSection> streamFetchMost(String type, String section, String period){
         ApiService apiService = getRetrofit().create(ApiService.class);
@@ -68,12 +66,11 @@ public class ApiStreams {
     }
 
     /**
-     * @param query
-     * @param filter
-     * @param begin_date
-     * @param end_date
-     * @return
-     * method to call and pass the request via an observable for the ArticleSearch api
+     * @param query String
+     * @param filter String
+     * @param begin_date String
+     * @param end_date String
+     * @return the request via an observable for the ArticleSearch api
      */
     public static Observable<NewsSection> streamFetchASearch(String query, String filter, String begin_date, String end_date){
         String fl = "web_url,section_name,snippet,multimedia,pub_date,headline";

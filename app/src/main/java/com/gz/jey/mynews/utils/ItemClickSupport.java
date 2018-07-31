@@ -10,6 +10,10 @@ public class ItemClickSupport {
     private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        /**
+         * @param v View
+         * onClick function
+          */
         @Override
         public void onClick(View v) {
             if (mOnItemClickListener != null) {
@@ -20,6 +24,11 @@ public class ItemClickSupport {
     };
 
     private CompoundButton.OnCheckedChangeListener mOnCheckedListener = new CompoundButton.OnCheckedChangeListener() {
+        /**
+         * @param bv CompoundButton
+         * @param isChecked boolean
+         * onChecked function
+         */
         @Override
         public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
             if (mOnCheckedChangeListener != null) {
@@ -28,10 +37,18 @@ public class ItemClickSupport {
         }
     };
 
+    /**
+     * @param recyclerView RecyclerView
+     * @param itemID int
+     *               to attach the recycler view's item to listener
+     */
     private ItemClickSupport(RecyclerView recyclerView, int itemID) {
         mRecyclerView = recyclerView;
         mRecyclerView.setTag(itemID, this);
         RecyclerView.OnChildAttachStateChangeListener mAttachListener = new RecyclerView.OnChildAttachStateChangeListener() {
+            /**
+             * @param view View
+             */
             @Override
             public void onChildViewAttachedToWindow(View view) {
                 if (mOnItemClickListener != null) {
@@ -44,6 +61,9 @@ public class ItemClickSupport {
                 }
             }
 
+            /**
+             * @param view View
+             */
             @Override
             public void onChildViewDetachedFromWindow(View view) {
 
@@ -52,6 +72,11 @@ public class ItemClickSupport {
         mRecyclerView.addOnChildAttachStateChangeListener(mAttachListener);
     }
 
+    /**
+     * @param view RecyclerView
+     * @param itemID int
+     * @return ItemClickSupport
+     */
     public static ItemClickSupport addTo(RecyclerView view, int itemID) {
         ItemClickSupport support = (ItemClickSupport) view.getTag(itemID);
         if (support == null) {
@@ -60,16 +85,27 @@ public class ItemClickSupport {
         return support;
     }
 
+    /**
+     * @param listener OnItemClickListener
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
+    /**
+     * @param listener OnCheckedChangeListener
+     */
     public void setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
         mOnCheckedChangeListener = listener;
     }
 
 
     public interface OnItemClickListener {
+        /**
+         * @param recyclerView RecyclerView
+         * @param position int
+         * @param v View
+         */
         void onItemClicked(RecyclerView recyclerView, int position, View v);
     }
 

@@ -9,7 +9,7 @@ public class DatesCalculator {
     private static SimpleDateFormat df;
 
     /**
-     * @param date
+     * @param date Calendar
      * @return the calculated date one week before the params date
      */
     public static Calendar GetOneWeekAgo(Calendar date){
@@ -20,7 +20,7 @@ public class DatesCalculator {
 
 
     /**
-     * @param dt
+     * @param dt int[] array
      * @return the calendar date mades with the int array [day,month,year]
      */
     public static Calendar SetupCustomDateInt(int[] dt){
@@ -39,7 +39,7 @@ public class DatesCalculator {
     }
 
     /**
-     * @param cal
+     * @param cal Calendar
      * @return a string date formatted as dd/MM/yyyy from a calendar params
      */
     public static String StandardStringDateFormat(Calendar cal){
@@ -49,7 +49,7 @@ public class DatesCalculator {
     }
 
     /**
-     * @param cal
+     * @param cal Calendar
      * @return a string date formatted as yyyyMMdd from a calendar params
      *          (the begin & end dates needed for the article search api)
      */
@@ -60,7 +60,7 @@ public class DatesCalculator {
     }
 
     /**
-     * @param cal
+     * @param cal Calendar
      * @return a int array [day,month,year] from a calendar params
      */
     public static int[] IntDateFormat(Calendar cal){
@@ -72,7 +72,7 @@ public class DatesCalculator {
     }
 
     /**
-     * @param dd
+     * @param dd String
      * @return a Calendar date from a string yyyyMMdd date format
      */
     public static Calendar ConvertRequestToCalendar(String dd){
@@ -85,7 +85,7 @@ public class DatesCalculator {
     }
 
     /**
-     * @param dd
+     * @param dd String
      * @return a String date format as dd/MM/yyyy from a string format yyyyMMdd
      */
     public static String ConvertRequestToStandardDate(String dd){
@@ -98,7 +98,7 @@ public class DatesCalculator {
 
 
     /**
-     * @param time
+     * @param time int[] array
      * @return a String time format as HH:mm from an int array [Hour,Minutes]
      */
     public static String StandardStringTimeFormat(int[] time){

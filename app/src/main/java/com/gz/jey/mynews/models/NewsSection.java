@@ -5,8 +5,8 @@ import java.util.List;
 
 public class NewsSection {
     /**
-     * @return
      * all the Getters & Setters for the foolwings vars
+     * #return the datas values
      */
 
     private String status;

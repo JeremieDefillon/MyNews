@@ -24,13 +24,23 @@ public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
     private List<String> categorys;
     private List<Boolean> check;
 
-    // CONSTRUCTOR
+    /**
+     * @param categs List<String>
+     * @param checked List<boolean>
+     * @param callback CheckBoxAdapter.Listener
+     *  CONSTRUCTOR
+     */
     public CheckBoxsAdapter(List<String> categs, List<Boolean> checked, CheckBoxsAdapter.Listener callback) {
         this.categorys = categs;
         this.check = checked;
         this.callback = callback;
     }
 
+    /**
+     * @param parent ViewGroup
+     * @param viewType int
+     * @return CheckBoxsViewHolder(View)
+     */
     @NonNull
     @Override
     public CheckBoxsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,13 +51,19 @@ public class CheckBoxsAdapter extends RecyclerView.Adapter<CheckBoxsViewHolder>{
         return new CheckBoxsViewHolder(view);
     }
 
-    // UPDATE VIEW HOLDER WITH A NEWS
+    /**
+     * @param viewHolder CheckBoxsViewHolder
+     * @param position int
+     * UPDATE VIEW HOLDER WITH CHECKBOXS
+     */
     @Override
     public void onBindViewHolder(@NonNull CheckBoxsViewHolder viewHolder, int position) {
         viewHolder.updateCheckBoxs(this.categorys.get(position),this.callback,this.check.get(position));
     }
 
-    // RETURN THE TOTAL COUNT OF ITEMS IN THE LIST
+    /**
+     * @return THE TOTAL COUNT OF ITEMS IN THE LIST
+     */
     @Override
     public int getItemCount() {
         return this.categorys.size();

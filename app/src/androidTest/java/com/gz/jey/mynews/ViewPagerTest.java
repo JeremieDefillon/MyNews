@@ -32,7 +32,9 @@ public class ViewPagerTest {
         assertNotNull(mActivity.pager.getAdapter());
     }
 
-    // Test the Adapter
+    /**
+     * Test the Adapter
+     */
     @Test
     public void testGetAdapter() {
         mActivity = mActivityRule.getActivity();
@@ -40,22 +42,39 @@ public class ViewPagerTest {
     }
 
 
-    // Test if pager move to the desired page
+    /**
+     * @throws Exception
+     * Test if pager move to the desired page (0 for TopStories page)
+     */
     @Test
     public void testSetAndGetCurrentItemIs0() throws Exception {
         TestThread(0, "Top Stories");
     }
 
+    /**
+     * @throws Exception
+     * Test if pager move to the desired page (1 for MostPopular page)
+     */
     @Test
     public void testSetAndGetCurrentItemIs1() throws Exception {
         TestThread(1, "Most Popular");
     }
 
+    /**
+     * @throws Exception
+     * Test if pager move to the desired page (2 for ArticleSearch page)
+     */
     @Test
     public void testSetAndGetCurrentItemIs2() throws Exception {
         TestThread(2, "Article Search");
     }
 
+    /**
+     * @param i int
+     * @param s String (expected page's Title)
+     * @throws InterruptedException
+     * Testing viewpager when moved to the pagenumber and getting his title to compare
+     */
     private void TestThread(final int i, String s) throws InterruptedException {
         mActivity = mActivityRule.getActivity();
         mActivity.runOnUiThread(new Runnable() {

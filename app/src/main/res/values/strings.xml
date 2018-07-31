@@ -18,7 +18,8 @@
     <string name="hint_search_query">Search query term</string>
     <string name="settings">SETTINGS</string>
     <string name="newSearch">NEW SEARCH</string>
-    <string name="noResults">No Results found under this Category</string>
+    <string name="noResultsCat">No Results found under this Category</string>
+    <string name="noResultsFilt">No Results found with these filters and parametters</string>
     <string name="hint_begin_date">Begin Date</string>
     <string name="hint_end_date">End Date</string>
 

@@ -70,14 +70,26 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     private List<Boolean> checked;
     private int beginOrEnd = 0;
 
-    // Start & Initializing
+    /**
+     * Start & Initializing
+     */
     public NewsQueryFragment(){ }
 
+    /**
+     * @param mainActivity MainActivity
+     * @return new NewsQueryFragment()
+     */
     public static NewsQueryFragment newInstance(MainActivity mainActivity){
         mact = mainActivity;
         return (new NewsQueryFragment());
     }
 
+    /**
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return View
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_query, container, false);
@@ -93,6 +105,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     // CONFIGURATION
     // -----------------
 
+    /**
+     * Initialize Datas
+     */
     private void InitDatas(){
         filters = new ArrayList<>();
         checked = new ArrayList<>();
@@ -132,6 +147,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     }
 
 
+    /**
+     * set all the on clicks
+     */
     private void SetOnClickButtons(){
         beginDateBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +199,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         mact.TerminateLoad();
     }
 
+    /**
+     * Set the checkboxs
+     */
     private void SetCheckboxCategorys(){
         // Create newsAdapter passing in the sample user data
         CheckBoxsAdapter checkBoxsAdapter = new CheckBoxsAdapter(filters, checked, this);
@@ -191,6 +212,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         checkBoxsAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * when Date Changed
+     */
     private void OnDateChanged(){
         switch (beginOrEnd){
             case 0 :
@@ -208,6 +232,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         artSearch.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * to erase Date datas
+     */
     private void OnDateErased(){
         switch (beginOrEnd){
             case 0 :
@@ -229,6 +256,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         artSearch.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * to set Min and Max dates for the date picker
+     */
     private  void SetupMinMaxDates(){
         minbegin = Calendar.getInstance();
         maxbegin = Calendar.getInstance();
@@ -270,6 +300,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         Log.d("MAX END", StandardStringDateFormat(maxend));
     }
 
+    /**
+     * Destroy this Fragment
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -279,6 +312,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
     // ACTION
     // -----------------
 
+    /**
+     * to send search with query term dates and filters choosen
+     */
     public void SearchArticles(){
         query = searchQuery.getText().toString();
         boolean searchCondition = !query.isEmpty();
@@ -313,6 +349,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         }
     }
 
+    /**
+     * Open the datePicker from Begin Date button
+     */
     public void OpenUpBeginDatePicker(){
         if(begin_date==null){
             Calendar cal = Calendar.getInstance();
@@ -323,6 +362,9 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         UpdateDatePicker(begin_date, minbegin, maxbegin);
     }
 
+    /**
+     * Open the datePicker from End Date button
+     */
     public void OpenUpEndDatePicker(){
         if(end_date==null)
             end_date = Calendar.getInstance();
@@ -331,6 +373,12 @@ public class NewsQueryFragment extends Fragment implements CheckBoxsAdapter.List
         UpdateDatePicker(end_date, minend, maxend);
     }
 
+    /**
+     * @param date Calendar
+     * @param min Calendar
+     * @param max Calendar
+     *            to set and init datepicker
+     */
     public void UpdateDatePicker(Calendar date, Calendar min, Calendar max){
         // Insert Date into DatePicker
         long mini = min.getTimeInMillis();

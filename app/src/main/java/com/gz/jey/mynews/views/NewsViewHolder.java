@@ -25,11 +25,20 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     private WeakReference<NewsAdapter.Listener> callbackWeakRef;
 
+    /**
+     * @param itemView View
+     */
     NewsViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
+    /**
+     * @param res Result
+     * @param glide RequestManager
+     * @param callback NewsAdapter.Listener
+     * UPDATE NEWS ITEM LIST
+     */
     public void updateNews(Result res, RequestManager glide, NewsAdapter.Listener callback){
         String Sec = res.getSection();
         String Sub = res.getSubsection();
@@ -51,6 +60,10 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         callbackWeakRef = new WeakReference<>(callback);
     }
 
+    /**
+     * @param view View
+     * OnClick callback
+     */
     @Override
     public void onClick(View view) {
         callbackWeakRef.get();

@@ -13,6 +13,9 @@ public class DatesFormatter {
     };
 
 
+    /**
+     * Initialize & Start
+     */
     private DatesFormatter(){ }
     /**
      * To create instance of this class DatesFormatter
@@ -23,7 +26,7 @@ public class DatesFormatter {
     // ex date string 2018-04-25T05:00:13-04:00
 
     /**
-     * @param dateUnformatted
+     * @param dateUnformatted String
      * @return a String date format as dd/MM/yy from several existing known format
      */
     public String getDateFormated(String dateUnformatted){

@@ -33,6 +33,9 @@ public class FragmentUnitTest {
      private ViewPager flContainer = null;
      private WebView wvContainer = null;
 
+    /**
+     * The SetUp
+     */
      @Before
      public void SetUp() {
         mActivity = mActivityRule.getActivity();
@@ -40,11 +43,17 @@ public class FragmentUnitTest {
         wvContainer = mActivity.findViewById(R.id.activity_main_web);
      }
 
+    /**
+     * to Test if container isn't null
+     */
      @Test
      public void testActivity(){
         assertNotNull(flContainer);
      }
 
+    /**
+     * to Test if mainFragment does exist once instancied
+     */
      @Test
      public void testMainFragment(){
          // Test if the Main fragment is launched or not
@@ -52,7 +61,9 @@ public class FragmentUnitTest {
          testFragment(fragment, flContainer, R.id.fragment_main_swipe_container);
      }
 
-
+    /**
+     * to Test if webViewFragment does exist once instancied
+     */
     @Test
     public void testWebViewFragment(){
         // Test if the WebView fragment is launched or not
@@ -61,6 +72,12 @@ public class FragmentUnitTest {
     }
 
 
+    /**
+     * @param fragment Fragment
+     * @param container View
+     * @param Gen int
+     * Verify if the fragment view is in the expected container
+     */
      private void testFragment(Fragment fragment , View container, int Gen) {
          mActivity.getSupportFragmentManager().beginTransaction().add(container.getId(), fragment).commitAllowingStateLoss();
          getInstrumentation().waitForIdleSync();
@@ -68,6 +85,9 @@ public class FragmentUnitTest {
          assertNotNull(view);
      }
 
+    /**
+     * to destroy activity
+     */
     @After
      public void tearDown() {
         mActivity = null;

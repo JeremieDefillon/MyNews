@@ -11,8 +11,8 @@ public class PageAdapter extends FragmentPagerAdapter {
     private Fragment fragment0,fragment1,fragment2;
 
     /**
-     * @param mgr
-     * @param fragments
+     * @param mgr FragmentManager
+     * @param fragments List<Fragment>
      */
     public PageAdapter(FragmentManager mgr, List<Fragment> fragments){
         super(mgr);
@@ -22,7 +22,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * @return
+     * @return int
      */
     @Override
     public int getCount(){
@@ -30,8 +30,8 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * @param position
-     * @return
+     * @param position int
+     * @return Fragment
      */
     @Override
     public Fragment getItem(int position){
@@ -49,8 +49,8 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * @param position
-     * @return
+     * @param position int
+     * @return String title
      */
     @Override
     public CharSequence getPageTitle(int position){

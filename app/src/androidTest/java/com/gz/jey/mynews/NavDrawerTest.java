@@ -22,22 +22,35 @@ public class NavDrawerTest extends ActivityInstrumentationTestCase2<MainActivity
     private MainActivity mActivity = null;
     private DrawerLayout mDrawerLayout = null;
 
+    /**
+     * Initialize Main Activity
+     */
     public NavDrawerTest() {
         super(MainActivity.class);
     }
 
+    /**
+     * The SetUp
+     */
     @Before
     public void SetUp() {
         mActivity = mActivityRule.getActivity();
         mDrawerLayout = mActivity.findViewById(R.id.activity_main_drawer_layout);
     }
 
+    /**
+     * to Test if drawer is closed
+     */
     @Test
     public void NavDrawerStartisClosed() {
         // Left Drawer should be closed.
         assertFalse("Drawer Closed", mDrawerLayout.isDrawerOpen(GravityCompat.START));
     }
 
+    /**
+     * @throws InterruptedException
+     * to Test if drawer is opened after have force click to open it
+     */
     @Test
     public void NavDrawerStartIsOpened() throws InterruptedException{
         // Open Drawer & check if is open.

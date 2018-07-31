@@ -12,34 +12,46 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 public class DeserializerTest {
 
+    /**
+     * Test Deserialization with TopStories proper json returned
+     */
     @Test
     public void DeserializeFromTopStoriesNormal(){
         String x = "https://static01.nyt.com/images/2017/01/18/world/16annefrank-item1/16annefrank-item1-thumbStandard-v2.jpg";
         DeserializeTest(x, 0);
-        // more assertions based on what the JSON was would be here
     }
 
+    /**
+     * Test Deserialization with MostPopular proper json returned
+     */
     @Test
     public void DeserializeFromMostPopularNormal(){
         String x = "https://static01.nyt.com/images/2018/06/03/books/review/03Cover/03Cover-thumbStandard-v2.gif";
         DeserializeTest(x, 1);
-        // more assertions based on what the JSON was would be here
     }
 
+    /**
+     * Test Deserialization with TopStories bad json returned
+     */
     @Test
     public void DeserializeFromTopStoriesWithAPIBadReturns(){
         String x = "";
         DeserializeTest(x, 2);
-        // more assertions based on what the JSON was would be here
     }
 
+    /**
+     * Test Deserialization with MostPopular bad json returned
+     */
     @Test
     public void DeserializeFromMostPopularWithAPIBadReturns(){
         String x = "";
         DeserializeTest(x, 3);
-        // more assertions based on what the JSON was would be here
     }
 
+    /**
+     * @param x String (the expected string)
+     * @param ind Integer (to select the result to return)
+     */
     private void DeserializeTest(String x, Integer ind) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(NewsSection.class, new NewsDeserializer())
@@ -93,6 +105,8 @@ public class DeserializerTest {
                 "    }\n" +
                 "  ]\n" +
                 "}";
+
+        // more assertions based on what the JSON was would be here
         NewsSection ns = gson.fromJson(json, NewsSection.class);
         assertThat( x , CoreMatchers.containsString(ns.getResults().get(ind).getImageUrl()));
     }

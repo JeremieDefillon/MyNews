@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProgressDialog progressDialog;
 
     /**
-     * @param savedInstanceState
+     * @param savedInstanceState Bundle
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param menu
-     * @return
+     * @param menu Menu
+     * @return true
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param item
-     * @return
+     * @param item MenuItem
+     * @return boolean
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -145,8 +145,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param item
-     * @return
+     * @param item MenuItem
+     * @return true
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     *
+     * The function called when Datas changed
      */
     public void ChangeData(){
         SetVisibilityFragmentsAndMenu(0);
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // -------------------
 
     /**
-     *
+     * To set toolbar
      */
     // Configure Toolbar
     private void setToolBar() {
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     *
+     * to set every fragments
      */
     private void setFragments(){
         topStoriesFragment = MainFragment.newInstance(this);
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param view
+     * @param view View
      */
     private void openUpSettings(View view){
          //Creating the instance of PopupMenu
@@ -376,19 +376,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             /**
-             * @param state
+             * @param state int
              */
             public void onPageScrollStateChanged(int state) {}
 
             /**
-             * @param position
-             * @param positionOffset
-             * @param positionOffsetPixels
+             * @param position int
+             * @param positionOffset float
+             * @param positionOffsetPixels int
              */
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             /**
-             * @param position
+             * @param position int
              */
             public void onPageSelected(int position) {
                 Data.setActualTab(position);
@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param id
+     * @param id int
      * Open WebView Fragment
      */
     private void OpenWebView(int id){
@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param fragment
+     * @param fragment int
      * to set the visibilities and proper toolbar depending on wich fragment we need
      */
     private void SetVisibilityFragmentsAndMenu(int fragment) {
@@ -488,8 +488,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * @param visible
-     * @param gone
+     * @param visible View.VISIBLE
+     * @param gone View.GONE
      * for all fragment that need else webview or framelayout container
      */
     private void setOutterMainView(int visible, int gone) {

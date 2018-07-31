@@ -21,6 +21,9 @@ public class DatesCalculatorTest {
     private String dateForm1, dateForm2;
     private int[] dateInt1, dateInt2;
 
+    /**
+     * the SetUp to Initialize expected values
+     */
     @Before
     public void SetUp(){
         // Initial Date for Test
@@ -32,6 +35,9 @@ public class DatesCalculatorTest {
         dateInt2 = new int[]{31,12,2018};
     }
 
+    /**
+     * Test the converting date format as dd/MM/yyyy
+     */
     @Test
     public void TestDateStr() {
         Calendar cal1 = SetupCustomDateInt(dateInt1);
@@ -43,6 +49,9 @@ public class DatesCalculatorTest {
         Assert.assertEquals(dateStr2, result2);
     }
 
+    /**
+     * Test the converting date format as yyyyMMdd
+     */
     @Test
     public void TestDateReq() {
         Calendar cal1 = SetupCustomDateInt(dateInt1);
@@ -54,6 +63,9 @@ public class DatesCalculatorTest {
         Assert.assertEquals(dateForm2, result2);
     }
 
+    /**
+     * Test the converting date format as int array [dd,MM,yyyy]
+     */
     @Test
     public void TestDateInt() {
         Calendar cal1 = SetupCustomDateInt(dateInt1);
@@ -69,6 +81,9 @@ public class DatesCalculatorTest {
         Assert.assertEquals(dateInt2[2], result2[2]);
     }
 
+    /**
+     * Test the converting date format as Calendar  from req format
+     */
     @Test
     public void TestDateConvertReqToCal() {
         Calendar cal1 = SetupCustomDateInt(dateInt1);
@@ -80,6 +95,9 @@ public class DatesCalculatorTest {
         Assert.assertEquals(cal2, result2);
     }
 
+    /**
+     * Test the converting date format as dd/MM/yyyy from yyyyMMdd
+     */
     @Test
     public void TestConvertReqToStandard() {
         String result1 = ConvertRequestToStandardDate(dateForm1);
@@ -89,6 +107,9 @@ public class DatesCalculatorTest {
         Assert.assertEquals(dateStr2, result2);
     }
 
+    /**
+     * Test the calculator one week before
+     */
     @Test
     public void TestGetOneWeekAgo(){
         Calendar end1 = SetupCustomDateInt(dateInt1);

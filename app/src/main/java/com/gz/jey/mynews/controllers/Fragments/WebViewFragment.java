@@ -26,14 +26,27 @@ public class WebViewFragment extends Fragment {
     static MainActivity mact;
     WebView wvPage;
 
+    /**
+     * Start & Initialize
+     */
     public WebViewFragment() {
     }
 
+    /**
+     * @param mainActivity MainActivity
+     * @return new WebViewFragment()
+     */
     public static WebViewFragment newInstance(MainActivity mainActivity){
         mact = mainActivity;
         return (new WebViewFragment());
     }
 
+    /**
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return View
+     */
    @SuppressLint("SetJavaScriptEnabled")
    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -58,18 +71,36 @@ public class WebViewFragment extends Fragment {
 
     private class MyWebViewClient extends WebViewClient {
 
+        /**
+         * Start & Initialize WebView
+         */
         MyWebViewClient(){ }
 
+        /**
+         * @param view WebView
+         * @param url String
+         * @param favicon Bitmap
+         */
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
         }
 
+        /**
+         * @param view WebVIew
+         * @param url String
+         * @return true
+         */
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return true;
         }
 
+        /**
+         * @param view WebView
+         * @param request WebResourceRequest
+         * @return true
+         */
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -77,6 +108,10 @@ public class WebViewFragment extends Fragment {
             return true;
         }
 
+        /**
+         * @param view WebView
+         * @param url String
+         */
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);

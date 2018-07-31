@@ -3,8 +3,8 @@ package com.gz.jey.mynews.models;
 public class Result {
 
     /**
-     * @return
      * all the Getters & Setters for the foolwings vars
+     * #return the datas values
      */
 
         private String section;

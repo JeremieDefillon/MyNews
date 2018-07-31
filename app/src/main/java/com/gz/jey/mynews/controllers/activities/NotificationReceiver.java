@@ -36,8 +36,8 @@ public class NotificationReceiver extends BroadcastReceiver {
     private ArrayList<Result> results;
 
     /**
-     * @param context
-     * @param intent
+     * @param context Context
+     * @param intent Intent
      * to request article with articleSearch parameters
      */
     @Override
@@ -68,8 +68,8 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     /**
-     * @param news
-     * @param context
+     * @param news NewsSection
+     * @param context Context
      * to build models results with the returned request
      */
     private void UpdateNews(NewsSection news, Context context){
@@ -94,7 +94,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     /**
-     * @param context
+     * @param context Context
      * build the notification and pop it if results resturned a new article
      */
     private void BuildNotification(Context context){

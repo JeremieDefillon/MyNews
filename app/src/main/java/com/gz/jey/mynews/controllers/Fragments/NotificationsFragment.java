@@ -63,14 +63,26 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     private List<String> filters;
     private List<Boolean> checked;
 
-    // Start & Initializing
+    /**
+     * Start & Initializing
+     */
     public NotificationsFragment(){ }
 
+    /**
+     * @param mainActivity MainActivity
+     * @return new NotificationsFragment()
+     */
     public static NotificationsFragment newInstance(MainActivity mainActivity){
         mact = mainActivity;
         return (new NotificationsFragment());
     }
 
+    /**
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return View
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
@@ -86,6 +98,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     // CONFIGURATION
     // -----------------
 
+    /**
+     * Initialize Datas
+     */
     private void InitDatas(){
         notifications.setVisibility(View.VISIBLE);
         timePicker.setVisibility(View.GONE);
@@ -117,6 +132,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     }
 
 
+    /**
+     * Set all the OnClicks
+     */
     private void SetOnClickButtons(){
         enableNotif.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +178,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         mact.TerminateLoad();
     }
 
+    /**
+     * set the checboxs
+     */
     private void SetCheckboxCategorys(){
         // Create newsAdapter passing in the sample user data
         CheckBoxsAdapter checkBoxsAdapter = new CheckBoxsAdapter(filters, checked, this);
@@ -170,6 +191,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         checkBoxsAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * to destroy this Fragment
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -179,6 +203,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
     // ACTION
     // -----------------
 
+    /**
+     * to Enable or Activate Notification
+     */
     public void ActivateNotif(){
         MainActivity mact = (MainActivity)getActivity();
         query = searchQuery.getText().toString();
@@ -221,11 +248,17 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         }
     }
 
+    /**
+     * to Open the TimePicker
+     */
     private void OnOpenTimePicker(){
         timePicker.setVisibility(View.VISIBLE);
         notifications.setVisibility(View.GONE);
     }
 
+    /**
+     * when time changed
+     */
     private void OnChangedTime(){
         timePicker.setVisibility(View.GONE);
         notifications.setVisibility(View.VISIBLE);
@@ -237,6 +270,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         mact.SetNotification();
     }
 
+    /**
+     * when time erased
+     */
     private void OnEraseTime(){
         timePicker.setVisibility(View.GONE);
         notifications.setVisibility(View.VISIBLE);
@@ -246,6 +282,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         mact.SetNotification();
     }
 
+    /**
+     * to disable , Cancel Notification
+     */
     private void UnactivateNotif(){
         String msg = getResources().getString(R.string.disabledNotif);
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
@@ -255,6 +294,9 @@ public class NotificationsFragment  extends Fragment implements CheckBoxsAdapter
         mact.CancelNotification();
     }
 
+    /**
+     * to Set the final choosen time
+     */
     private void SetTimeOnButton(){
         int[] times = {Data.getHour(),Data.getMinutes()};
         String time = DatesCalculator.StandardStringTimeFormat(times);

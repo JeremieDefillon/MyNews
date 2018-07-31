@@ -16,8 +16,8 @@ public interface ApiService {
     String KEY = "3564bb9719b4419e9d3c48f5449100f5";
 
     /**
-     * @param section
-     * @return
+     * @param section String
+     * @return Observable<NewsSection>
      * the request for the nyt top stories api
      */
     @GET("/svc/topstories/v2/{section}.json?api-key="+KEY)
@@ -27,10 +27,10 @@ public interface ApiService {
 
 
     /**
-     * @param type
-     * @param section
-     * @param period
-     * @return
+     * @param type String
+     * @param section String
+     * @param period String
+     * @return Observable<NewsSection>
      * the request for the nyt top stories api
      */
     @GET("svc/mostpopular/v2/{mosttype}/{section}/{period}.json?api-key="+KEY)
@@ -41,13 +41,13 @@ public interface ApiService {
     );
 
     /**
-     * @param q
-     * @param fq
-     * @param sort
-     * @param fl
-     * @param begin_date
-     * @param end_date
-     * @return
+     * @param q String
+     * @param fq String
+     * @param sort String
+     * @param fl String
+     * @param begin_date String
+     * @param end_date String
+     * @return Observable<NewsSection>
      * the request for the nyt article search api
      */
     @GET("svc/search/v2/articlesearch.json?api-key="+KEY)

@@ -2,8 +2,8 @@ package com.gz.jey.mynews.models;
 
 public class Data {
     /**
-     * @return
      * all the Getters & Setters for the foolwings vars
+     * #return the datas values
      */
 
     private static int actualTab = 0;

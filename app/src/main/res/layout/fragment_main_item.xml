@@ -67,7 +67,6 @@
 
             </LinearLayout>
 
-
             <View
                 android:gravity="bottom"
                 android:layout_width="fill_parent"

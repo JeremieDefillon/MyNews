@@ -24,13 +24,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     private List<Result> results;
     private RequestManager glide;
 
-    // CONSTRUCTOR
+    /**
+     * @param res List<Result>
+     * @param glide RequestManager
+     * @param callback Listener
+     * CONSTRUCTOR
+     */
     public NewsAdapter(List<Result> res, RequestManager glide, Listener callback) {
         this.results = res;
         this.glide = glide;
         this.callback = callback;
     }
 
+    /**
+     * @param parent ViewGroup
+     * @param viewType int
+     * @return NewsViewHolder(View)
+     */
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,18 +51,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         return new NewsViewHolder(view);
     }
 
-    // UPDATE VIEW HOLDER WITH A NEWS
+    /**
+     * @param viewHolder NewsViewHolder
+     * @param position int
+     * UPDATE VIEW HOLDER WITH NEWS
+     */
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder viewHolder, int position) {
         viewHolder.updateNews(this.results.get(position), this.glide, this.callback);
     }
 
-    // RETURN THE TOTAL COUNT OF ITEMS IN THE LIST
+    /**
+     * @return THE TOTAL COUNT OF ITEMS IN THE LIST
+     */
     @Override
     public int getItemCount() {
         return this.results.size();
     }
 
+    /**
+     * @param position int
+     * @return Result
+     */
     public Result getNews(int position){
         return this.results.get(position);
     }

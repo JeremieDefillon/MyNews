@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +41,8 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.no_result)
     LinearLayout noResult;
+    @BindView(R.id.no_result_text)
+    TextView noResultTx;
     @BindView(R.id.new_search)
     Button newSearch;
 
@@ -52,13 +55,26 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     private static final String TAG = MainFragment.class.getSimpleName();
 
 
+    /**
+     * the public acces of this fragment
+     */
     public MainFragment(){ }
 
+    /**
+     * @param mainActivity MainActivity
+     * @return new MainFragment()
+     */
     public static MainFragment newInstance(MainActivity mainActivity){
         mact = mainActivity;
         return (new MainFragment());
     }
 
+    /**
+     * @param inflater LayoutInflater
+     * @param container ViewGroup
+     * @param savedInstanceState Bundle
+     * @return View
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -73,6 +89,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     }
 
 
+    /**
+     * to Destroy fragment
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -83,7 +102,10 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // ACTION
     // -----------------
 
-    private void SetOnClickRecyclerView(){
+    /**
+     * to Set the onClick function from items in RecyclerView
+     */
+    protected void SetOnClickRecyclerView(){
         ItemClickSupport.addTo(recyclerView, R.layout.fragment_main_item)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
@@ -101,6 +123,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // CONFIGURATION
     // -----------------
 
+    /**
+     * to set the RecyclerView
+     */
     private void SetRecyclerView(){
         results = new ArrayList<>();
         // Create newsAdapter passing in the sample user data
@@ -111,6 +136,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    /**
+     * to set the OnClick New Search
+     */
     private void SetOnClickNewSearch(){
         newSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +148,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         });
     }
 
+    /**
+     * to set the SwipeRefreshLayout Listeners
+     */
     private void SetSwipeRefreshLayout(){
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -129,6 +160,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         });
     }
 
+    /**
+     * the onResume function when any datas change from MainActivity
+     */
     public void onResume() {
         super.onResume();
         mact.ProgressLoad();
@@ -141,22 +175,35 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // HTTP (RxJAVA)
     // -------------------
 
+    /**
+     * the HttpRequest with Retrofit
+     */
     private void executeHttpRequestWithRetrofit(){
         switch(Data.getActualTab()) {
             case 0:
+                noResultTx.setText(R.string.noResultsCat);
                 String ts_cat = mact.getResources().getStringArray(R.array.ts_category)[Data.getSecTop()];
                 disposable = ApiStreams.streamFetchTopStories(ts_cat)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
+                            /**
+                             * @param results NewsSection
+                             */
                             @Override
                             public void onNext(NewsSection results) {
                                 UpdateUI(results);
                             }
 
+                            /**
+                             * @param e Throwable
+                             */
                             @Override
                             public void onError(Throwable e) {
                                 Log.e(TAG, e.toString());
                             }
 
+                            /**
+                             * to close progressDialog when request is terminated
+                             */
                             @Override
                             public void onComplete() {
                                 mact.TerminateLoad();
@@ -164,21 +211,32 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
                         });
                 break;
             case 1:
+                noResultTx.setText(R.string.noResultsCat);
                 String mp_cat = mact.getResources().getStringArray(R.array.mp_category)[Data.getSecMost()];
                 String mp_typ = mact.getResources().getStringArray(R.array.mp_type)[Data.gettNum()];
                 String mp_per = mact.getResources().getStringArray(R.array.mp_period)[Data.getpNum()];
                 disposable = ApiStreams.streamFetchMost(mp_typ, mp_cat,mp_per)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
+
+                            /**
+                             * @param results NewsSection
+                             */
                             @Override
                             public void onNext(NewsSection results) {
                                 UpdateUI(results);
                             }
 
+                            /**
+                             * @param e Throwable
+                             */
                             @Override
                             public void onError(Throwable e) {
                                 Log.e(TAG, e.toString());
                             }
 
+                            /**
+                             * to close progressDialog when request is terminated
+                             */
                             @Override
                             public void onComplete() {
                                 mact.TerminateLoad();
@@ -187,22 +245,32 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
                 break;
 
             case 2:
+                noResultTx.setText(R.string.noResultsFilt);
                 String query = Data.isLoadNotif()?Data.getNotifQuery():Data.getSearchQuery();
                 String fquery = Data.isLoadNotif()?Data.getNotifFilters():Data.getSearchFilters();
                 String begin = Data.isLoadNotif()?"":Data.getBeginDate();
                 String end = Data.isLoadNotif()?"":Data.getEndDate();
                 disposable = ApiStreams.streamFetchASearch(query, fquery, begin, end)
                         .subscribeWith(new DisposableObserver<NewsSection>() {
+                            /**
+                             * @param results NewsSection
+                             */
                             @Override
                             public void onNext(NewsSection results) {
                                 UpdateUI(results);
                             }
 
+                            /**
+                             * @param e Throwable
+                             */
                             @Override
                             public void onError(Throwable e) {
                                 Log.e(TAG, e.toString());
                             }
 
+                            /**
+                             * to close progressDialog when request is terminated
+                             */
                             @Override
                             public void onComplete() {
                                 mact.TerminateLoad();
@@ -212,6 +280,9 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
         }
     }
 
+    /**
+     * to destroy disposable and avoid memory leaks
+     */
     private void disposeWhenDestroy(){
         if (disposable != null && !disposable.isDisposed())
             disposable.dispose();
@@ -221,6 +292,10 @@ public class MainFragment extends Fragment implements NewsAdapter.Listener{
     // UPDATE UI
     // -------------------
 
+    /**
+     * @param news NewsSection
+     * called while request get back models
+     */
     private void UpdateUI(NewsSection news){
         if(results!= null)
             results.clear();
